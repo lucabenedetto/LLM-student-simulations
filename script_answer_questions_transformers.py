@@ -45,6 +45,8 @@ sequences = pipeline(
 for seq in sequences:
     print(f"Result: {seq['generated_text']}")
     print("----")
-    print(len(seq))
+    print(len(seq['generated_text']))
     print("----")
-    print(len(input_prompt))
+    print(seq.keys())
+    print("----")
+    print(len(input_prompt), len(input_prompt.split(' ')))
