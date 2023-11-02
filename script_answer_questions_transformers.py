@@ -46,7 +46,3 @@ for seq in sequences:
     print(f"Result: {seq['generated_text']}")
     print("----")
     print(len(seq['generated_text']))
-    print("----")
-    print(seq.keys())
-    print("----")
-    print(len(input_prompt), len(input_prompt.split(' ')))
