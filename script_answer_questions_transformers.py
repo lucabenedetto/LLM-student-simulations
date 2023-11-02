@@ -27,20 +27,20 @@ Options: "{answers}"
 """
 
 
-input_prompt = system_message + '\n' + user_prompt
-# input_prompt = f"""<s>[INST] <<SYS>>
-# { system_message }
-# <</SYS>>
-#
-# { user_prompt } [/INST]
-# """
+# input_prompt = system_message + '\n' + user_prompt
+input_prompt = f"""<s>[INST] <<SYS>>
+{ system_message }
+<</SYS>>
+
+{ user_prompt } [/INST]
+"""
 sequences = pipeline(
     input_prompt,
     do_sample=True,
     top_k=10,
     num_return_sequences=1,
     eos_token_id=tokenizer.eos_token_id,
-    max_length=200,
+    max_length=750,  #200,
 )
 for seq in sequences:
     print(f"Result: {seq['generated_text']}")
