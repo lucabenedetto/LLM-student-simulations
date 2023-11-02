@@ -12,8 +12,30 @@ pipeline = transformers.pipeline(
     device_map="auto",
 )
 
+question = 'Screech owls nest in holes in trees. They eat mice and crickets. Where would a screech owl most likely live?'
+answers = "['a beach ', 'a forest ', 'a desert ', 'a rainforest']"
+student_level = 1
+system_message = f"""
+You will be shown a multiple choice question from an science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of level {student_level} would pick.
+Provide only a JSON file with the following structure:
+{{"question level": "difficulty level of the question", "answer explanation": "the list of steps that the students of level {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a student of level {student_level}"}}        
+"""
+user_prompt = f"""
+Question: "{question}"
+Options: "{answers}"
+"""
+
+
+input_prompt = system_message + '\n' + user_prompt
+# input_prompt = f"""<s>[INST] <<SYS>>
+# { system_message }
+# <</SYS>>
+#
+# { user_prompt } [/INST]
+# """
 sequences = pipeline(
-    'I liked "Breaking Bad" and "Band of Brothers". Do you have any recommendations of other shows I might like?\n',
+    input_prompt,
     do_sample=True,
     top_k=10,
     num_return_sequences=1,
