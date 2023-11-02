@@ -29,10 +29,10 @@ Options: "{answers}"
 
 # input_prompt = system_message + '\n' + user_prompt
 input_prompt = f"""<s>[INST] <<SYS>>
-{ system_message }
+{system_message}
 <</SYS>>
 
-{ user_prompt } [/INST]
+{user_prompt} [/INST]
 """
 sequences = pipeline(
     input_prompt,
@@ -40,8 +40,11 @@ sequences = pipeline(
     top_k=10,
     num_return_sequences=1,
     eos_token_id=tokenizer.eos_token_id,
-    max_length=750,  #200,
+    max_length=750,  # this is important to get right especially for the reading comprehension questions, as they can be quite long.
 )
 for seq in sequences:
     print(f"Result: {seq['generated_text']}")
-
+    print("----")
+    print(len(seq))
+    print("----")
+    print(len(input_prompt))
