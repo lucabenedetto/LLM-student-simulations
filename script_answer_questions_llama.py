@@ -28,17 +28,10 @@ def prepare_answers_dict_llama(df_questions, pipeline, student_level=None, is_re
         lambda r: get_llama_input_prompt(student_level, prompt_idx, is_reading_question, r['question'], r['options'], r['context']),
         axis=1
     )
-    # print(df_questions['input_prompt'])
-    # dataset = Dataset.from_pandas(df_questions[['input_prompt']])
-    # def preprocess_function(examples):
-    #     return tokenizer(examples["input_prompt"])
-    # dataset = dataset.map(preprocess_function, batched=True)
     list_q_id = df_questions['q_id'].values.tolist()
     print(list_q_id)
 
-    # print(dataset)
     sequences = pipeline(
-        # dataset,  # I call the pipeline on the whole dataset. because it is much more efficient.
         df_questions['input_prompt'].values.tolist(),  # I call the pipeline on the whole dataset. because it is much more efficient.
         do_sample=True,
         top_k=10,
@@ -47,24 +40,18 @@ def prepare_answers_dict_llama(df_questions, pipeline, student_level=None, is_re
         eos_token_id=None,  # tokenizer.eos_token_id,
         max_length=750, # this is important to get right especially for the reading comprehension questions, as they can be quite long.
     )
-    print(len(sequences))  # len of sequences is the number of elements in df_questions.
+    # len of sequences is the number of elements in df_questions.
     for idx, answer in enumerate(sequences):
         try:
-            print("IN")
-            print(len(answer))
-            print(type(answer))  # answer is a list, with one element only
-            print(answer)
+            # answer is a list, with one element only
             answer = answer[0]['generated_text']
-            print(answer)
             answer = answer.split('{')[1]
             answer = answer.split('}')[0]
             answer = '{' + answer + '}'
-            print(answer)
             answer = validate_answer(answer)
         except Exception as e:
             print(e)
             answer = "{'index': -9, 'text': 'None'}"  # this if the model did not produce a valid JSON or integer
-        assert 1 == 2
         answers_dict[list_q_id[idx]] = answer
 
     # for idx, row in df_questions.iterrows():
