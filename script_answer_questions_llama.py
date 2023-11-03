@@ -27,7 +27,7 @@ def prepare_answers_dict_llama(df_questions, pipeline, student_level=None, is_re
             {build_user_prompt_from_params(r['question'], r['options'], is_reading_question, r['context'])} [/INST]""",
         axis=1
     )
-    dataset = Dataset.from_pandas(df_questions['input_prompt'])
+    dataset = Dataset.from_pandas(df_questions[['input_prompt']])
     list_q_id = df_questions['q_id'].values.to_list()
 
     sequences = pipeline(
