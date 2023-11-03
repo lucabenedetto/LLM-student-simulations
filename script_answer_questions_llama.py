@@ -47,13 +47,13 @@ def prepare_answers_dict_llama(df_questions, pipeline, student_level=None, is_re
         eos_token_id=None,  # tokenizer.eos_token_id,
         max_length=750, # this is important to get right especially for the reading comprehension questions, as they can be quite long.
     )
-    print(len(sequences))
+    print(len(sequences))  # len of sequences is the number of elements in df_questions.
     for idx, answer in enumerate(sequences):
         try:
             print("IN")
-            print(type(answer))
+            print(type(answer))  # answer is a list, with one element only
             print(answer)
-            answer = answer['generated_answer']
+            answer = answer[0]['generated_answer']
             print(answer)
             answer = answer.split('{')[1]
             answer = answer.split('}')[0]
