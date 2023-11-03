@@ -1,4 +1,10 @@
 RACE = 'race_pp'
 ARC = 'arc'
 
-DATA_DIR = '/home/luca/projects/_project_data/unsupervised_qdet'
+IS_READING_QUESTION = {
+    RACE: True,
+    ARC: False,
+}
+
+INPUT_DATA_DIR = 'data/input'
+OUTPUT_DATA_DIR = 'data/output'
