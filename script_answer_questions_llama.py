@@ -15,28 +15,36 @@ from utils import (
 from constants import RACE, ARC, IS_READING_QUESTION, OUTPUT_DATA_DIR
 
 
+def get_llama_input_prompt(student_level, prompt_idx, is_reading_question, question, options, context):
+    return f"""[INST] <<SYS>> \
+{build_system_message_from_params(prompt_idx, student_level)} <</SYS>>
+{build_user_prompt_from_params(question, options, is_reading_question, context)} [/INST]"""
+
+
 def prepare_answers_dict_llama(df_questions, pipeline, student_level=None, is_reading_question=False, prompt_idx=None):
     answers_dict = {}
 
     df_questions['input_prompt'] = df_questions.apply(
-        lambda r: f"""
-            <s>[INST] <<SYS>>
-            {build_system_message_from_params(prompt_idx, student_level)}
-            <</SYS>>
-    
-            {build_user_prompt_from_params(r['question'], r['options'], is_reading_question, r['context'])} [/INST]""",
+        lambda r: get_llama_input_prompt(student_level, prompt_idx, is_reading_question, r['question'], r['options'], r['context']),
         axis=1
     )
+    print(df_questions['input_prompt'])
     dataset = Dataset.from_pandas(df_questions[['input_prompt']])
     list_q_id = df_questions['q_id'].values.tolist()
 
+# def preprocess_function(examples):
+    #     return tokenizer(examples["text"], truncation=True, max_length=MAX_LENGTH, padding=True)
+    #
+    # tokenized_dataset = dataset.map(preprocess_function, batched=True)
+
+    print(dataset)
     sequences = pipeline(
         dataset,  # I call the pipeline on the whole dataset. because it is much more efficient.
         do_sample=True,
         top_k=10,
         num_return_sequences=1,
         return_full_text=False,
-        eos_token_id=tokenizer.eos_token_id,
+        eos_token_id=None,  # tokenizer.eos_token_id,
         max_length=750, # this is important to get right especially for the reading comprehension questions, as they can be quite long.
     )
     for idx, answer in enumerate(sequences):
