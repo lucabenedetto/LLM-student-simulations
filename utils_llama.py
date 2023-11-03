@@ -2,10 +2,14 @@ from utils import validate_answer, build_system_message_from_params, build_user_
 
 
 def clean_raw_llama_answer(answer):
-    answer = answer.split('{')[1]
-    answer = answer.split('}')[0]
-    answer = '{' + answer + '}'
-    answer = validate_answer(answer)
+    try:
+        answer = answer.split('{')[1]
+        answer = answer.split('}')[0]
+        answer = '{' + answer + '}'
+        answer = validate_answer(answer)
+    except Exception as e:
+        print(e)
+        answer = "{'index': -9, 'text': 'None'}"  # this if the model did not produce a valid JSON or integer
     return answer
 
 
