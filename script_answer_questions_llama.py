@@ -49,10 +49,13 @@ def prepare_answers_dict_llama(df_questions, pipeline, student_level=None, is_re
     )
     for idx, answer in enumerate(sequences):
         try:
+            print(answer)
             answer = answer['generated_answer']
+            print(answer)
             answer = answer.split('{')[1]
             answer = answer.split('}')[0]
             answer = '{' + answer + '}'
+            print(answer)
             answer = validate_answer(answer)
         except Exception as e:
             print(e)
