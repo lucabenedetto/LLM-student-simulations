@@ -53,7 +53,7 @@ def prepare_answers_dict_llama(df_questions, pipeline, student_level=None, is_re
             print("IN")
             print(type(answer))  # answer is a list, with one element only
             print(answer)
-            answer = answer[0]['generated_answer']
+            answer = answer[0]['generated_text']
             print(answer)
             answer = answer.split('{')[1]
             answer = answer.split('}')[0]
