@@ -31,7 +31,7 @@ def prepare_answers_dict_llama(df_questions, pipeline, student_level=None, is_re
     print(df_questions['input_prompt'])
     dataset = Dataset.from_pandas(df_questions[['input_prompt']])
     def preprocess_function(examples):
-        return tokenizer(examples["input_prompt"], truncation=True, max_length=750, padding=True)
+        return tokenizer(examples["input_prompt"])
     dataset = dataset.map(preprocess_function, batched=True)
     list_q_id = df_questions['q_id'].values.tolist()
 
