@@ -20,8 +20,6 @@ PROMPT_IDX = 39
 st_levels = get_student_levels_from_prompt_idx(PROMPT_IDX)
 df_items = get_dataset(DATASET, 50)
 
-df_items = df_items[:11]  # todo this is tmp
-
 is_reading_question = IS_READING_QUESTION[DATASET]
 
 model = "meta-llama/Llama-2-7b-chat-hf"
