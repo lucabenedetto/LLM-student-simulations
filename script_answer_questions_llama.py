@@ -28,16 +28,18 @@ def prepare_answers_dict_llama(df_questions, pipeline, student_level=None, is_re
         lambda r: get_llama_input_prompt(student_level, prompt_idx, is_reading_question, r['question'], r['options'], r['context']),
         axis=1
     )
-    print(df_questions['input_prompt'])
-    dataset = Dataset.from_pandas(df_questions[['input_prompt']])
-    def preprocess_function(examples):
-        return tokenizer(examples["input_prompt"])
-    dataset = dataset.map(preprocess_function, batched=True)
+    # print(df_questions['input_prompt'])
+    # dataset = Dataset.from_pandas(df_questions[['input_prompt']])
+    # def preprocess_function(examples):
+    #     return tokenizer(examples["input_prompt"])
+    # dataset = dataset.map(preprocess_function, batched=True)
     list_q_id = df_questions['q_id'].values.tolist()
+    print(list_q_id)
 
-    print(dataset)
+    # print(dataset)
     sequences = pipeline(
-        dataset,  # I call the pipeline on the whole dataset. because it is much more efficient.
+        # dataset,  # I call the pipeline on the whole dataset. because it is much more efficient.
+        df_questions['input_prompt'].values.tolist(),  # I call the pipeline on the whole dataset. because it is much more efficient.
         do_sample=True,
         top_k=10,
         num_return_sequences=1,
