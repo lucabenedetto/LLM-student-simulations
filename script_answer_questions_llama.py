@@ -51,6 +51,7 @@ def prepare_answers_dict_llama(df_questions, pipeline, student_level=None, is_re
     for idx, answer in enumerate(sequences):
         try:
             print("IN")
+            print(len(answer))
             print(type(answer))  # answer is a list, with one element only
             print(answer)
             answer = answer[0]['generated_text']
