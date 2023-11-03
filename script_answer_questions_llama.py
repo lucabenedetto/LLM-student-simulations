@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+from datasets import Dataset
 from transformers import AutoTokenizer
 import transformers
 import torch
@@ -16,31 +17,61 @@ from constants import RACE, ARC, IS_READING_QUESTION, OUTPUT_DATA_DIR
 
 def prepare_answers_dict_llama(df_questions, pipeline, student_level=None, is_reading_question=False, prompt_idx=None):
     answers_dict = {}
-    for idx, row in df_questions.iterrows():
-        print("Processing idx: ", idx)
-        prompt = build_user_prompt_from_params(row.question, row.options, is_reading_question, row.context)
-        system_message = build_system_message_from_params(prompt_idx, student_level)
-        input_prompt = f"""<s>[INST] <<SYS>>
-        {system_message}
-        <</SYS>>
 
-        {prompt} [/INST]"""
+    df_questions['input_prompt'] = df_questions.apply(
+        lambda r: f"""
+            <s>[INST] <<SYS>>
+            {build_system_message_from_params(prompt_idx, student_level)}
+            <</SYS>>
+    
+            {build_user_prompt_from_params(r['question'], r['options'], is_reading_question, r['context'])} [/INST]""",
+        axis=1
+    )
+    dataset = Dataset.from_pandas(df_questions['input_prompt'])
+    list_q_id = df_questions['q_id'].values.to_list()
+
+    sequences = pipeline(
+        dataset,  # I call the pipeline on the whole dataset. because it is much more efficient.
+        do_sample=True,
+        top_k=10,
+        num_return_sequences=1,
+        return_full_text=False,
+        eos_token_id=tokenizer.eos_token_id,
+        max_length=750, # this is important to get right especially for the reading comprehension questions, as they can be quite long.
+    )
+    for idx, answer in enumerate(sequences):
         try:
-            sequences = pipeline(
-                input_prompt,
-                do_sample=True,
-                top_k=10,
-                num_return_sequences=1,
-                return_full_text=False,
-                eos_token_id=tokenizer.eos_token_id,
-                max_length=750,  # this is important to get right especially for the reading comprehension questions, as they can be quite long.
-            )
-            answer = sequences[0]
             answer = validate_answer(answer)
         except Exception as e:
             print(e)
             answer = "{'index': -9, 'text': 'None'}"  # this if the model did not produce a valid JSON or integer
-        answers_dict[row.q_id] = answer
+        answers_dict[list_q_id[idx]] = answer
+
+    # for idx, row in df_questions.iterrows():
+    #     print("Processing idx: ", idx)
+    #     prompt = build_user_prompt_from_params(row.question, row.options, is_reading_question, row.context)
+    #     system_message = build_system_message_from_params(prompt_idx, student_level)
+    #     input_prompt = f"""<s>[INST] <<SYS>>
+    #     {system_message}
+    #     <</SYS>>
+    #
+    #     {prompt} [/INST]"""
+    #     try:
+    #         sequences = pipeline(
+    #             input_prompt,
+    #             do_sample=True,
+    #             top_k=10,
+    #             num_return_sequences=1,
+    #             return_full_text=False,
+    #             eos_token_id=tokenizer.eos_token_id,
+    #             max_length=750,  # this is important to get right especially for the reading comprehension questions, as they can be quite long.
+    #         )
+    #         answer = sequences[0]
+    #         answer = validate_answer(answer)
+    #     except Exception as e:
+    #         print(e)
+    #         answer = "{'index': -9, 'text': 'None'}"  # this if the model did not produce a valid JSON or integer
+    #     answers_dict[row.q_id] = answer
     return answers_dict
 
 
@@ -48,10 +79,12 @@ DATASET = ARC
 # folder_name = '23_11_llama_responses_race_pp'  # RACE
 folder_name = '23_11_llama_responses_arc'  # ARC
 
-PROMPT_IDX = 47
+PROMPT_IDX = 39
 
 st_levels = get_student_levels_from_prompt_idx(PROMPT_IDX)
 df_items = get_dataset(DATASET, 50)
+
+df_items = df_items[:11]  # todo this is tmp
 
 is_reading_question = IS_READING_QUESTION[DATASET]
 
