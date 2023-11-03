@@ -15,6 +15,14 @@ from utils import (
 from constants import RACE, ARC, IS_READING_QUESTION, OUTPUT_DATA_DIR
 
 
+def clean_raw_llama_answer(answer):
+    answer = answer.split('{')[1]
+    answer = answer.split('}')[0]
+    answer = '{' + answer + '}'
+    answer = validate_answer(answer)
+    return answer
+
+
 def get_llama_input_prompt(student_level, prompt_idx, is_reading_question, question, options, context):
     return f"""[INST] <<SYS>> \
 {build_system_message_from_params(prompt_idx, student_level)} <</SYS>>
@@ -45,40 +53,10 @@ def prepare_answers_dict_llama(df_questions, pipeline, student_level=None, is_re
         try:
             # answer is a list, with one element only
             answer = answer[0]['generated_text']
-            answer = answer.split('{')[1]
-            answer = answer.split('}')[0]
-            answer = '{' + answer + '}'
-            answer = validate_answer(answer)
         except Exception as e:
             print(e)
             answer = "{'index': -9, 'text': 'None'}"  # this if the model did not produce a valid JSON or integer
         answers_dict[list_q_id[idx]] = answer
-
-    # for idx, row in df_questions.iterrows():
-    #     print("Processing idx: ", idx)
-    #     prompt = build_user_prompt_from_params(row.question, row.options, is_reading_question, row.context)
-    #     system_message = build_system_message_from_params(prompt_idx, student_level)
-    #     input_prompt = f"""<s>[INST] <<SYS>>
-    #     {system_message}
-    #     <</SYS>>
-    #
-    #     {prompt} [/INST]"""
-    #     try:
-    #         sequences = pipeline(
-    #             input_prompt,
-    #             do_sample=True,
-    #             top_k=10,
-    #             num_return_sequences=1,
-    #             return_full_text=False,
-    #             eos_token_id=tokenizer.eos_token_id,
-    #             max_length=750,  # this is important to get right especially for the reading comprehension questions, as they can be quite long.
-    #         )
-    #         answer = sequences[0]
-    #         answer = validate_answer(answer)
-    #     except Exception as e:
-    #         print(e)
-    #         answer = "{'index': -9, 'text': 'None'}"  # this if the model did not produce a valid JSON or integer
-    #     answers_dict[row.q_id] = answer
     return answers_dict
 
 
@@ -115,7 +93,8 @@ for idx, student_level in enumerate(st_levels):
         row.append(value)
         rows.append(row)
 
-    df_model_answers = pd.DataFrame(rows, columns=["q_id", "answer"])
+    df_model_answers = pd.DataFrame(rows, columns=['q_id', 'raw_answer'])
+    df_model_answers['answer'] = df_model_answers.apply(lambda r: clean_raw_llama_answer(r['raw_answer']), axis=1)
 
     df_model_answers.to_csv(
         os.path.join(OUTPUT_DATA_DIR, folder_name, f"llama2_answers_prompt{PROMPT_IDX}_0shot_{student_level}.csv"),
