@@ -47,6 +47,7 @@ def prepare_answers_dict_llama(df_questions, pipeline, student_level=None, is_re
         eos_token_id=None,  # tokenizer.eos_token_id,
         max_length=750, # this is important to get right especially for the reading comprehension questions, as they can be quite long.
     )
+    print(type(sequences))
     for idx, answer in enumerate(sequences):
         try:
             print(answer)
@@ -60,6 +61,7 @@ def prepare_answers_dict_llama(df_questions, pipeline, student_level=None, is_re
         except Exception as e:
             print(e)
             answer = "{'index': -9, 'text': 'None'}"  # this if the model did not produce a valid JSON or integer
+        assert 1 == 2
         answers_dict[list_q_id[idx]] = answer
 
     # for idx, row in df_questions.iterrows():
