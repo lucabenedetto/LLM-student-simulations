@@ -4,14 +4,14 @@ from typing import Union
 
 import pandas as pd
 
-from constants import RACE, ARC, DATA_DIR
+from constants import RACE, ARC, INPUT_DATA_DIR
 
 
 def get_dataset(dataset_name: str, num_questions_per_difficulty_level: int = 50) -> pd.DataFrame:
     if dataset_name == RACE and num_questions_per_difficulty_level == 50:
-        return pd.read_csv(os.path.join(DATA_DIR, "processed/race_pp_test_50q_per_diff.csv"))
+        return pd.read_csv(os.path.join(INPUT_DATA_DIR, "race_pp_test_50q_per_diff.csv"))
     elif dataset_name == ARC and num_questions_per_difficulty_level == 50:
-        return pd.read_csv(os.path.join(DATA_DIR, "processed/arc_test_50q_per_diff.csv"))
+        return pd.read_csv(os.path.join(INPUT_DATA_DIR, "arc_test_50q_per_diff.csv"))
     else:
         raise NotImplementedError()
 

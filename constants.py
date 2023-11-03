@@ -6,5 +6,5 @@ IS_READING_QUESTION = {
     ARC: False,
 }
 
-DATA_DIR = '/home/luca/projects/_project_data/unsupervised_qdet'
-OUTPUT_DIR = 'output'
+INPUT_DATA_DIR = 'data/input'
+OUTPUT_DATA_DIR = 'data/output'

@@ -11,7 +11,7 @@ from utils import (
     build_system_message_from_params,
     validate_answer,
 )
-from constants import RACE, ARC, DATA_DIR, IS_READING_QUESTION, OUTPUT_DIR
+from constants import RACE, ARC, IS_READING_QUESTION, OUTPUT_DATA_DIR
 
 
 def prepare_answers_dict_llama(df_questions, pipeline, student_level=None, is_reading_question=False, prompt_idx=None):
@@ -46,7 +46,7 @@ def prepare_answers_dict_llama(df_questions, pipeline, student_level=None, is_re
 
 DATASET = ARC
 # folder_name = '23_11_llama_responses_race_pp'  # RACE
-folder_name = '23_11_llama_responses'  # ARC
+folder_name = '23_11_llama_responses_arc'  # ARC
 
 PROMPT_IDX = 47
 
@@ -78,6 +78,6 @@ for idx, student_level in enumerate(st_levels):
     df_model_answers = pd.DataFrame(rows, columns=["q_id", "answer"])
 
     df_model_answers.to_csv(
-        os.path.join(DATA_DIR, OUTPUT_DIR, folder_name, f"llama2_answers_prompt{PROMPT_IDX}_0shot_{student_level}.csv"),
+        os.path.join(OUTPUT_DATA_DIR, folder_name, f"llama2_answers_prompt{PROMPT_IDX}_0shot_{student_level}.csv"),
         index=False
     )

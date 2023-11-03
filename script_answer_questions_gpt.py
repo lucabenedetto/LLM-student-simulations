@@ -5,7 +5,7 @@ import openai
 
 from utils import get_student_levels_from_prompt_idx, get_dataset
 from utils_openai_api import prepare_answers_dict_gpt
-from constants import RACE, ARC, DATA_DIR, IS_READING_QUESTION, OUTPUT_DIR
+from constants import RACE, ARC, IS_READING_QUESTION, OUTPUT_DATA_DIR
 
 # get the OpenAI API key
 with open('key.json', 'r') as f:
@@ -40,6 +40,6 @@ for idx, student_level in enumerate(st_levels):
     df_model_answers = pd.DataFrame(rows, columns=["q_id", "answer"])
 
     df_model_answers.to_csv(
-        os.path.join(DATA_DIR, OUTPUT_DIR, folder_name, f"gpt3_5_grade_answers_prompt{PROMPT_IDX}_0shot_a_{student_level}.csv"),
+        os.path.join(OUTPUT_DATA_DIR, folder_name, f"gpt3_5_grade_answers_prompt{PROMPT_IDX}_0shot_a_{student_level}.csv"),
         index=False
     )
