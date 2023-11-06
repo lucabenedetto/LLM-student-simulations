@@ -27,7 +27,8 @@ PROMPT_IDX = 40
 data_path = os.path.join(OUTPUT_DATA_DIR, f'gpt_responses_{DATASET}')
 
 student_levels = get_student_levels_from_prompt_idx(PROMPT_IDX)
-filenames = [f"gpt3_5_grade_answers_prompt{PROMPT_IDX}_0shot_a_{student_level}.csv" for student_level in student_levels]
+# the 1+idx is needed for backward compatibility with files written with a previous script.
+filenames = [f"gpt3_5_grade_answers_prompt{PROMPT_IDX}_0shot_a_{1+idx}.csv" for idx, _ in enumerate(student_levels)]
 filepaths = [os.path.join(data_path, filename) for filename in filenames]
 
 difficulty_levels = DIFFICULTY_LEVELS[DATASET]
