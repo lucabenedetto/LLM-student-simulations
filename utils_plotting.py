@@ -31,6 +31,8 @@ def plot_accuracy_per_difficulty_per_model(avg_accuracy_per_grade_per_model, dat
             print("WARNING!")  # TODO add raise error instead of this
     fig, ax = plt.subplots(1, len(difficulty_levels), sharey='all')
     for idx, grade in enumerate(difficulty_levels):
+        ax[idx].set_ylim(0, 1.0)
+        ax[idx].set_yticks(np.arange(0.0, 1.0, 0.1))
         ax[idx].grid(alpha=0.5, axis='y')
         ax[idx].bar(range(n_role_played_levels), avg_accuracy_per_grade_per_model[grade], color=COLORS[idx])
         ax[idx].plot([0, n_role_played_levels-1], [np.mean(avg_accuracy_per_grade_per_model[grade])] * 2, c='k')
@@ -39,3 +41,20 @@ def plot_accuracy_per_difficulty_per_model(avg_accuracy_per_grade_per_model, dat
         ax[idx].set_ylabel('QA accuracy')
     plt.show()
 
+
+def plot_accuracy_per_difficulty_for_different_role_played_levels(avg_accuracy_per_grade_per_model, role_played_levels, dataset_name, prompt_idx):
+    difficulty_levels = list(avg_accuracy_per_grade_per_model.keys())
+    n_role_played_levels = len(role_played_levels)
+
+    fig, ax = plt.subplots(1, n_role_played_levels, sharey='all')
+    for idx, role_played_level in enumerate(role_played_levels):
+        ax[idx].set_ylim(0, 1.0)
+        ax[idx].set_yticks(np.arange(0.0, 1.0, 0.1))
+        ax[idx].grid(alpha=0.5, axis='y')
+        ax[idx].bar(difficulty_levels, [avg_accuracy_per_grade_per_model[i][idx] for i in difficulty_levels], color=COLORS[idx])
+        ax[idx].set_title(f'{dataset_name} | prompt {prompt_idx}\n Role-played level: {role_played_level}')
+        ax[idx].set_xlabel('Grade')
+        ax[idx].set_ylabel('QA accuracy')
+        ax[idx].set_xticks(difficulty_levels)
+        ax[idx].set_xticklabels(difficulty_levels)
+    plt.show()
