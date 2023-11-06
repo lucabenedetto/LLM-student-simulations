@@ -17,6 +17,7 @@ def get_average_accuracy_per_model(
 ) -> Tuple[List[float], Dict[int, List[float]]]:
     # dict that maps from "true_difficulty" to list of qids
     questions_by_difficulty = get_questions_by_difficulty_dict(complete_df, difficulty_levels)
+    correct_answer_dict = get_correct_answer_dict_from_df(complete_df)  # dict that maps from qid to correct answer
 
     avg_accuracy_per_grade_per_model = dict()
     for grade in difficulty_levels:
@@ -27,6 +28,7 @@ def get_average_accuracy_per_model(
         df = df[df['q_id'].isin(set_q_ids)]
         # df = df[~df['q_id'].isna()]
         # df = df[~df['q_id'].isnull()]
+        df['correct'] = df.apply(lambda r: int(correct_answer_dict[r['q_id']]) == get_answer_index_as_int(r['answer']), axis=1)
         avg_accuracy_per_model.append(df['correct'].mean())
         for grade in difficulty_levels:
             avg_accuracy_per_grade_per_model[grade].append(
@@ -39,8 +41,7 @@ def get_response_correctness_per_model(
         set_q_ids,
         complete_df,
 ) -> Tuple[Dict[str, List[bool]], Dict[str, List[str]]]:
-    # dict that maps from qid to correct answer
-    correct_answer_dict = get_correct_answer_dict_from_df(complete_df)
+    correct_answer_dict = get_correct_answer_dict_from_df(complete_df)  # I am computing this twice, I should probably pass it to the method instead of computing it here.
 
     correctness_per_model = defaultdict(list)
     answers_per_model = defaultdict(list)
@@ -51,8 +52,8 @@ def get_response_correctness_per_model(
         # df = df[~df['q_id'].isna()]
         # df = df[~df['q_id'].isnull()]
 
-        df['correct'] = df.apply(lambda r: int(correct_answer_dict[r['q_id']]) == get_answer_index_as_int(r['answer']), axis=1)
-        df['correct_answer'] = df.apply(lambda r: correct_answer_dict[r['q_id']], axis=1)
+        # df['correct'] = df.apply(lambda r: int(correct_answer_dict[r['q_id']]) == get_answer_index_as_int(r['answer']), axis=1)
+        # df['correct_answer'] = df.apply(lambda r: correct_answer_dict[r['q_id']], axis=1)
         for q_id, answer in df[['q_id', 'answer']].values:
             correctness_per_model[q_id].append(get_answer_index_as_int(answer) == int(correct_answer_dict[q_id]))
             answers_per_model[q_id].append(answer)
