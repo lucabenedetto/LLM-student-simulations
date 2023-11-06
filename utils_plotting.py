@@ -8,11 +8,18 @@ COLORS = [
 ]
 
 
-def plot_accuracy_per_model(average_accuracy_per_model):
-    n_role_played_levels = len(average_accuracy_per_model)
+def plot_accuracy_per_model(average_accuracy_per_model, role_played_levels, dataset_name, prompt_idx):
+    n_role_played_levels = len(role_played_levels)
     fig, ax = plt.subplots()
-    colors = ['darkred'] * 5 + ['darkgreen'] * 5 + ['orange'] * 5  # TODO!
-    ax.bar(range(n_role_played_levels), average_accuracy_per_model, color=colors)
+    ax.bar(range(n_role_played_levels), average_accuracy_per_model)
+    ax.set_ylim(0, 1.0)
+    ax.set_yticks(np.arange(0.0, 1.0, 0.1))
+    ax.grid(axis='y')
+    ax.set_ylabel('QA accuracy')
+    ax.set_xlabel('Role-played level')
+    ax.set_xticks(range(n_role_played_levels))
+    ax.set_xticklabels(role_played_levels)
+    ax.set_title(f'QA accuracy per role-played level | {dataset_name} | prompt {prompt_idx}')
     plt.show()
 
 
@@ -31,3 +38,4 @@ def plot_accuracy_per_difficulty_per_model(avg_accuracy_per_grade_per_model):
         ax[idx].set_xlabel('Role-played level')
         ax[idx].set_ylabel('QA accuracy')
     plt.show()
+
