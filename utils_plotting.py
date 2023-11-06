@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
+import pandas as pd
+import seaborn
 
 COLORS = [
     'tab:blue', 'tab:orange', 'tab:green', 'tab:red',
@@ -58,3 +59,42 @@ def plot_accuracy_per_difficulty_for_different_role_played_levels(avg_accuracy_p
         ax[idx].set_xticks(difficulty_levels)
         ax[idx].set_xticklabels(difficulty_levels)
     plt.show()
+
+
+def plot_correlation_between_difficulty_and_qa_correctness(
+        correctness_per_model,
+        difficulty_dict,
+        dataset_name,
+        prompt_idx,
+):
+    difficulty_levels = set(difficulty_dict.values())
+    X, Y = [], []
+    for q_id in correctness_per_model.keys():
+        X.append(difficulty_dict[q_id])
+        Y.append(np.mean(correctness_per_model[q_id]))
+
+    # Version 1 of the plot: hexbin
+    fig, ax = plt.subplots()
+    # ax.scatter(X, Y)
+    ax.set_ylim(-0.05, 1.05)
+    ax.set_xlim(min(difficulty_levels)-0.2, max(difficulty_levels)+0.2)
+    ax.hexbin(X, Y, gridsize=10)
+    ax.set_title(f'Correlation between QA accuracy and true difficulty | {dataset_name} | prompt {prompt_idx}')
+    ax.set_xlabel('"True" difficulty')
+    ax.set_ylabel('QA correctness')
+    m, b = np.polyfit(X, Y, 1)
+    if m and b:
+        x0, x1 = min(X), max(X)
+        ax.plot([x0, x1], [x0 * m + b, x1 * m + b], c='r')
+    plt.show()
+    plt.close(fig)
+
+    # Version 2 of the plot: KDE
+    fig, ax = plt.subplots()
+    ax.set_title(f'Correlation between QA accuracy and true difficulty | {dataset_name} | prompt {prompt_idx}')
+    seaborn.kdeplot(pd.DataFrame({'"True" difficulty': X, 'QA correctness': Y}), x='"True" difficulty', y='QA correctness', fill=True, levels=15)
+    if m and b:
+        x0, x1 = min(X), max(X)
+        ax.plot([x0, x1], [x0 * m + b, x1 * m + b], c='r')
+    plt.show()
+    plt.close(fig)
