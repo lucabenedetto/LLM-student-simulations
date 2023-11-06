@@ -23,8 +23,7 @@ df_items = get_dataset(DATASET, 50)
 
 is_reading_question = IS_READING_QUESTION[DATASET]
 
-# folder_name = '2309_gpt_responses_race_pp'  # RACE
-folder_name = '23_07_gpt_responses'  # ARC
+folder_name = f'gpt_responses_{DATASET}'
 
 for idx, student_level in enumerate(st_levels):
     print(f"-- Doing idx {idx}, student level {student_level}")
