@@ -1,10 +1,88 @@
+import ast
 import json
 import os
-from typing import Union
+from collections import defaultdict
+from typing import Union, Dict, List, Set, Tuple
 
 import pandas as pd
 
 from constants import RACE, ARC, INPUT_DATA_DIR
+
+
+def get_average_accuracy_per_model(
+        filepaths,
+        set_q_ids,
+        complete_df,
+        difficulty_levels,
+) -> Tuple[List[float], Dict[int, List[float]]]:
+    # dict that maps from "true_difficulty" to list of qids
+    questions_by_difficulty = get_questions_by_difficulty_dict(complete_df, difficulty_levels)
+    correct_answer_dict = get_correct_answer_dict_from_df(complete_df)  # dict that maps from qid to correct answer
+
+    avg_accuracy_per_grade_per_model = dict()
+    for grade in difficulty_levels:
+        avg_accuracy_per_grade_per_model[grade] = []
+    avg_accuracy_per_model = []
+    for idx, filepath in enumerate(filepaths):
+        df = pd.read_csv(filepath)
+        df = df[df['q_id'].isin(set_q_ids)]
+        # df = df[~df['q_id'].isna()]
+        # df = df[~df['q_id'].isnull()]
+        df['correct'] = df.apply(lambda r: int(correct_answer_dict[r['q_id']]) == get_answer_index_as_int(r['answer']), axis=1)
+        avg_accuracy_per_model.append(df['correct'].mean())
+        for grade in difficulty_levels:
+            avg_accuracy_per_grade_per_model[grade].append(
+                df[df['q_id'].isin(questions_by_difficulty[grade])]['correct'].mean())
+    return avg_accuracy_per_model, avg_accuracy_per_grade_per_model
+
+
+def get_response_correctness_per_model(
+        filepaths,
+        set_q_ids,
+        complete_df,
+) -> Tuple[Dict[str, List[bool]], Dict[str, List[str]]]:
+    correct_answer_dict = get_correct_answer_dict_from_df(complete_df)  # I am computing this twice, I should probably pass it to the method instead of computing it here.
+
+    correctness_per_model = defaultdict(list)
+    answers_per_model = defaultdict(list)
+
+    for idx, filepath in enumerate(filepaths):
+        df = pd.read_csv(filepath)
+        df = df[df['q_id'].isin(set_q_ids)]
+        # df = df[~df['q_id'].isna()]
+        # df = df[~df['q_id'].isnull()]
+
+        # df['correct'] = df.apply(lambda r: int(correct_answer_dict[r['q_id']]) == get_answer_index_as_int(r['answer']), axis=1)
+        # df['correct_answer'] = df.apply(lambda r: correct_answer_dict[r['q_id']], axis=1)
+        for q_id, answer in df[['q_id', 'answer']].values:
+            correctness_per_model[q_id].append(get_answer_index_as_int(answer) == int(correct_answer_dict[q_id]))
+            answers_per_model[q_id].append(answer)
+    return correctness_per_model, answers_per_model
+
+
+def get_answer_index_as_int(answer):
+    try:
+        answer_integer = int(ast.literal_eval(answer)['index'])
+    except:
+        answer_integer = -9  # TODO fix this, this is tmp
+    return answer_integer
+
+
+def get_correct_answer_dict_from_df(df) -> Dict[str, str]:
+    return {q_id: correct_answer for q_id, correct_answer in df[['q_id', 'correct_answer']].values}
+
+
+def get_difficulty_dict_from_df(df) -> Dict[str, int]:
+    return {q_id: difficulty for q_id, difficulty in df[['q_id', 'difficulty']].values}
+
+
+def get_questions_by_difficulty_dict(df: pd.DataFrame, difficulty_levels: List[int]) -> Dict[int, Set[str]]:
+    questions_by_difficulty = dict()
+    for diff in difficulty_levels:
+        questions_by_difficulty[diff] = set()
+    for q_id, diff in df[['q_id', 'difficulty']].values:
+        questions_by_difficulty[diff].add(q_id)
+    return questions_by_difficulty
 
 
 def get_dataset(dataset_name: str, num_questions_per_difficulty_level: int = 50) -> pd.DataFrame:
@@ -14,6 +92,24 @@ def get_dataset(dataset_name: str, num_questions_per_difficulty_level: int = 50)
         return pd.read_csv(os.path.join(INPUT_DATA_DIR, "arc_test_50q_per_diff.csv"))
     else:
         raise NotImplementedError()
+
+
+def get_original_dataset(dataset_name: str) -> pd.DataFrame:
+    if dataset_name == RACE:
+        return pd.read_csv(os.path.join(INPUT_DATA_DIR, 'race_pp_test.csv'))
+    elif dataset_name == ARC:
+        return pd.read_csv(os.path.join(INPUT_DATA_DIR, 'arc_test.csv'))
+    else:
+        raise NotImplementedError()
+
+
+def get_questions_answered_by_all_roleplayed_levels(filepaths, complete_df):
+    set_q_ids = set(complete_df['q_id'].unique())
+    for idx, filepath in enumerate(filepaths):
+        df = pd.read_csv(filepath)
+        df = df[df['answer'] != "{'index': -9, 'text': 'None'}"]
+        set_q_ids = set_q_ids.intersection(set(df['q_id'].unique()))
+    return set_q_ids
 
 
 def get_student_levels_from_prompt_idx(prompt_idx):
