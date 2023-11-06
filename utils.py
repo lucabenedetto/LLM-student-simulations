@@ -11,6 +11,10 @@ def get_correct_answer_dict_from_df(df) -> Dict[str, str]:
     return {q_id: correct_answer for q_id, correct_answer in df[['q_id', 'correct_answer']].values}
 
 
+def get_difficulty_dict_from_df(df) -> Dict[str, int]:
+    return {q_id: difficulty for q_id, difficulty in df[['q_id', 'difficulty']].values}
+
+
 def get_dataset(dataset_name: str, num_questions_per_difficulty_level: int = 50) -> pd.DataFrame:
     if dataset_name == RACE and num_questions_per_difficulty_level == 50:
         return pd.read_csv(os.path.join(INPUT_DATA_DIR, "race_pp_test_50q_per_diff.csv"))
