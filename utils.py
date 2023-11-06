@@ -1,10 +1,35 @@
 import json
 import os
-from typing import Union, Dict, List, Set
+from typing import Union, Dict, List, Set, Tuple
 
 import pandas as pd
 
 from constants import RACE, ARC, INPUT_DATA_DIR
+
+
+def get_average_accuracy_per_model(
+        complete_df,
+        filepaths,
+        difficulty_levels,
+        set_q_ids
+) -> Tuple[List[float], Dict[int, List[float]]]:
+    # dict that maps from "true_difficulty" to list of qids
+    questions_by_difficulty = get_questions_by_difficulty_dict(complete_df, difficulty_levels)
+
+    avg_accuracy_per_grade_per_model = dict()
+    for grade in difficulty_levels:
+        avg_accuracy_per_grade_per_model[grade] = []
+    avg_accuracy_per_model = []
+    for idx, filepath in enumerate(filepaths):
+        df = pd.read_csv(filepath)
+        df = df[df['q_id'].isin(set_q_ids)]
+        # df = df[~df['q_id'].isna()]
+        # df = df[~df['q_id'].isnull()]
+        avg_accuracy_per_model.append(df['correct'].mean())
+        for grade in difficulty_levels:
+            avg_accuracy_per_grade_per_model[grade].append(
+                df[df['q_id'].isin(questions_by_difficulty[grade])]['correct'].mean())
+    return avg_accuracy_per_model, avg_accuracy_per_grade_per_model
 
 
 def get_correct_answer_dict_from_df(df) -> Dict[str, str]:
