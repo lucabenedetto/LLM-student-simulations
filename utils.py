@@ -1,10 +1,14 @@
 import json
 import os
-from typing import Union
+from typing import Union, Dict
 
 import pandas as pd
 
 from constants import RACE, ARC, INPUT_DATA_DIR
+
+
+def get_correct_answer_dict_from_df(df) -> Dict[str, str]:
+    return {q_id: correct_answer for q_id, correct_answer in df[['q_id', 'correct_answer']].values}
 
 
 def get_dataset(dataset_name: str, num_questions_per_difficulty_level: int = 50) -> pd.DataFrame:
