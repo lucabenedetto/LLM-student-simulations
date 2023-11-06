@@ -16,6 +16,15 @@ def get_dataset(dataset_name: str, num_questions_per_difficulty_level: int = 50)
         raise NotImplementedError()
 
 
+def get_original_dataset(dataset_name: str) -> pd.DataFrame:
+    if dataset_name == RACE:
+        return pd.read_csv(os.path.join(INPUT_DATA_DIR, 'race_pp_test.csv'))
+    elif dataset_name == ARC:
+        return pd.read_csv(os.path.join(INPUT_DATA_DIR, 'arc_test.csv'))
+    else:
+        raise NotImplementedError()
+
+
 def get_questions_answered_by_all_roleplayed_levels(filepaths, complete_df):
     set_q_ids = set(complete_df['q_id'].unique())
     for idx, filepath in enumerate(filepaths):
