@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Union, Dict
+from typing import Union, Dict, List, Set
 
 import pandas as pd
 
@@ -13,6 +13,15 @@ def get_correct_answer_dict_from_df(df) -> Dict[str, str]:
 
 def get_difficulty_dict_from_df(df) -> Dict[str, int]:
     return {q_id: difficulty for q_id, difficulty in df[['q_id', 'difficulty']].values}
+
+
+def get_questions_by_difficulty_dict(df: pd.DataFrame, difficulty_levels: List[int]) -> Dict[int, Set[str]]:
+    questions_by_difficulty = dict()
+    for diff in difficulty_levels:
+        questions_by_difficulty[diff] = set()
+    for q_id, diff in df[['q_id', 'difficulty']].values:
+        questions_by_difficulty[diff].add(q_id)
+    return questions_by_difficulty
 
 
 def get_dataset(dataset_name: str, num_questions_per_difficulty_level: int = 50) -> pd.DataFrame:
