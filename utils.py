@@ -117,7 +117,7 @@ def get_student_levels_from_prompt_idx(prompt_idx):
     five_levels_char = ['one', 'two', 'three', 'four', 'five']
     ten_levels_char = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
     # the two "standard" approaches with numbers in digit, either 5 or 10 levels.
-    five_levels_int = [str(idx) for idx in range(6)]
+    five_levels_int = [str(idx) for idx in range(5)]
     ten_levels_int = [str(idx) for idx in range(10)]
     # IELTS levels
     ielts_levels = ['4', '4.5', '5', '5.5', '6', '6.5', '7', '7.5', '8', '9']
