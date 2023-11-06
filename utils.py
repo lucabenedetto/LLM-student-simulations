@@ -16,6 +16,15 @@ def get_dataset(dataset_name: str, num_questions_per_difficulty_level: int = 50)
         raise NotImplementedError()
 
 
+def get_questions_answered_by_all_roleplayed_levels(filepaths, complete_df):
+    set_q_ids = set(complete_df['q_id'].unique())
+    for idx, filepath in enumerate(filepaths):
+        df = pd.read_csv(filepath)
+        df = df[df['answer'] != "{'index': -9, 'text': 'None'}"]
+        set_q_ids = set_q_ids.intersection(set(df['q_id'].unique()))
+    return set_q_ids
+
+
 def get_student_levels_from_prompt_idx(prompt_idx):
     # thw two standard approaches with numbers in chars, these (especially 5 levels) are the ones used the most.
     five_levels_char = ['one', 'two', 'three', 'four', 'five']
