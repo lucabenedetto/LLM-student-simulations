@@ -32,7 +32,8 @@ def plot_accuracy_per_model(
     if output_filepath is None:
         plt.show()
     else:
-        plt.savefig(output_filepath)
+        plt.savefig(output_filepath + '.pdf')
+        plt.savefig(output_filepath + '.png')
     plt.close(fig)
 
 
@@ -63,7 +64,8 @@ def plot_accuracy_per_difficulty_per_model(
     if output_filepath is None:
         plt.show()
     else:
-        plt.savefig(output_filepath)
+        plt.savefig(output_filepath + '.pdf')
+        plt.savefig(output_filepath + '.png')
     plt.close(fig)
 
 
@@ -94,7 +96,8 @@ def plot_accuracy_per_difficulty_for_different_role_played_levels(
     if output_filepath is None:
         plt.show()
     else:
-        plt.savefig(output_filepath)
+        plt.savefig(output_filepath + '.pdf')
+        plt.savefig(output_filepath + '.png')
     plt.close(fig)
 
 
@@ -130,7 +133,8 @@ def plot_correlation_between_difficulty_and_qa_correctness(
     if output_filepath_hexbin is None:
         plt.show()
     else:
-        plt.savefig(output_filepath_hexbin)
+        plt.savefig(output_filepath_hexbin + '.pdf')
+        plt.savefig(output_filepath_hexbin + '.png')
     plt.close(fig)
 
     # Version 2 of the plot: KDE
@@ -143,5 +147,6 @@ def plot_correlation_between_difficulty_and_qa_correctness(
     if output_filepath_kdeplot is None:
         plt.show()
     else:
-        plt.savefig(output_filepath_kdeplot)
+        plt.savefig(output_filepath_kdeplot + '.pdf')
+        plt.savefig(output_filepath_kdeplot + '.png')
     plt.close(fig)
