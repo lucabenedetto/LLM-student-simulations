@@ -27,7 +27,11 @@ def plot_accuracy_per_model(
     ax.set_xticks(range(n_role_played_levels))
     ax.set_xticklabels(role_played_levels)
     ax.set_title(f'QA accuracy per role-played level | {dataset_name} | prompt {prompt_idx}')
-    plt.show()
+    if output_filepath is None:
+        plt.show()
+    else:
+        plt.savefig(output_filepath)
+    plt.close(fig)
 
 
 def plot_accuracy_per_difficulty_per_model(
@@ -51,7 +55,11 @@ def plot_accuracy_per_difficulty_per_model(
         ax[idx].set_title(f'{dataset_name} | prompt {prompt_idx}\n Diff. level {grade} ')
         ax[idx].set_xlabel('Role-played level')
         ax[idx].set_ylabel('QA accuracy')
-    plt.show()
+    if output_filepath is None:
+        plt.show()
+    else:
+        plt.savefig(output_filepath)
+    plt.close(fig)
 
 
 def plot_accuracy_per_difficulty_for_different_role_played_levels(
@@ -75,7 +83,11 @@ def plot_accuracy_per_difficulty_for_different_role_played_levels(
         ax[idx].set_ylabel('QA accuracy')
         ax[idx].set_xticks(difficulty_levels)
         ax[idx].set_xticklabels(difficulty_levels)
-    plt.show()
+    if output_filepath is None:
+        plt.show()
+    else:
+        plt.savefig(output_filepath)
+    plt.close(fig)
 
 
 def plot_correlation_between_difficulty_and_qa_correctness(
@@ -83,7 +95,8 @@ def plot_correlation_between_difficulty_and_qa_correctness(
         difficulty_dict,
         dataset_name,
         prompt_idx,
-        output_filepath: str = None,
+        output_filepath_hexbin: str = None,
+        output_filepath_kdeplot: str = None,
 ):
     difficulty_levels = set(difficulty_dict.values())
     X, Y = [], []
@@ -104,7 +117,10 @@ def plot_correlation_between_difficulty_and_qa_correctness(
     if m and b:
         x0, x1 = min(X), max(X)
         ax.plot([x0, x1], [x0 * m + b, x1 * m + b], c='r')
-    plt.show()
+    if output_filepath_hexbin is None:
+        plt.show()
+    else:
+        plt.savefig(output_filepath_hexbin)
     plt.close(fig)
 
     # Version 2 of the plot: KDE
@@ -114,5 +130,8 @@ def plot_correlation_between_difficulty_and_qa_correctness(
     if m and b:
         x0, x1 = min(X), max(X)
         ax.plot([x0, x1], [x0 * m + b, x1 * m + b], c='r')
-    plt.show()
+    if output_filepath_kdeplot is None:
+        plt.show()
+    else:
+        plt.savefig(output_filepath_kdeplot)
     plt.close(fig)
