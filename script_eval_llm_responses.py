@@ -25,6 +25,7 @@ from constants import (
 DATASET = RACE
 PROMPT_IDX = 40
 data_path = os.path.join(OUTPUT_DATA_DIR, f'gpt_responses_{DATASET}')
+out_fig_path = os.path.join('output_figures', f'gpt_{DATASET}')
 
 student_levels = get_student_levels_from_prompt_idx(PROMPT_IDX)
 # the 1+idx is needed for backward compatibility with files written with a previous script.
@@ -45,13 +46,26 @@ avg_accuracy_per_model, avg_accuracy_per_grade_per_model = get_average_accuracy_
 correctness_per_model, answers_per_model = get_response_correctness_per_model(filepaths, set_q_ids, complete_df)
 
 # accuracy per model
-plot_accuracy_per_model(avg_accuracy_per_model, student_levels, DATASET, PROMPT_IDX)
+plot_accuracy_per_model(
+    avg_accuracy_per_model, student_levels, DATASET, PROMPT_IDX,
+    output_filepath=os.path.join(out_fig_path, f'{PROMPT_IDX}_accuracy_per_roleplayed_level'),
+)
 
 # accuracy per model per (true) difficulty level (i.e. grade)
-plot_accuracy_per_difficulty_per_model(avg_accuracy_per_grade_per_model, DATASET, PROMPT_IDX)
+plot_accuracy_per_difficulty_per_model(
+    avg_accuracy_per_grade_per_model, DATASET, PROMPT_IDX,
+    output_filepath=os.path.join(out_fig_path, f'{PROMPT_IDX}_accuracy_per_roleplayed_level_on_different_difficulty_levels'),
+)
 
 # accuracy per different grades when role-playing different levels
-plot_accuracy_per_difficulty_for_different_role_played_levels(avg_accuracy_per_grade_per_model, student_levels, DATASET, PROMPT_IDX)
+plot_accuracy_per_difficulty_for_different_role_played_levels(
+    avg_accuracy_per_grade_per_model, student_levels, DATASET, PROMPT_IDX,
+    output_filepath=os.path.join(out_fig_path, f'{PROMPT_IDX}_accuracy_per_difficulty_with_different_roleplayed_levels'),
+)
 
 # correlation between grade (difficulty) and QA correctness
-plot_correlation_between_difficulty_and_qa_correctness(correctness_per_model, difficulty_dict, DATASET, PROMPT_IDX)
+plot_correlation_between_difficulty_and_qa_correctness(
+    correctness_per_model, difficulty_dict, DATASET, PROMPT_IDX,
+    output_filepath_hexbin=os.path.join(out_fig_path, f'{PROMPT_IDX}_correlation_difficulty_and_qa_correctness_hexbin'),
+    output_filepath_kdeplot=os.path.join(out_fig_path, f'{PROMPT_IDX}_correlation_difficulty_and_qa_correctness_kdeplot'),
+)
