@@ -9,7 +9,13 @@ COLORS = [
 ]
 
 
-def plot_accuracy_per_model(average_accuracy_per_model, role_played_levels, dataset_name, prompt_idx):
+def plot_accuracy_per_model(
+        average_accuracy_per_model,
+        role_played_levels,
+        dataset_name,
+        prompt_idx,
+        output_filepath: str = None,
+):
     n_role_played_levels = len(role_played_levels)
     fig, ax = plt.subplots()
     ax.bar(range(n_role_played_levels), average_accuracy_per_model)
@@ -24,7 +30,12 @@ def plot_accuracy_per_model(average_accuracy_per_model, role_played_levels, data
     plt.show()
 
 
-def plot_accuracy_per_difficulty_per_model(avg_accuracy_per_grade_per_model, dataset_name, prompt_idx):
+def plot_accuracy_per_difficulty_per_model(
+        avg_accuracy_per_grade_per_model,
+        dataset_name,
+        prompt_idx,
+        output_filepath: str = None,
+):
     difficulty_levels = list(avg_accuracy_per_grade_per_model.keys())
     n_role_played_levels = len(avg_accuracy_per_grade_per_model[difficulty_levels[0]])
     for difficulty in difficulty_levels[1:]:
@@ -43,7 +54,13 @@ def plot_accuracy_per_difficulty_per_model(avg_accuracy_per_grade_per_model, dat
     plt.show()
 
 
-def plot_accuracy_per_difficulty_for_different_role_played_levels(avg_accuracy_per_grade_per_model, role_played_levels, dataset_name, prompt_idx):
+def plot_accuracy_per_difficulty_for_different_role_played_levels(
+        avg_accuracy_per_grade_per_model,
+        role_played_levels,
+        dataset_name,
+        prompt_idx,
+        output_filepath: str = None,
+):
     difficulty_levels = list(avg_accuracy_per_grade_per_model.keys())
     n_role_played_levels = len(role_played_levels)
 
@@ -66,6 +83,7 @@ def plot_correlation_between_difficulty_and_qa_correctness(
         difficulty_dict,
         dataset_name,
         prompt_idx,
+        output_filepath: str = None,
 ):
     difficulty_levels = set(difficulty_dict.values())
     X, Y = [], []
