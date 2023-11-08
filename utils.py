@@ -126,7 +126,7 @@ def get_student_levels_from_prompt_idx(prompt_idx):
     cefr_levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
     # TOEFL levels
     toefl_levels = ['32', '35', '46', '60', '79', '94', '102', '110', '115', '118']
-    rounded_toefl_levels = ['45', '60', '80', '95', '100', '120']  # this was used to see if "rounded" nums work better
+    rounded_toefl_levels = ['40', '60', '80', '100', '120']  # this was used to see if "rounded" nums work better
 
     if prompt_idx in {39, 40, 41, 48}:
         return five_levels_char
@@ -140,6 +140,8 @@ def get_student_levels_from_prompt_idx(prompt_idx):
         return toefl_levels
     if prompt_idx in {47}:
         return ielts_levels_2
+    if prompt_idx in {49}:
+        return rounded_toefl_levels
     raise NotImplementedError()
 
 
@@ -186,7 +188,7 @@ You must assign a difficulty level to the given multiple choice question, and se
 Provide only a JSON file with the following structure:
 {{"question level": "difficulty level of the question", "answer explanation": "the list of steps that the students of IELTS level {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a student of IELTS level {student_level}"}}    
 """
-    if prompt_idx == 46:
+    if prompt_idx == 46 or prompt_idx == 49:
         return f"""
 You will be shown a multiple choice question from an English reading comprehension exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
 You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of TOEFL level {student_level} would pick.
