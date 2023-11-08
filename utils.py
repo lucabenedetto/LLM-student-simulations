@@ -119,6 +119,8 @@ def get_student_levels_from_prompt_idx(prompt_idx):
     # the two "standard" approaches with numbers in digit, either 5 or 10 levels.
     five_levels_int = [str(idx) for idx in range(5)]
     ten_levels_int = [str(idx) for idx in range(10)]
+    # "categorical" levels
+    cat_levels = ['a beginner', 'an intermediate', 'an expert']
     # IELTS levels
     ielts_levels = ['4', '4.5', '5', '5.5', '6', '6.5', '7', '7.5', '8', '9']
     ielts_levels_2 = ['4', '5', '6', '7', '8', '9']
@@ -146,6 +148,8 @@ def get_student_levels_from_prompt_idx(prompt_idx):
         return rounded_toefl_levels
     if prompt_idx in {50}:
         return ielts_levels_with_def
+    if prompt_idx in {52}:
+        return cat_levels
     raise NotImplementedError()
 
 
@@ -219,6 +223,13 @@ You will be shown a multiple choice question from a science exam, and the questi
 You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of level {student_level} would pick.
 Provide only a JSON file with the following structure:
 {{"question level": "difficulty level of the question", "answer explanation": "the list of steps that the students of level {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a student of level {student_level}"}}
+"""
+    if prompt_idx == 52:
+        return f"""
+You will be shown a multiple choice question from a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, and select the answer choice that {student_level} student would pick.
+Provide only a JSON file with the following structure:
+{{"question level": "difficulty level of the question", "answer explanation": "the list of steps that {student_level} student would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by {student_level} student"}}
 """
     raise NotImplementedError()
 
