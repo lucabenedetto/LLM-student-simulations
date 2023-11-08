@@ -126,6 +126,8 @@ def get_student_levels_from_prompt_idx(prompt_idx):
     ielts_levels_2 = ['4', '5', '6', '7', '8', '9']
     ielts_levels_with_def = ['4 (Limited test taker)', '5 (Modest test taker)', '6 (Competent test taker)',
                              '7 (Good test taker)', '8 (Very good test taker)', '9 (Expert test taker)']
+    ielts_definitions_without_numbers = ['Limited test taker', 'Modest test taker', 'Competent test taker',
+                                         'Good test taker', 'Very good test taker', 'Expert test taker']
     # CEFR levels
     cefr_levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
     # TOEFL levels
@@ -148,6 +150,8 @@ def get_student_levels_from_prompt_idx(prompt_idx):
         return rounded_toefl_levels
     if prompt_idx in {50}:
         return ielts_levels_with_def
+    if prompt_idx in {51}:
+        return ielts_definitions_without_numbers
     if prompt_idx in {52, 53}:
         return cat_levels
     raise NotImplementedError()
@@ -223,6 +227,13 @@ You will be shown a multiple choice question from a science exam, and the questi
 You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of level {student_level} would pick.
 Provide only a JSON file with the following structure:
 {{"question level": "difficulty level of the question", "answer explanation": "the list of steps that the students of level {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a student of level {student_level}"}}
+"""
+    if prompt_idx == 51:
+        return f"""
+You will be shown a multiple choice question from an English reading comprehension exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, and select the answer choice that a {student_level} would pick.
+Provide only a JSON file with the following structure:
+{{"question level": "difficulty level of the question", "answer explanation": "the list of steps that the a {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a {student_level}"}}
 """
     if prompt_idx == 52:
         return f"""
