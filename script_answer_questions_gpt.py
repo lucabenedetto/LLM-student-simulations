@@ -8,7 +8,7 @@ from utils_openai_api import prepare_answers_dict_gpt
 from constants import RACE, ARC, IS_READING_QUESTION, OUTPUT_DATA_DIR
 
 # get the OpenAI API key
-with open('key.json', 'r') as f:
+with open('../unsupervised-qdet/key.json', 'r') as f:
     data = json.load(f)
 api_key = data['key']
 openai.api_key = api_key
@@ -43,3 +43,5 @@ for idx, student_level in enumerate(st_levels):
         os.path.join(OUTPUT_DATA_DIR, folder_name, f"gpt3_5_grade_answers_prompt{PROMPT_IDX}_0shot_a_{1+idx}.csv"),
         index=False
     )
+
+print(f"[INFO] Complete run | {DATASET} | prompt {PROMPT_IDX}")
