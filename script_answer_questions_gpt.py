@@ -15,17 +15,14 @@ def main():
     api_key = data['key']
     openai.api_key = api_key
 
-    model = 'gpt-3.5-turbo'
-
     DATASET = RACE
     PROMPT_IDX = 47
 
+    folder_name = f'gpt_responses_{DATASET}'
     st_levels = get_student_levels_from_prompt_idx(PROMPT_IDX)
     df_items = get_dataset(DATASET, 50)
-
     is_reading_question = IS_READING_QUESTION[DATASET]
-
-    folder_name = f'gpt_responses_{DATASET}'
+    model = 'gpt-3.5-turbo'
 
     for idx, student_level in enumerate(st_levels):
         print(f"-- Doing idx {idx}, student level {student_level}")

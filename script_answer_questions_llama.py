@@ -14,15 +14,12 @@ from utils_llama import clean_raw_llama_answer, prepare_answers_dict_llama
 
 def main():
     DATASET = ARC
-    folder_name = f'llama_responses_{DATASET}'
-
     PROMPT_IDX = 39
 
+    folder_name = f'llama_responses_{DATASET}'
     st_levels = get_student_levels_from_prompt_idx(PROMPT_IDX)
     df_items = get_dataset(DATASET, 50)
-
     is_reading_question = IS_READING_QUESTION[DATASET]
-
     model = "meta-llama/Llama-2-7b-chat-hf"
     tokenizer = AutoTokenizer.from_pretrained(model)
     pipeline = transformers.pipeline(
