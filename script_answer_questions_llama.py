@@ -50,3 +50,5 @@ for idx, student_level in enumerate(st_levels):
         os.path.join(OUTPUT_DATA_DIR, folder_name, f"llama2_answers_prompt{PROMPT_IDX}_0shot_{1+idx}.csv"),
         index=False
     )
+
+print(f"[INFO] Complete run Llama | {DATASET} | prompt {PROMPT_IDX}")

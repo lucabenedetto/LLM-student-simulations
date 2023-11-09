@@ -44,4 +44,4 @@ for idx, student_level in enumerate(st_levels):
         index=False
     )
 
-print(f"[INFO] Complete run | {DATASET} | prompt {PROMPT_IDX}")
+print(f"[INFO] Complete run GPT | {DATASET} | prompt {PROMPT_IDX}")
