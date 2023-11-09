@@ -121,6 +121,11 @@ def get_student_levels_from_prompt_idx(prompt_idx):
     ten_levels_int = [str(idx) for idx in range(10)]
     # "categorical" levels
     cat_levels = ['a beginner', 'an intermediate', 'an expert']
+    # grades marks
+    mark_grades = ['A', 'B', 'C', 'D', 'F']
+    # school_grades
+    school_grades = ['a third grade', 'a fourth grade', 'a fifth grade', 'a sixth grade',
+                     'a seventh grade', 'an eight grade', 'a ninth grade']
     # IELTS levels
     ielts_levels = ['4', '4.5', '5', '5.5', '6', '6.5', '7', '7.5', '8', '9']
     ielts_levels_2 = ['4', '5', '6', '7', '8', '9']
@@ -154,6 +159,10 @@ def get_student_levels_from_prompt_idx(prompt_idx):
         return ielts_definitions_without_numbers
     if prompt_idx in {52, 53}:
         return cat_levels
+    if prompt_idx in {55}:
+        return mark_grades
+    if prompt_idx in {56}:
+        return school_grades
     raise NotImplementedError()
 
 
@@ -255,6 +264,20 @@ You are taking an English reading comprehension exam, and the questions in the e
 You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of level {student_level} would pick.
 Provide only a JSON file with the following structure:
 {{"question level": "difficulty level of the question", "answer explanation": "the list of steps that the students of level {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a student of level {student_level}"}}
+"""
+    if prompt_idx == 55:
+        return f"""
+You will be shown a multiple choice question from a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, and select the answer choice that a grade {student_level} student would pick.
+Provide only a JSON file with the following structure:
+{{"question level": "difficulty level of the question", "answer explanation": "the list of steps that a grade {student_level} student would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a grade {student_level} student"}}
+"""
+    if prompt_idx == 56:
+        return f"""
+You will be shown a multiple choice question from a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, and select the answer choice that {student_level} student would pick.
+Provide only a JSON file with the following structure:
+{{"question level": "difficulty level of the question", "answer explanation": "the list of steps that {student_level} student would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by {student_level} student"}}
 """
     raise NotImplementedError()
 
