@@ -119,16 +119,22 @@ def get_student_levels_from_prompt_idx(prompt_idx):
     # the two "standard" approaches with numbers in digit, either 5 or 10 levels.
     five_levels_int = [str(idx) for idx in range(5)]
     ten_levels_int = [str(idx) for idx in range(10)]
+    # "categorical" levels
+    cat_levels = ['a beginner', 'an intermediate', 'an expert']
     # IELTS levels
     ielts_levels = ['4', '4.5', '5', '5.5', '6', '6.5', '7', '7.5', '8', '9']
     ielts_levels_2 = ['4', '5', '6', '7', '8', '9']
+    ielts_levels_with_def = ['4 (Limited test taker)', '5 (Modest test taker)', '6 (Competent test taker)',
+                             '7 (Good test taker)', '8 (Very good test taker)', '9 (Expert test taker)']
+    ielts_definitions_without_numbers = ['Limited test taker', 'Modest test taker', 'Competent test taker',
+                                         'Good test taker', 'Very good test taker', 'Expert test taker']
     # CEFR levels
     cefr_levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
     # TOEFL levels
     toefl_levels = ['32', '35', '46', '60', '79', '94', '102', '110', '115', '118']
-    rounded_toefl_levels = ['45', '60', '80', '95', '100', '120']  # this was used to see if "rounded" nums work better
+    rounded_toefl_levels = ['40', '60', '80', '100', '120']  # this was used to see if "rounded" nums work better
 
-    if prompt_idx in {39, 40, 41}:
+    if prompt_idx in {39, 40, 41, 48}:
         return five_levels_char
     if prompt_idx in {43}:
         return five_levels_int
@@ -140,6 +146,14 @@ def get_student_levels_from_prompt_idx(prompt_idx):
         return toefl_levels
     if prompt_idx in {47}:
         return ielts_levels_2
+    if prompt_idx in {49}:
+        return rounded_toefl_levels
+    if prompt_idx in {50}:
+        return ielts_levels_with_def
+    if prompt_idx in {51}:
+        return ielts_definitions_without_numbers
+    if prompt_idx in {52, 53}:
+        return cat_levels
     raise NotImplementedError()
 
 
@@ -179,14 +193,14 @@ You must assign a difficulty level to the given multiple choice question, and se
 Provide only a JSON file with the following structure:
 {{"question level": "difficulty level of the question", "answer explanation": "the list of steps that the students of CEFR level {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a student of CEFR level {student_level}"}}        
 """
-    if prompt_idx == 45:
+    if prompt_idx == 45 or prompt_idx == 50:
         return f"""
 You will be shown a multiple choice question from an English reading comprehension exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
 You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of IELTS level {student_level} would pick.
 Provide only a JSON file with the following structure:
 {{"question level": "difficulty level of the question", "answer explanation": "the list of steps that the students of IELTS level {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a student of IELTS level {student_level}"}}    
 """
-    if prompt_idx == 46:
+    if prompt_idx == 46 or prompt_idx == 49:
         return f"""
 You will be shown a multiple choice question from an English reading comprehension exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
 You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of TOEFL level {student_level} would pick.
@@ -206,6 +220,34 @@ The meaning of the IELTS levels is as follows:
 - IELTS level 4 indicates a Limited test taker
 Provide only a JSON file with the following structure:
 {{"question level": "difficulty level of the question", "answer explanation": "the list of steps that the students of IELTS level {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a student of IELTS level {student_level}"}}
+"""
+    if prompt_idx == 48:
+        return f"""
+You will be shown a multiple choice question from a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of level {student_level} would pick.
+Provide only a JSON file with the following structure:
+{{"question level": "difficulty level of the question", "answer explanation": "the list of steps that the students of level {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a student of level {student_level}"}}
+"""
+    if prompt_idx == 51:
+        return f"""
+You will be shown a multiple choice question from an English reading comprehension exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, and select the answer choice that a {student_level} would pick.
+Provide only a JSON file with the following structure:
+{{"question level": "difficulty level of the question", "answer explanation": "the list of steps that the a {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a {student_level}"}}
+"""
+    if prompt_idx == 52:
+        return f"""
+You will be shown a multiple choice question from a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, and select the answer choice that {student_level} student would pick.
+Provide only a JSON file with the following structure:
+{{"question level": "difficulty level of the question", "answer explanation": "the list of steps that {student_level} student would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by {student_level} student"}}
+"""
+    if prompt_idx == 53:
+        return f"""
+You will be shown a multiple choice question from an English reading comprehension exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, and select the answer choice that {student_level} student would pick.
+Provide only a JSON file with the following structure:
+{{"question level": "difficulty level of the question", "answer explanation": "the list of steps that {student_level} student would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by {student_level} student"}}
 """
     raise NotImplementedError()
 
