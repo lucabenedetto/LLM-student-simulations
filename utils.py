@@ -134,7 +134,7 @@ def get_student_levels_from_prompt_idx(prompt_idx):
     toefl_levels = ['32', '35', '46', '60', '79', '94', '102', '110', '115', '118']
     rounded_toefl_levels = ['40', '60', '80', '100', '120']  # this was used to see if "rounded" nums work better
 
-    if prompt_idx in {39, 40, 41, 48}:
+    if prompt_idx in {39, 40, 41, 48, 54}:
         return five_levels_char
     if prompt_idx in {43}:
         return five_levels_int
@@ -248,6 +248,13 @@ You will be shown a multiple choice question from an English reading comprehensi
 You must assign a difficulty level to the given multiple choice question, and select the answer choice that {student_level} student would pick.
 Provide only a JSON file with the following structure:
 {{"question level": "difficulty level of the question", "answer explanation": "the list of steps that {student_level} student would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by {student_level} student"}}
+"""
+    if prompt_idx == 54:
+        return f"""
+You are taking an English reading comprehension exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of level {student_level} would pick.
+Provide only a JSON file with the following structure:
+{"question level": "difficulty level of the question", "answer explanation": "the list of steps that the students of level {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a student of level {student_level}"}}
 """
     raise NotImplementedError()
 
