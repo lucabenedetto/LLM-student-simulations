@@ -14,8 +14,7 @@ from utils_llama import clean_raw_llama_answer, prepare_answers_dict_llama
 
 def main():
     DATASET = ARC
-    # folder_name = '23_11_llama_responses_race_pp'  # RACE
-    folder_name = '23_11_llama_responses_arc'  # ARC
+    folder_name = f'llama_responses_{DATASET}'
 
     PROMPT_IDX = 39
 
