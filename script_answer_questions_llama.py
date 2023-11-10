@@ -11,10 +11,12 @@ from utils import (
 from constants import ARC, IS_READING_QUESTION, OUTPUT_DATA_DIR
 from utils_llama import clean_raw_llama_answer, prepare_answers_dict_llama
 
+DATASET = ARC
+PROMPT_IDX = 39
+MAX_LENGTH = 1024
+
 
 def main():
-    DATASET = ARC
-    PROMPT_IDX = 39
 
     folder_name = f'llama_responses_{DATASET}'
     st_levels = get_student_levels_from_prompt_idx(PROMPT_IDX)
@@ -31,7 +33,14 @@ def main():
 
     for idx, student_level in enumerate(st_levels):
         print(f"-- Doing idx {idx}, student level {student_level}")
-        answers_dict = prepare_answers_dict_llama(df_items, pipeline, student_level, is_reading_question=is_reading_question, prompt_idx=PROMPT_IDX)
+        answers_dict = prepare_answers_dict_llama(
+            df_items,
+            pipeline,
+            student_level,
+            is_reading_question=is_reading_question,
+            prompt_idx=PROMPT_IDX,
+            max_length=MAX_LENGTH,
+        )
 
         rows = []
         for item, value in answers_dict.items():
