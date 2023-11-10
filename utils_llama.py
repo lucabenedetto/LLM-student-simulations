@@ -27,7 +27,6 @@ def prepare_answers_dict_llama(df_questions, pipeline, student_level=None, is_re
         axis=1
     )
     list_q_id = df_questions['q_id'].values.tolist()
-    print(list_q_id)
 
     sequences = pipeline(
         df_questions['input_prompt'].values.tolist(),  # I call the pipeline on the whole dataset. because it is much more efficient.
