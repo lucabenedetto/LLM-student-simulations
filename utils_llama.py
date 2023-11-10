@@ -19,7 +19,17 @@ def get_llama_input_prompt(student_level, prompt_idx, is_reading_question, quest
 {build_user_prompt_from_params(question, options, is_reading_question, context)} [/INST]"""
 
 
-def prepare_answers_dict_llama(df_questions, pipeline, student_level=None, is_reading_question=False, prompt_idx=None):
+def prepare_answers_dict_llama(
+        df_questions,
+        pipeline,
+        student_level=None,
+        is_reading_question=False,
+        prompt_idx=None,
+        num_return_sequences=1,
+        return_full_text=False,
+        eos_token_id=None,
+        max_length=750,
+):
     answers_dict = {}
 
     df_questions['input_prompt'] = df_questions.apply(
@@ -29,13 +39,13 @@ def prepare_answers_dict_llama(df_questions, pipeline, student_level=None, is_re
     list_q_id = df_questions['q_id'].values.tolist()
 
     sequences = pipeline(
-        df_questions['input_prompt'].values.tolist(),  # I call the pipeline on the whole dataset. because it is much more efficient.
+        df_questions['input_prompt'].values.tolist(),
         do_sample=True,
         top_k=10,
-        num_return_sequences=1,
-        return_full_text=False,
-        eos_token_id=None,  # tokenizer.eos_token_id,
-        max_length=750, # this is important to get right especially for the reading comprehension questions, as they can be quite long.
+        num_return_sequences=num_return_sequences,
+        return_full_text=return_full_text,
+        eos_token_id=eos_token_id,  # tokenizer.eos_token_id,
+        max_length=max_length,
     )
     # len of sequences is the number of elements in df_questions.
     for idx, answer in enumerate(sequences):
