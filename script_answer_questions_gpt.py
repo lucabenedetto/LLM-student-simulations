@@ -7,6 +7,9 @@ from utils import get_student_levels_from_prompt_idx, get_dataset
 from utils_openai_api import prepare_answers_dict_gpt
 from constants import RACE, ARC, IS_READING_QUESTION, OUTPUT_DATA_DIR
 
+DATASET = RACE
+PROMPT_IDX = 47
+
 
 def main():
     # get the OpenAI API key
@@ -14,9 +17,6 @@ def main():
         data = json.load(f)
     api_key = data['key']
     openai.api_key = api_key
-
-    DATASET = RACE
-    PROMPT_IDX = 47
 
     folder_name = f'gpt_responses_{DATASET}'
     st_levels = get_student_levels_from_prompt_idx(PROMPT_IDX)
