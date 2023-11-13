@@ -159,7 +159,7 @@ def get_student_levels_from_prompt_idx(prompt_idx):
         return ielts_definitions_without_numbers
     if prompt_idx in {52, 53}:
         return cat_levels
-    if prompt_idx in {55}:
+    if prompt_idx in {55, 57}:
         return mark_grades
     if prompt_idx in {56}:
         return school_grades
@@ -278,6 +278,13 @@ You will be shown a multiple choice question from a science exam, and the questi
 You must assign a difficulty level to the given multiple choice question, and select the answer choice that {student_level} student would pick.
 Provide only a JSON file with the following structure:
 {{"question level": "difficulty level of the question", "answer explanation": "the list of steps that {student_level} student would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by {student_level} student"}}
+"""
+    if prompt_idx == 57:
+        return f"""
+You will be shown a multiple choice question from an English reading comprehension exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, and select the answer choice that a grade {student_level} student would pick.
+Provide only a JSON file with the following structure:
+{{"question level": "difficulty level of the question", "answer explanation": "the list of steps that a grade {student_level} student would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a grade {student_level} student"}}
 """
     raise NotImplementedError()
 
