@@ -19,18 +19,29 @@ from constants import (
     RACE,
     ARC,
     OUTPUT_DATA_DIR,
+    GPT_3_5,
+    LLAMA2_7B,
+    LLAMA2_13B,
 )
+
+DATASET = RACE
+PROMPT_IDX = 44
+MODEL = GPT_3_5
 
 
 def main():
-    DATASET = RACE
-    PROMPT_IDX = 40
-    data_path = os.path.join(OUTPUT_DATA_DIR, f'gpt_responses_{DATASET}')
-    out_fig_path = os.path.join('output_figures', f'gpt_{DATASET}')
+    data_path = os.path.join(OUTPUT_DATA_DIR, f'{MODEL}_responses_{DATASET}')
+    out_fig_path = os.path.join('output_figures', f'{MODEL}_{DATASET}')
 
     student_levels = get_student_levels_from_prompt_idx(PROMPT_IDX)
     # the 1+idx is needed for backward compatibility with files written with a previous script.
-    filenames = [f"gpt3_5_grade_answers_prompt{PROMPT_IDX}_0shot_a_{1+idx}.csv" for idx, _ in enumerate(student_levels)]
+    # also, this is so noise due to some inconsistency in the output filenames, I will have to sort this out...
+    if MODEL in {GPT_3_5}:
+        filenames = [f"gpt3_5_grade_answers_prompt{PROMPT_IDX}_0shot_a_{1+idx}.csv" for idx, _ in enumerate(student_levels)]
+    if MODEL in {LLAMA2_7B, LLAMA2_13B}:
+        filenames = [f"llama2_answers_prompt{PROMPT_IDX}_0shot_a_{1 + idx}.csv" for idx, _ in enumerate(student_levels)]
+    else:
+        raise ValueError()
     filepaths = [os.path.join(data_path, filename) for filename in filenames]
 
     difficulty_levels = DIFFICULTY_LEVELS[DATASET]
