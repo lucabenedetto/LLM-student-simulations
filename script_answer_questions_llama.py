@@ -8,18 +8,18 @@ from utils import (
     get_student_levels_from_prompt_idx,
     get_dataset,
 )
-from constants import ARC, RACE, IS_READING_QUESTION, OUTPUT_DATA_DIR, LLAMA2_13B, LLAMA2_7B
+from constants import ARC, RACE, IS_READING_QUESTION, OUTPUT_DATA_DIR, LLAMA2_13B, LLAMA2_7B, LLAMA2_70B
 from utils_llama import clean_raw_llama_answer, prepare_answers_dict_llama, get_model
 
 DATASET = ARC
-PROMPT_IDX = 39
+PROMPT_IDX = 48
 MAX_LENGTH = 1024
-MODEL = LLAMA2_7B
+MODEL = LLAMA2_70B
 
 
 def main():
 
-    folder_name = f'llama_responses_{DATASET}'
+    folder_name = f'{MODEL}_responses_{DATASET}'
     st_levels = get_student_levels_from_prompt_idx(PROMPT_IDX)
     df_items = get_dataset(DATASET, 50)
     is_reading_question = IS_READING_QUESTION[DATASET]
