@@ -23,7 +23,8 @@ def main():
     st_levels = get_student_levels_from_prompt_idx(PROMPT_IDX)
     df_items = get_dataset(DATASET, 50)
     is_reading_question = IS_READING_QUESTION[DATASET]
-    model = get_model(MODEL)
+    # model = get_model(MODEL)
+    model = '4bit/Llama-2-70b-chat-hf'
     tokenizer = AutoTokenizer.from_pretrained(model)
     pipeline = transformers.pipeline(
         "text-generation",
