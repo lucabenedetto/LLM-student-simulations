@@ -2,6 +2,7 @@ RACE = 'race_pp'
 ARC = 'arc'
 CUPA = 'cupa'
 
+GPT_3_5 = 'gpt3_5'
 LLAMA2_7B = 'llama2_7b'
 LLAMA2_13B = 'llama2_13b'
 
