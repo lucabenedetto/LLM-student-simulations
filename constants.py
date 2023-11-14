@@ -1,6 +1,9 @@
 RACE = 'race_pp'
 ARC = 'arc'
 
+LLAMA2_7B = 'llama2_7b'
+LLAMA2_13B = 'llama2_13b'
+
 IS_READING_QUESTION = {
     RACE: True,
     ARC: False,
