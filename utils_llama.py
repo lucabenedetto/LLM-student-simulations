@@ -2,6 +2,23 @@ from utils import validate_answer, build_system_message_from_params, build_user_
 from constants import LLAMA2_13B, LLAMA2_7B
 
 
+def get_index_from_raw_answer(answer):
+    try:
+        answer = answer.lower()
+        answer = answer.split('{')[1]
+        answer = answer.split('}')[0]
+        answer = '{' + answer + '}'
+        answer = answer.replace('\n', ' ')
+        answer = answer.replace('  ', ' ')
+        answer = answer.replace('"', '')
+        answer = answer.split('index: ')[1][0]
+        answer = int(answer)
+    except:
+        # print(answer)
+        answer = -9
+    return answer
+
+
 def get_model(name):
     if name == LLAMA2_7B:
         return "meta-llama/Llama-2-7b-chat-hf"
