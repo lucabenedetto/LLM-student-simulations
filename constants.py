@@ -5,7 +5,6 @@ CUPA = 'cupa'
 GPT_3_5 = 'gpt3_5'
 LLAMA2_7B = 'llama2_7b'
 LLAMA2_13B = 'llama2_13b'
-LLAMA2_70B = 'llama2_70b'
 
 IS_READING_QUESTION = {
     RACE: True,
