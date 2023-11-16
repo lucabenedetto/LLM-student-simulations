@@ -24,7 +24,7 @@ def main():
     is_reading_question = IS_READING_QUESTION[DATASET]
     folder_name = f'{MODEL}_responses_{DATASET}'
     # todo: change this depending on param so that it will work with GPT-4 as well
-    model = 'gpt-3.5-turbo'
+    model = 'gpt-3.5-turbo-0613'
 
     for idx, student_level in enumerate(st_levels):
         print(f"-- Doing idx {idx}, student level {student_level}")
