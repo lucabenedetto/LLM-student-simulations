@@ -15,14 +15,14 @@ from constants import (
     OUTPUT_DATA_DIR,
     LLAMA2_13B_CHAT,
     LLAMA2_7B_CHAT,
-    LLAMA2_13B,
+    VICUNA_13B_V1_5,
 )
 from utils_llama import clean_raw_llama_answer, prepare_answers_dict_llama, get_llama_model
 
 DATASET = ARC
 PROMPT_IDX = 48
 MAX_LENGTH = 1024
-MODEL = LLAMA2_7B_CHAT
+MODEL = VICUNA_13B_V1_5
 
 
 def main():
