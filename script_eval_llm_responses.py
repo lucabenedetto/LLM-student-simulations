@@ -26,6 +26,7 @@ from constants import (
     GPT_3_5,
     LLAMA2_7B_CHAT,
     LLAMA2_13B_CHAT,
+    LLAMA2_13B,
 )
 
 DATASET = RACE
