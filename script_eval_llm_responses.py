@@ -24,13 +24,14 @@ from constants import (
     CUPA,
     OUTPUT_DATA_DIR,
     GPT_3_5,
-    LLAMA2_7B,
+    LLAMA2_7B_CHAT,
+    LLAMA2_13B_CHAT,
     LLAMA2_13B,
 )
 
 DATASET = RACE
 PROMPT_IDX = 57
-MODEL = LLAMA2_13B
+MODEL = LLAMA2_13B_CHAT
 
 
 def main():
@@ -42,12 +43,12 @@ def main():
     # also, this is so noise due to some inconsistency in the output filenames, I will have to sort this out...
     if MODEL in {GPT_3_5}:
         filenames = [f"gpt3_5_grade_answers_prompt{PROMPT_IDX}_0shot_a_{1+idx}.csv" for idx, _ in enumerate(student_levels)]
-    elif MODEL in {LLAMA2_7B, LLAMA2_13B}:
+    elif MODEL in {LLAMA2_7B_CHAT, LLAMA2_13B_CHAT}:
         filenames = [f"llama2_answers_prompt{PROMPT_IDX}_0shot_{1 + idx}.csv" for idx, _ in enumerate(student_levels)]
     else:
         raise ValueError()
     list_dfs = [pd.read_csv(os.path.join(data_path, filename)) for filename in filenames]
-    if MODEL in {LLAMA2_7B, LLAMA2_13B}:
+    if MODEL in {LLAMA2_7B_CHAT, LLAMA2_13B_CHAT}:
         for idx in range(len(list_dfs)):
             list_dfs[idx]['answer_index'] = list_dfs[idx].apply(lambda r: get_index_from_raw_answer(r['raw_answer']), axis=1)
             print(list_dfs[idx].value_counts('answer_index'))
