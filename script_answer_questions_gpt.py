@@ -45,9 +45,9 @@ def main():
 
         # TODO: as of now, for GPT I don't save the raw answer but only the processed one. I might want to change this.
         #   see below for the corresponding code from the llama runs.
-        # df_model_answers = pd.DataFrame(rows, columns=["q_id", "answer"])
-        df_model_answers = pd.DataFrame(rows, columns=['q_id', 'raw_answer'])
-        df_model_answers['answer'] = df_model_answers.apply(lambda r: validate_answer(r['raw_answer']), axis=1)
+        df_model_answers = pd.DataFrame(rows, columns=["q_id", "answer"])
+        # df_model_answers = pd.DataFrame(rows, columns=['q_id', 'raw_answer'])
+        # df_model_answers['answer'] = df_model_answers.apply(lambda r: validate_answer(r['raw_answer']), axis=1)
 
         # the 1+idx is needed for backward compatibility with files written with a previous script.
         df_model_answers.to_csv(
