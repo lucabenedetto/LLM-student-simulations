@@ -48,6 +48,11 @@ def get_llama_input_prompt(student_level, prompt_idx, is_reading_question, quest
 {build_user_prompt_from_params(question, options, is_reading_question, context)} [/INST]"""
 
 
+def get_vicuna_input_prompt(student_level, prompt_idx, is_reading_question, question, options, context):
+    return f"""{build_system_message_from_params(prompt_idx, student_level)}\n
+{build_user_prompt_from_params(question, options, is_reading_question, context)}"""
+
+
 def prepare_answers_dict_huggingface_model(
         model,
         df_questions,
@@ -69,7 +74,7 @@ def prepare_answers_dict_huggingface_model(
         )
     elif model in {VICUNA_13B_V1_5}:
         df_questions['input_prompt'] = df_questions.apply(
-            lambda r: get_llama_input_prompt(student_level, prompt_idx, is_reading_question, r['question'], r['options'], r['context']),
+            lambda r: get_vicuna_input_prompt(student_level, prompt_idx, is_reading_question, r['question'], r['options'], r['context']),
             axis=1
         )
     else:
