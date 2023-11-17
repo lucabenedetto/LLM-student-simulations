@@ -48,7 +48,8 @@ def get_llama_input_prompt(student_level, prompt_idx, is_reading_question, quest
 {build_user_prompt_from_params(question, options, is_reading_question, context)} [/INST]"""
 
 
-def prepare_answers_dict_llama(
+def prepare_answers_dict_huggingface_model(
+        model,
         df_questions,
         pipeline,
         student_level=None,
@@ -61,10 +62,18 @@ def prepare_answers_dict_llama(
 ):
     answers_dict = {}
 
-    df_questions['input_prompt'] = df_questions.apply(
-        lambda r: get_llama_input_prompt(student_level, prompt_idx, is_reading_question, r['question'], r['options'], r['context']),
-        axis=1
-    )
+    if model in {LLAMA2_7B_CHAT, LLAMA2_13B_CHAT}:
+        df_questions['input_prompt'] = df_questions.apply(
+            lambda r: get_llama_input_prompt(student_level, prompt_idx, is_reading_question, r['question'], r['options'], r['context']),
+            axis=1
+        )
+    elif model in {VICUNA_13B_V1_5}:
+        df_questions['input_prompt'] = df_questions.apply(
+            lambda r: get_llama_input_prompt(student_level, prompt_idx, is_reading_question, r['question'], r['options'], r['context']),
+            axis=1
+        )
+    else:
+        raise ValueError('Unknown model.')
     list_q_id = df_questions['q_id'].values.tolist()
 
     sequences = pipeline(
