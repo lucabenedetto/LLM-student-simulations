@@ -19,8 +19,8 @@ from constants import (
 )
 from utils_llama import clean_raw_llama_answer, prepare_answers_dict_llama, get_llama_model
 
-DATASET = ARC
-PROMPT_IDX = 48
+DATASET = RACE
+PROMPT_IDX = 40
 MAX_LENGTH = 1024
 MODEL = VICUNA_13B_V1_5
 
