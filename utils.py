@@ -304,14 +304,14 @@ Options: "{answers}"
     return prompt
 
 
-def validate_answer(answer: str) -> Union[dict, None]:
+def validate_answer(answer: str) -> Union[str, None]:
     try:
         answer_json = json.loads(answer)
         index_str = str(answer_json['index'])
         if not index_str.isdigit():
             print("The index is not an integer.")
-            return None
-        return answer_json
+            return "{'index': -8, 'text': 'None'}"
+        return str(answer_json)
     except json.JSONDecodeError:
         print("The answer is not a valid JSON string.")
-        return None
+        return "{'index': -7, 'text': 'None'}"
