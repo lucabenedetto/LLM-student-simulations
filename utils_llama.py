@@ -19,7 +19,7 @@ def get_index_from_raw_answer(answer):
     return answer
 
 
-def get_model(name):
+def get_llama_model(name):
     if name == LLAMA2_7B_CHAT:
         return "meta-llama/Llama-2-7b-chat-hf"
     elif name == LLAMA2_13B_CHAT:

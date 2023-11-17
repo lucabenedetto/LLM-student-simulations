@@ -17,7 +17,7 @@ from constants import (
     LLAMA2_7B_CHAT,
     LLAMA2_13B,
 )
-from utils_llama import clean_raw_llama_answer, prepare_answers_dict_llama, get_model
+from utils_llama import clean_raw_llama_answer, prepare_answers_dict_llama, get_llama_model
 
 DATASET = ARC
 PROMPT_IDX = 48
@@ -31,7 +31,7 @@ def main():
     st_levels = get_student_levels_from_prompt_idx(PROMPT_IDX)
     df_items = get_dataset(DATASET, 50)
     is_reading_question = IS_READING_QUESTION[DATASET]
-    model = get_model(MODEL)
+    model = get_llama_model(MODEL)
     tokenizer = AutoTokenizer.from_pretrained(model)
     pipeline = transformers.pipeline(
         "text-generation",

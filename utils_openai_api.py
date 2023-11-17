@@ -1,6 +1,19 @@
 import openai
 
 from utils import build_system_message_from_params, build_user_prompt_from_params, validate_answer
+from constants import (
+    GPT_3_5,
+    GPT_3_5_1106,
+)
+
+
+def get_gpt_model(name):
+    if name == GPT_3_5:
+        return 'gpt-3.5-turbo-0613'
+    elif name == GPT_3_5_1106:
+        return 'gpt-3.5-turbo-1106'
+    else:
+        raise ValueError("Unknown model")
 
 
 def answer_question(system_context: str, user_prompt: str, temperature=0, model=None) -> str:
