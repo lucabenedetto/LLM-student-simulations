@@ -8,13 +8,13 @@ from utils import (
     get_student_levels_from_prompt_idx,
     get_dataset,
 )
-from constants import ARC, RACE, IS_READING_QUESTION, OUTPUT_DATA_DIR, LLAMA2_13B, LLAMA2_7B
+from constants import ARC, RACE, IS_READING_QUESTION, OUTPUT_DATA_DIR, LLAMA2_13B_CHAT, LLAMA2_7B_CHAT
 from utils_llama import clean_raw_llama_answer, prepare_answers_dict_llama, get_model
 
 DATASET = ARC
 PROMPT_IDX = 48
 MAX_LENGTH = 1024
-MODEL = LLAMA2_7B
+MODEL = LLAMA2_7B_CHAT
 
 
 def main():

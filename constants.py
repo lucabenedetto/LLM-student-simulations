@@ -3,8 +3,8 @@ ARC = 'arc'
 CUPA = 'cupa'
 
 GPT_3_5 = 'gpt3_5'
-LLAMA2_7B = 'llama2_7b'
-LLAMA2_13B = 'llama2_13b'
+LLAMA2_7B_CHAT = 'llama2_7b_chat'
+LLAMA2_13B_CHAT = 'llama2_13b_chat'
 
 IS_READING_QUESTION = {
     RACE: True,

@@ -1,5 +1,5 @@
 from utils import validate_answer, build_system_message_from_params, build_user_prompt_from_params
-from constants import LLAMA2_13B, LLAMA2_7B
+from constants import LLAMA2_13B_CHAT, LLAMA2_7B_CHAT
 
 
 def get_index_from_raw_answer(answer):
@@ -20,9 +20,9 @@ def get_index_from_raw_answer(answer):
 
 
 def get_model(name):
-    if name == LLAMA2_7B:
+    if name == LLAMA2_7B_CHAT:
         return "meta-llama/Llama-2-7b-chat-hf"
-    elif name == LLAMA2_13B:
+    elif name == LLAMA2_13B_CHAT:
         return "meta-llama/Llama-2-13b-chat-hf"
     else:
         raise ValueError("Unknown model")
