@@ -108,6 +108,8 @@ def get_questions_answered_by_all_roleplayed_levels(list_dfs, complete_df):
     set_q_ids = set(complete_df['q_id'].unique())
     for idx, df in enumerate(list_dfs):
         df = df[df['answer'] != "{'index': -9, 'text': 'None'}"].copy()
+        df = df[df['answer'] != "{'index': -8, 'text': 'None'}"].copy()
+        df = df[df['answer'] != "{'index': -7, 'text': 'None'}"].copy()
         set_q_ids = set_q_ids.intersection(set(df['q_id'].unique()))
     return set_q_ids
 
