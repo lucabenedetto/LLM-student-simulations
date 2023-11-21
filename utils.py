@@ -304,7 +304,7 @@ Question: "{question}"
 Options: 
 """
     if explicit_indexes:
-        for idx, answer in ast.literal_eval(answers):
+        for idx, answer in enumerate(ast.literal_eval(answers)):
             prompt += f"{idx}) {answer}"
             if idx != len(answers)-1:
                 prompt += ", "
