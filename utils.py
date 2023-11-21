@@ -291,18 +291,25 @@ Provide only a JSON file with the following structure:
     raise NotImplementedError()
 
 
-def build_user_prompt_from_params(question, answers, is_reading_question, context=None) -> str:
+def build_user_prompt_from_params(question, answers, is_reading_question, context=None, explicit_indexes=False) -> str:
     if is_reading_question:
         prompt = f"""
 Reading passage: "{context}"
 Question: "{question}"
-Options: "{answers}"
+Options: 
 """
     else:
         prompt = f"""
 Question: "{question}"
-Options: "{answers}"
+Options: 
 """
+    if explicit_indexes:
+        for idx, answer in ast.literal_eval(answers):
+            prompt += f"{idx}) {answer}"
+            if idx != len(answers)-1:
+                prompt += ", "
+    else:
+        prompt += f"{answers}"
     return prompt
 
 

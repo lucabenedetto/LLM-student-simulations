@@ -50,7 +50,7 @@ def get_llama_input_prompt(student_level, prompt_idx, is_reading_question, quest
 
 def get_vicuna_input_prompt(student_level, prompt_idx, is_reading_question, question, options, context):
     return f"""{build_system_message_from_params(prompt_idx, student_level)}\n
-{build_user_prompt_from_params(question, options, is_reading_question, context)}"""
+{build_user_prompt_from_params(question, options, is_reading_question, context, explicit_indexes=True)}"""
 
 
 def prepare_answers_dict_huggingface_model(
