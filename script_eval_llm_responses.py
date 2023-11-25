@@ -10,7 +10,7 @@ from utils import (
     get_questions_answered_by_all_roleplayed_levels,
     get_student_levels_from_prompt_idx,
 )
-from utils_llama import get_index_from_raw_answer
+from utils_huggingface_models import get_index_from_raw_answer
 from utils_plotting import (
     plot_accuracy_per_model,
     plot_accuracy_per_difficulty_per_model,
@@ -30,8 +30,8 @@ from constants import (
 )
 
 DATASET = RACE
-PROMPT_IDX = 40
-MODEL = VICUNA_13B_V1_5
+PROMPT_IDX = 58
+MODEL = GPT_3_5
 
 
 def main():
