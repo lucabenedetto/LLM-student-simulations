@@ -41,10 +41,10 @@ def prepare_answers_dict_gpt(df_questions, model, student_level=None, is_reading
         system_message = build_gpt_system_message_from_params(prompt_idx, student_level)
         try:
             answer = answer_question(system_message, prompt, model=model)
-            answer = validate_answer(answer)
+            # answer = validate_answer(answer)
         except Exception as e:
             print(e)
-            answer = "{'index': -9, 'text': 'None'}"  # this if the GPT model did not produce a valid JSON or integer
+            answer = "{'index': -9, 'text': 'None'}"  # this if the GPT model did not produce a response
         answers_dict[row.q_id] = answer
     return answers_dict
 
