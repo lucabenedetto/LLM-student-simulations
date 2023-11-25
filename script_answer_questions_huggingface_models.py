@@ -15,14 +15,14 @@ from constants import (
     OUTPUT_DATA_DIR,
     LLAMA2_13B_CHAT,
     LLAMA2_7B_CHAT,
-    LLAMA2_13B,
+    VICUNA_13B_V1_5,
 )
-from utils_llama import clean_raw_llama_answer, prepare_answers_dict_llama, get_model
+from utils_huggingface_models import clean_raw_llama_answer, prepare_answers_dict_huggingface_model, get_llama_model
 
-DATASET = ARC
-PROMPT_IDX = 48
+DATASET = RACE
+PROMPT_IDX = 40
 MAX_LENGTH = 1024
-MODEL = LLAMA2_7B_CHAT
+MODEL = VICUNA_13B_V1_5
 
 
 def main():
@@ -31,7 +31,7 @@ def main():
     st_levels = get_student_levels_from_prompt_idx(PROMPT_IDX)
     df_items = get_dataset(DATASET, 50)
     is_reading_question = IS_READING_QUESTION[DATASET]
-    model = get_model(MODEL)
+    model = get_llama_model(MODEL)
     tokenizer = AutoTokenizer.from_pretrained(model)
     pipeline = transformers.pipeline(
         "text-generation",
@@ -42,7 +42,8 @@ def main():
 
     for idx, student_level in enumerate(st_levels):
         print(f"-- Doing idx {idx}, student level {student_level}")
-        answers_dict = prepare_answers_dict_llama(
+        answers_dict = prepare_answers_dict_huggingface_model(
+            MODEL,
             df_items,
             pipeline,
             student_level,

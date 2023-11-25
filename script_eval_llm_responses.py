@@ -26,12 +26,12 @@ from constants import (
     GPT_3_5,
     LLAMA2_7B_CHAT,
     LLAMA2_13B_CHAT,
-    LLAMA2_13B,
+    VICUNA_13B_V1_5,
 )
 
 DATASET = RACE
-PROMPT_IDX = 57
-MODEL = LLAMA2_13B_CHAT
+PROMPT_IDX = 40
+MODEL = VICUNA_13B_V1_5
 
 
 def main():
@@ -45,6 +45,8 @@ def main():
         filenames = [f"gpt3_5_grade_answers_prompt{PROMPT_IDX}_0shot_a_{1+idx}.csv" for idx, _ in enumerate(student_levels)]
     elif MODEL in {LLAMA2_7B_CHAT, LLAMA2_13B_CHAT}:
         filenames = [f"llama2_answers_prompt{PROMPT_IDX}_0shot_{1 + idx}.csv" for idx, _ in enumerate(student_levels)]
+    elif MODEL in {VICUNA_13B_V1_5}:
+        filenames = [f"{MODEL}_answers_prompt{PROMPT_IDX}_0shot_{1 + idx}.csv" for idx, _ in enumerate(student_levels)]
     else:
         raise ValueError()
     list_dfs = [pd.read_csv(os.path.join(data_path, filename)) for filename in filenames]

@@ -108,6 +108,8 @@ def get_questions_answered_by_all_roleplayed_levels(list_dfs, complete_df):
     set_q_ids = set(complete_df['q_id'].unique())
     for idx, df in enumerate(list_dfs):
         df = df[df['answer'] != "{'index': -9, 'text': 'None'}"].copy()
+        df = df[df['answer'] != "{'index': -8, 'text': 'None'}"].copy()
+        df = df[df['answer'] != "{'index': -7, 'text': 'None'}"].copy()
         set_q_ids = set_q_ids.intersection(set(df['q_id'].unique()))
     return set_q_ids
 
@@ -149,7 +151,7 @@ def get_student_levels_from_prompt_idx(prompt_idx):
         return ielts_levels
     if prompt_idx in {46}:
         return toefl_levels
-    if prompt_idx in {47}:
+    if prompt_idx in {47, 58}:
         return ielts_levels_2
     if prompt_idx in {49}:
         return rounded_toefl_levels
@@ -174,7 +176,7 @@ You must assign a difficulty level to the given multiple choice question, and se
 Provide only a JSON file with the following structure:
 {{"question level": "difficulty level of the question", "answer explanation": "the list of steps that the students of level {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a student of level {student_level}"}}
 """
-    if prompt_idx == 40:
+    if prompt_idx == 40 or prompt_idx == 58:
         return f"""
 You will be shown a multiple choice question from an English reading comprehension exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
 You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of level {student_level} would pick.
@@ -289,29 +291,36 @@ Provide only a JSON file with the following structure:
     raise NotImplementedError()
 
 
-def build_user_prompt_from_params(question, answers, is_reading_question, context=None) -> str:
+def build_user_prompt_from_params(question, answers, is_reading_question, context=None, explicit_indexes=False) -> str:
     if is_reading_question:
         prompt = f"""
 Reading passage: "{context}"
 Question: "{question}"
-Options: "{answers}"
+Options: 
 """
     else:
         prompt = f"""
 Question: "{question}"
-Options: "{answers}"
+Options: 
 """
+    if explicit_indexes:
+        for idx, answer in enumerate(ast.literal_eval(answers)):
+            prompt += f"{idx}) {answer}"
+            if idx != len(answers)-1:
+                prompt += ", "
+    else:
+        prompt += f"{answers}"
     return prompt
 
 
-def validate_answer(answer: str) -> Union[dict, None]:
+def validate_answer(answer: str) -> Union[str, None]:
     try:
         answer_json = json.loads(answer)
         index_str = str(answer_json['index'])
         if not index_str.isdigit():
             print("The index is not an integer.")
-            return None
-        return answer_json
+            return "{'index': -8, 'text': 'None'}"
+        return str(answer_json)
     except json.JSONDecodeError:
         print("The answer is not a valid JSON string.")
-        return None
+        return "{'index': -7, 'text': 'None'}"
