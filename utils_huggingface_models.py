@@ -50,7 +50,7 @@ def get_llama_input_prompt(student_level, prompt_idx, is_reading_question, quest
 
 def get_vicuna_input_prompt(student_level, prompt_idx, is_reading_question, question, options, context):
     return f"""{build_system_message_from_params(prompt_idx, student_level)}\n
-{build_user_prompt_from_params(question, options, is_reading_question, context, explicit_indexes=True)}"""
+{build_user_prompt_from_params(question, options, is_reading_question, context, explicit_indexes=False)}"""
 
 
 def prepare_answers_dict_huggingface_model(
@@ -83,7 +83,7 @@ def prepare_answers_dict_huggingface_model(
 
     sequences = pipeline(
         df_questions['input_prompt'].values.tolist(),
-        # do_sample=True,  # This was here but removed for the time being.
+        do_sample=True,  # This was here but removed for the time being.
         # top_k=10,  # This was here but removed for the time being.
         # num_return_sequences=num_return_sequences,  # This was here but removed for the time being.
         return_full_text=return_full_text,
