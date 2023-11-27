@@ -145,7 +145,9 @@ def get_student_levels_from_prompt_idx(prompt_idx):
         return five_levels_char
     if prompt_idx in {43}:
         return five_levels_int
-    if prompt_idx in {44}:
+    if prompt_idx in {59}:
+        return ten_levels_char
+    if prompt_idx in {44, 60}:
         return cefr_levels
     if prompt_idx in {45}:
         return ielts_levels
@@ -176,7 +178,7 @@ You must assign a difficulty level to the given multiple choice question, and se
 Provide only a JSON file with the following structure:
 {{"question level": "difficulty level of the question", "answer explanation": "the list of steps that the students of level {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a student of level {student_level}"}}
 """
-    if prompt_idx == 40 or prompt_idx == 58:
+    if prompt_idx in {40, 58, 59}:
         return f"""
 You will be shown a multiple choice question from an English reading comprehension exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
 You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of level {student_level} would pick.
@@ -288,7 +290,27 @@ You must assign a difficulty level to the given multiple choice question, and se
 Provide only a JSON file with the following structure:
 {{"question level": "difficulty level of the question", "answer explanation": "the list of steps that a grade {student_level} student would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a grade {student_level} student"}}
 """
+    if prompt_idx == 60:
+        return f"""
+You will be shown a multiple choice question from an English reading comprehension exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of CEFR level {student_level} would pick.
+A student of CEFR level {student_level} {get_cefr_levels_description(student_level)}.
+Provide only a JSON file with the following structure:
+{{"question level": "difficulty level of the question", "answer explanation": "the list of steps that the students of CEFR level {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a student of CEFR level {student_level}"}}
+"""
     raise NotImplementedError()
+
+
+def get_cefr_levels_description(student_level):
+    dict_cefr_level_descriptions = {
+        'A1': 'can understand and use familiar everyday expressions and very basic phrases aimed at the satisfaction of needs of a concrete type; can introduce him/herself and others and can ask and answer questions about personal details such as where he/she lives, people he/she knows and things he/she has; can interact in a simple way provided the other person talks slowly and clearly and is prepared to help.',
+        'A2': 'can understand sentences and frequently used expressions related to areas of most immediate relevance (e.g. very basic personal and family information, shopping, local geography, employment); can communicate in simple and routine tasks requiring a simple and direct exchange of information on familiar and routine matters; can describe in simple terms aspects of his/her background, immediate environment and matters in areas of immediate need.',
+        'B1': 'can understand the main points of clear standard input on familiar matters regularly encountered in work, school, leisure, etc; can deal with most situations likely to arise whilst travelling in an area where the language is spoken; can produce simple connected text on topics which are familiar or of personal interest; can describe experiences and events, dreams, hopes & ambitions and briefly give reasons and explanations for opinions and plans.',
+        'B2': 'can understand the main ideas of complex text on both concrete and abstract topics, including technical discussions in his/her field of specialisation; can interact with a degree of fluency and spontaneity that makes regular interaction with native speakers quite possible without strain for either party; can produce clear, detailed text on a wide range of subjects and explain a viewpoint on a topical issue giving the advantages and disadvantages of various options.',
+        'C1': 'can understand a wide range of demanding, longer texts, and recognise implicit meaning; can express him/herself fluently and spontaneously without much obvious searching for expressions; can use language flexibly and effectively for social, academic and professional purposes; can produce clear, well-structured, detailed text on complex subjects, showing controlled use of organisational patterns, connectors and cohesive devices.',
+        'C2': 'can understand with ease virtually everything heard or read; can summarise information from different spoken and written sources, reconstructing arguments and accounts in a coherent presentation; can express him/herself spontaneously, very fluently and precisely, differentiating finer shades of meaning even in more complex situations.',
+    }
+    return dict_cefr_level_descriptions[student_level]
 
 
 def build_user_prompt_from_params(question, answers, is_reading_question, context=None, explicit_indexes=False) -> str:
