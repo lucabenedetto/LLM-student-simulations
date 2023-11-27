@@ -83,12 +83,14 @@ def prepare_answers_dict_huggingface_model(
 
     sequences = pipeline(
         df_questions['input_prompt'].values.tolist(),
-        # do_sample=True,  # This was here but removed for the time being.
+        do_sample=True,  # This was here but removed for the time being.
+        temperature=0.7,  # This is tmp, to check
+        top_p=1,  # This is tmp, to check
         # top_k=10,  # This was here but removed for the time being.
         # num_return_sequences=num_return_sequences,  # This was here but removed for the time being.
         return_full_text=return_full_text,
         # eos_token_id=eos_token_id,  # tokenizer.eos_token_id,  # This was here but removed for the time being.
-        # max_length=max_length,  # This was here but removed for the time being.
+        max_length=max_length,  # This was here but removed for the time being.
     )
     # len of sequences is the number of elements in df_questions.
     for idx, answer in enumerate(sequences):
