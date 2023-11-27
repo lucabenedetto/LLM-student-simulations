@@ -21,7 +21,7 @@ from utils_huggingface_models import clean_raw_llama_answer, prepare_answers_dic
 
 DATASET = RACE
 PROMPT_IDX = 40
-MAX_LENGTH = 1024
+MAX_LENGTH = 2048
 MODEL = VICUNA_13B_V1_5
 
 
