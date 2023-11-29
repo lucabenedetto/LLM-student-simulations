@@ -1,4 +1,5 @@
 import openai
+import pandas as pd
 
 from utils import build_system_message_from_params, build_user_prompt_from_params, validate_answer
 from constants import (
@@ -35,12 +36,12 @@ def build_gpt_system_message_from_params(prompt_idx, student_level) -> str:
 
 
 def prepare_answers_dict_gpt(
-        df_questions,
-        model,
-        student_level=None,
-        is_reading_question=False,
-        prompt_idx=None,
-        response_format='text',
+        df_questions: pd.DataFrame,
+        model: str,
+        student_level: int = None,
+        is_reading_question: bool = False,
+        prompt_idx: int = None,
+        response_format: str = 'text',
 ):
     answers_dict = {}
     for idx, row in df_questions.iterrows():

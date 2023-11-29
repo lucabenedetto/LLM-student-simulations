@@ -114,7 +114,7 @@ def get_questions_answered_by_all_roleplayed_levels(list_dfs, complete_df):
     return set_q_ids
 
 
-def get_student_levels_from_prompt_idx(prompt_idx):
+def get_student_levels_from_prompt_idx(prompt_idx) -> List[str]:
     # thw two standard approaches with numbers in chars, these (especially 5 levels) are the ones used the most.
     five_levels_char = ['one', 'two', 'three', 'four', 'five']
     ten_levels_char = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
