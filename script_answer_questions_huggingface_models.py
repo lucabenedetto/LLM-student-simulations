@@ -21,7 +21,7 @@ from utils_huggingface_models import clean_raw_llama_answer, prepare_answers_dic
 
 DATASET = RACE
 PROMPT_IDX = 40
-MAX_LENGTH = 1024
+MAX_LENGTH = 2048
 MODEL = VICUNA_13B_V1_5
 
 
@@ -36,8 +36,13 @@ def main():
     pipeline = transformers.pipeline(
         "text-generation",
         model=model,
-        torch_dtype=torch.float16,
-        device_map="auto",
+        tokenizer=tokenizer,  # This is tmp, to check
+        max_length=MAX_LENGTH,  # This is tmp, to check
+        temperature=0.7,  # This is tmp, to check
+        top_p=1,  # This is tmp, to check
+        # repetition_penalty=1.15,  # This is tmp, to check
+        # torch_dtype=torch.float16,  # This was here but removed for the time being.
+        # device_map="auto",  # This was here but removed for the time being.
     )
 
     for idx, student_level in enumerate(st_levels):

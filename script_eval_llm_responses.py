@@ -51,7 +51,7 @@ def main():
     else:
         raise ValueError()
     list_dfs = [pd.read_csv(os.path.join(data_path, filename)) for filename in filenames]
-    if MODEL in {LLAMA2_7B_CHAT, LLAMA2_13B_CHAT}:
+    if MODEL in {LLAMA2_7B_CHAT, LLAMA2_13B_CHAT, VICUNA_13B_V1_5}:
         for idx in range(len(list_dfs)):
             list_dfs[idx]['answer_index'] = list_dfs[idx].apply(lambda r: get_index_from_raw_answer(r['raw_answer']), axis=1)
             print(list_dfs[idx].value_counts('answer_index'))
