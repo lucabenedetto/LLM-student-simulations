@@ -16,7 +16,7 @@ def get_gpt_model(name):
         raise ValueError("Unknown model")
 
 
-def answer_question(system_context: str, user_prompt: str, temperature=0, model=None) -> str:
+def answer_question(system_context: str, user_prompt: str, temperature=0, model=None, response_format='text') -> str:
     if model is None:
         raise ValueError
     response = openai.ChatCompletion.create(
@@ -24,6 +24,7 @@ def answer_question(system_context: str, user_prompt: str, temperature=0, model=
         messages=[{'role': 'system', 'content': system_context},
                   {'role': 'user', 'content': user_prompt}],
         temperature=temperature,
+        response_format={"type": response_format},
     )
     response_content = response['choices'][0]['message']['content']
     return response_content
@@ -33,14 +34,21 @@ def build_gpt_system_message_from_params(prompt_idx, student_level) -> str:
     return build_system_message_from_params(prompt_idx, student_level)
 
 
-def prepare_answers_dict_gpt(df_questions, model, student_level=None, is_reading_question=False, prompt_idx=None):
+def prepare_answers_dict_gpt(
+        df_questions,
+        model,
+        student_level=None,
+        is_reading_question=False,
+        prompt_idx=None,
+        response_format='text',
+):
     answers_dict = {}
     for idx, row in df_questions.iterrows():
         print("Processing idx: ", idx)
         prompt = build_user_prompt_from_params(row.question, row.options, is_reading_question, row.context)
         system_message = build_gpt_system_message_from_params(prompt_idx, student_level)
         try:
-            answer = answer_question(system_message, prompt, model=model)
+            answer = answer_question(system_message, prompt, model=model, response_format=response_format)
             # answer = validate_answer(answer)
         except Exception as e:
             print(e)
