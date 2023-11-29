@@ -34,7 +34,10 @@ def main():
 
     for idx, student_level in enumerate(st_levels):
         print(f"-- Doing idx {idx}, student level {student_level}")
-        answers_dict = prepare_answers_dict_gpt(df_items, model, student_level, is_reading_question=is_reading_question, prompt_idx=PROMPT_IDX)
+        response_format = 'text' if MODEL == GPT_3_5 else 'json_object'
+        answers_dict = prepare_answers_dict_gpt(
+            df_items, model, student_level, is_reading_question, PROMPT_IDX, response_format
+        )
 
         rows = []
         for item, value in answers_dict.items():
