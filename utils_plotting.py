@@ -5,7 +5,7 @@ import seaborn
 from typing import Optional, Tuple
 
 COLORS = [
-    'tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:olive', 
+    'tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:olive',
     'tab:purple', 'tab:pink', 'tab:cyan', 'tab:gray', 'tab:brown',
 ]
 
@@ -17,13 +17,17 @@ def plot_accuracy_per_model(
         prompt_idx,
         output_filepath: str = None,
         figsize: Tuple[int, int] = (7, 5),
+        output_file_extension: str = '.png',
 ):
     n_role_played_levels = len(role_played_levels)
+
     fig, ax = plt.subplots(figsize=figsize)
-    ax.bar(range(n_role_played_levels), average_accuracy_per_model)
+    # ax.bar(range(n_role_played_levels), average_accuracy_per_model)
+    # ax.grid(alpha=0.5, axis='y')
+    ax.plot(range(n_role_played_levels), average_accuracy_per_model)
+    ax.grid(alpha=0.5, axis='both')
     ax.set_ylim(0, 1.0)
     ax.set_yticks(np.arange(0.0, 1.0, 0.1))
-    ax.grid(alpha=0.5, axis='y')
     ax.set_ylabel('QA accuracy')
     ax.set_xlabel('Role-played level')
     ax.set_xticks(range(n_role_played_levels))
@@ -32,8 +36,7 @@ def plot_accuracy_per_model(
     if output_filepath is None:
         plt.show()
     else:
-        plt.savefig(output_filepath + '.pdf')
-        plt.savefig(output_filepath + '.png')
+        plt.savefig(output_filepath + output_file_extension)
     plt.close(fig)
 
 
