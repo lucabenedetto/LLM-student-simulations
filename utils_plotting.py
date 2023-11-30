@@ -5,8 +5,8 @@ import seaborn
 from typing import Optional, Tuple
 
 COLORS = [
-    'tab:blue', 'tab:orange', 'tab:green', 'tab:red',
-    'tab:purple', 'tab:pink', 'tab:cyan', 'tab:olive', 'tab:gray', 'tab:brown',
+    'tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:olive', 
+    'tab:purple', 'tab:pink', 'tab:cyan', 'tab:gray', 'tab:brown',
 ]
 
 
