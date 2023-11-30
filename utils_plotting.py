@@ -43,6 +43,7 @@ def plot_accuracy_per_difficulty_per_model(
         prompt_idx,
         output_filepath: str = None,
         figsize: Optional[Tuple[int, int]] = None,
+        output_file_extension: str = '.png',
 ):
     difficulty_levels = list(avg_accuracy_per_grade_per_model.keys())
     n_role_played_levels = len(avg_accuracy_per_grade_per_model[difficulty_levels[0]])
@@ -64,8 +65,7 @@ def plot_accuracy_per_difficulty_per_model(
     if output_filepath is None:
         plt.show()
     else:
-        plt.savefig(output_filepath + '.pdf')
-        plt.savefig(output_filepath + '.png')
+        plt.savefig(output_filepath + output_file_extension)
     plt.close(fig)
 
 
@@ -76,6 +76,7 @@ def plot_accuracy_per_difficulty_for_different_role_played_levels(
         prompt_idx,
         output_filepath: str = None,
         figsize: Optional[Tuple[int, int]] = None,
+        output_file_extension: str = '.png',
 ):
     difficulty_levels = list(avg_accuracy_per_grade_per_model.keys())
     n_role_played_levels = len(role_played_levels)
@@ -96,8 +97,7 @@ def plot_accuracy_per_difficulty_for_different_role_played_levels(
     if output_filepath is None:
         plt.show()
     else:
-        plt.savefig(output_filepath + '.pdf')
-        plt.savefig(output_filepath + '.png')
+        plt.savefig(output_filepath + output_file_extension)
     plt.close(fig)
 
 
@@ -110,6 +110,7 @@ def plot_correlation_between_difficulty_and_qa_correctness(
         output_filepath_kdeplot: str = None,
         figsize_hexbin: Tuple[int, int] = (7, 5),
         figsize_kdeplot: Tuple[int, int] = (7, 5),
+        output_file_extension: str = '.png',
 ):
     difficulty_levels = set(difficulty_dict.values())
     X, Y = [], []
@@ -133,8 +134,7 @@ def plot_correlation_between_difficulty_and_qa_correctness(
     if output_filepath_hexbin is None:
         plt.show()
     else:
-        plt.savefig(output_filepath_hexbin + '.pdf')
-        plt.savefig(output_filepath_hexbin + '.png')
+        plt.savefig(output_filepath_hexbin + output_file_extension)
     plt.close(fig)
 
     # Version 2 of the plot: KDE
@@ -147,6 +147,5 @@ def plot_correlation_between_difficulty_and_qa_correctness(
     if output_filepath_kdeplot is None:
         plt.show()
     else:
-        plt.savefig(output_filepath_kdeplot + '.pdf')
-        plt.savefig(output_filepath_kdeplot + '.png')
+        plt.savefig(output_filepath_kdeplot + output_file_extension)
     plt.close(fig)
