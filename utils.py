@@ -6,7 +6,7 @@ from typing import Union, Dict, List, Set, Tuple
 
 import pandas as pd
 
-from constants import RACE, ARC, INPUT_DATA_DIR  # , CUPA
+from constants import RACE, ARC, INPUT_DATA_DIR, CUPA
 
 
 def get_average_accuracy_per_model(
@@ -15,9 +15,9 @@ def get_average_accuracy_per_model(
         complete_df,
         difficulty_levels,
 ) -> Tuple[List[float], Dict[int, List[float]]]:
-    # if len(difficulty_levels) > 0:  # this is for CUPA
-    # dict that maps from "true_difficulty" to list of qids
-    questions_by_difficulty = get_questions_by_difficulty_dict(complete_df, difficulty_levels)
+    if len(difficulty_levels) > 0:  # this is for CUPA
+        # dict that maps from "true_difficulty" to list of qids
+        questions_by_difficulty = get_questions_by_difficulty_dict(complete_df, difficulty_levels)
     correct_answer_dict = get_correct_answer_dict_from_df(complete_df)  # dict that maps from qid to correct answer
 
     avg_accuracy_per_grade_per_model = dict()
@@ -98,8 +98,8 @@ def get_original_dataset(dataset_name: str) -> pd.DataFrame:
         return pd.read_csv(os.path.join(INPUT_DATA_DIR, 'race_pp_test.csv'))
     elif dataset_name == ARC:
         return pd.read_csv(os.path.join(INPUT_DATA_DIR, 'arc_test.csv'))
-    # elif dataset_name == CUPA:
-    #     return pd.read_csv(os.path.join(INPUT_DATA_DIR, 'cupa.csv'))
+    elif dataset_name == CUPA:
+        return pd.read_csv(os.path.join(INPUT_DATA_DIR, 'cupa.csv'))
     else:
         raise NotImplementedError()
 
