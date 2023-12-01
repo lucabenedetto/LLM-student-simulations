@@ -1,8 +1,17 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 import pandas as pd
 import seaborn
 from typing import Optional, Tuple
+
+from utils import (
+    get_student_levels_from_prompt_idx,
+    get_questions_answered_by_all_roleplayed_levels,
+    get_average_accuracy_per_model,
+    get_response_correctness_per_model,
+)
+from constants import OUTPUT_DATA_DIR
 
 COLORS = [
     'tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:olive',
@@ -152,3 +161,22 @@ def plot_correlation_between_difficulty_and_qa_correctness(
     else:
         plt.savefig(output_filepath_kdeplot + output_file_extension)
     plt.close(fig)
+
+
+def get_all_info_for_plotting_by_mdoel_prompt_and_dataset(model, prompt_idx, dataset, complete_df, difficulty_levels):
+    data_path = os.path.join(OUTPUT_DATA_DIR, f'{model}_responses_{dataset}')
+    student_levels = get_student_levels_from_prompt_idx(prompt_idx)
+    filenames = [f"{model}_grade_answers_prompt{prompt_idx}_0shot_a_{1+idx}.csv" for idx, _ in enumerate(student_levels)]
+    list_dfs = [pd.read_csv(os.path.join(data_path, filename)) for filename in filenames]
+    # to keep only the questions that are answered by all role-played levels
+    set_q_ids = get_questions_answered_by_all_roleplayed_levels(list_dfs, complete_df)
+    avg_accuracy_per_model, avg_accuracy_per_grade_per_model = get_average_accuracy_per_model(
+        list_dfs, set_q_ids, complete_df, difficulty_levels)
+    correctness_per_model, answers_per_model = get_response_correctness_per_model(list_dfs, set_q_ids, complete_df)
+    return {
+        'student_levels': student_levels,
+        'avg_accuracy_per_model': avg_accuracy_per_model,
+        'avg_accuracy_per_grade_per_model': avg_accuracy_per_grade_per_model,
+        'correctness_per_model': correctness_per_model,
+        'answers_per_model': answers_per_model,
+    }
