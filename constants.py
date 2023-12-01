@@ -11,6 +11,7 @@ VICUNA_13B_V1_5 = 'vicuna_13b_v1_5'
 IS_READING_QUESTION = {
     RACE: True,
     ARC: False,
+    CUPA: True,
 }
 
 DIFFICULTY_LEVELS = {
