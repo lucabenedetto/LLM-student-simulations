@@ -89,6 +89,8 @@ def get_dataset(dataset_name: str, num_questions_per_difficulty_level: int = 50)
         return pd.read_csv(os.path.join(INPUT_DATA_DIR, "race_pp_test_50q_per_diff.csv"))
     elif dataset_name == ARC and num_questions_per_difficulty_level == 50:
         return pd.read_csv(os.path.join(INPUT_DATA_DIR, "arc_test_50q_per_diff.csv"))
+    elif dataset_name == CUPA and num_questions_per_difficulty_level == 50:
+        return pd.read_csv(os.path.join(INPUT_DATA_DIR, "cupa_test_50q_per_diff.csv"))
     else:
         raise NotImplementedError()
 
