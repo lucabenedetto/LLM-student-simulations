@@ -54,6 +54,9 @@ def main():
     dict_gpt_3_5_race_44 = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 44, RACE, complete_df_race, difficulty_levels_race)
     dict_gpt_3_5_race_45 = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 45, RACE, complete_df_race, difficulty_levels_race)
     dict_gpt_3_5_race_46 = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 46, RACE, complete_df_race, difficulty_levels_race)
+    dict_gpt_3_5_cupa_44 = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 44, CUPA, complete_df_cupa, difficulty_levels_cupa)
+    dict_gpt_3_5_cupa_45 = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 45, CUPA, complete_df_cupa, difficulty_levels_cupa)
+    dict_gpt_3_5_cupa_46 = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 46, CUPA, complete_df_cupa, difficulty_levels_cupa)
     dict_gpt_3_5_arc_56 = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 56, ARC, complete_df_arc, difficulty_levels_arc)
     dict_gpt_3_5_arc_55 = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 55, ARC, complete_df_arc, difficulty_levels_arc)
     dict_gpt_3_5_race_57 = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 57, RACE, complete_df_race, difficulty_levels_race)
@@ -168,26 +171,24 @@ def main():
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-    # FIGURE: average accuracy per model -- language proficiency scales -- RACE
-    # TODO: all this on CUPA
+    # FIGURE: average accuracy per model -- language proficiency scales -- RACE and CUPA
     labels = ['CEFR', 'IELTS', 'TOEFL']
-    fig, ax = plt.subplots(1, 3, sharey=True, figsize=(7, 4.2))
-    for idx, dict_results in enumerate([dict_gpt_3_5_race_44, dict_gpt_3_5_race_45, dict_gpt_3_5_race_46]):
-        n_role_played_levels = len(dict_results['student_levels'])
-        ax[idx].plot(range(n_role_played_levels), dict_results['avg_accuracy_per_model'], 'o:', label=labels[idx], c='#ffab00')
-        # ax[idx].plot(range(n_role_played_levels), dict_gpt_3_5_race_40['avg_accuracy_per_model'], 'o:', label='Ref. prompt', c='#ffab00')
+    fig, ax = plt.subplots(3, 1, figsize=(6, 9))
+    results_race = [dict_gpt_3_5_race_44, dict_gpt_3_5_race_45, dict_gpt_3_5_race_46]
+    results_cupa = [dict_gpt_3_5_cupa_44, dict_gpt_3_5_cupa_45, dict_gpt_3_5_cupa_46]
+    for idx in range(3):
+        n_role_played_levels = len(results_race[idx]['student_levels'])
+        ax[idx].plot(range(n_role_played_levels), results_race[idx]['avg_accuracy_per_model'], 'o:', label=f'RACE - {labels[idx]}', c='#ffab00')
+        ax[idx].plot(range(n_role_played_levels), results_cupa[idx]['avg_accuracy_per_model'], 'x:', label=f'CUPA - {labels[idx]}', c='#b83266')
         ax[idx].grid(alpha=0.5, axis='both')
-        ax[idx].set_yticks(np.arange(0.0, 1.0, 0.1))
-        if idx == 0:
-            ax[idx].set_ylabel('MCQA accuracy')
-        ax[idx].set_xlabel('Simulated level')
+        ax[idx].set_yticks(np.arange(0.4, 1.0, 0.1))
+        ax[idx].set_ylabel('MCQA accuracy')
         ax[idx].set_xticks(range(n_role_played_levels))
-        if idx > 0:
-            ax[idx].set_xticklabels([x if x_idx%2 == 0 else '' for x_idx, x in enumerate(dict_results['student_levels'])])
-        else:
-            ax[idx].set_xticklabels(dict_results['student_levels'])
-        ax[idx].set_ylim(0.38, 0.92)
+        # ax[idx].set_xticklabels([x if x_idx%2 == 0 else '' for x_idx, x in enumerate(results_race[idx]['student_levels'])])
+        ax[idx].set_xticklabels(results_race[idx]['student_levels'])
+        # ax[idx].set_ylim(0.38, 0.92)
         ax[idx].legend()
+    ax[2].set_xlabel('Simulated level')
     # plt.show()
     # plt.savefig(os.path.join(out_fig_path, f'prompt_44_45_46_gpt_3_5_race_mcqa_accuracy_per_level.pdf'))
     plt.close(fig)
