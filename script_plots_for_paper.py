@@ -39,10 +39,10 @@ def main():
     complete_df_cupa = get_original_dataset(CUPA)
     complete_df_arc = get_original_dataset(ARC)
 
-    # dict that maps from qid to "true" difficulty
-    difficulty_dict = get_difficulty_dict_from_df(complete_df_race)
-    difficulty_dict = get_difficulty_dict_from_df(complete_df_cupa)
-    difficulty_dict = get_difficulty_dict_from_df(complete_df_arc)
+    # # dict that maps from qid to "true" difficulty
+    # difficulty_dict = get_difficulty_dict_from_df(complete_df_race)
+    # difficulty_dict = get_difficulty_dict_from_df(complete_df_cupa)
+    # difficulty_dict = get_difficulty_dict_from_df(complete_df_arc)
 
     # Simulation results
     dict_gpt_3_5_race_40 = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 40, RACE, complete_df_race, difficulty_levels_race)
