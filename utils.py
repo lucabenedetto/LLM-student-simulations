@@ -348,3 +348,6 @@ def validate_answer(answer: str) -> Union[str, None]:
     except json.JSONDecodeError:
         print("The answer is not a valid JSON string.")
         return "{'index': -7, 'text': 'None'}"
+    except KeyError:
+        print("'index' not in keys.")
+        return "{'index': -6, 'text': 'None'}"
