@@ -1,12 +1,21 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 import pandas as pd
 import seaborn
 from typing import Optional, Tuple
 
+from utils import (
+    get_student_levels_from_prompt_idx,
+    get_questions_answered_by_all_roleplayed_levels,
+    get_average_accuracy_per_model,
+    get_response_correctness_per_model,
+)
+from constants import OUTPUT_DATA_DIR
+
 COLORS = [
-    'tab:blue', 'tab:orange', 'tab:green', 'tab:red',
-    'tab:purple', 'tab:pink', 'tab:cyan', 'tab:olive', 'tab:gray', 'tab:brown',
+    'tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:olive',
+    'tab:purple', 'tab:pink', 'tab:cyan', 'tab:gray', 'tab:brown',
 ]
 
 
@@ -17,13 +26,17 @@ def plot_accuracy_per_model(
         prompt_idx,
         output_filepath: str = None,
         figsize: Tuple[int, int] = (7, 5),
+        output_file_extension: str = '.png',
 ):
     n_role_played_levels = len(role_played_levels)
+
     fig, ax = plt.subplots(figsize=figsize)
-    ax.bar(range(n_role_played_levels), average_accuracy_per_model)
+    # ax.bar(range(n_role_played_levels), average_accuracy_per_model)
+    # ax.grid(alpha=0.5, axis='y')
+    ax.plot(range(n_role_played_levels), average_accuracy_per_model)
+    ax.grid(alpha=0.5, axis='both')
     ax.set_ylim(0, 1.0)
     ax.set_yticks(np.arange(0.0, 1.0, 0.1))
-    ax.grid(alpha=0.5, axis='y')
     ax.set_ylabel('QA accuracy')
     ax.set_xlabel('Role-played level')
     ax.set_xticks(range(n_role_played_levels))
@@ -32,8 +45,7 @@ def plot_accuracy_per_model(
     if output_filepath is None:
         plt.show()
     else:
-        plt.savefig(output_filepath + '.pdf')
-        plt.savefig(output_filepath + '.png')
+        plt.savefig(output_filepath + output_file_extension)
     plt.close(fig)
 
 
@@ -43,6 +55,7 @@ def plot_accuracy_per_difficulty_per_model(
         prompt_idx,
         output_filepath: str = None,
         figsize: Optional[Tuple[int, int]] = None,
+        output_file_extension: str = '.png',
 ):
     difficulty_levels = list(avg_accuracy_per_grade_per_model.keys())
     n_role_played_levels = len(avg_accuracy_per_grade_per_model[difficulty_levels[0]])
@@ -64,8 +77,7 @@ def plot_accuracy_per_difficulty_per_model(
     if output_filepath is None:
         plt.show()
     else:
-        plt.savefig(output_filepath + '.pdf')
-        plt.savefig(output_filepath + '.png')
+        plt.savefig(output_filepath + output_file_extension)
     plt.close(fig)
 
 
@@ -76,6 +88,7 @@ def plot_accuracy_per_difficulty_for_different_role_played_levels(
         prompt_idx,
         output_filepath: str = None,
         figsize: Optional[Tuple[int, int]] = None,
+        output_file_extension: str = '.png',
 ):
     difficulty_levels = list(avg_accuracy_per_grade_per_model.keys())
     n_role_played_levels = len(role_played_levels)
@@ -96,8 +109,7 @@ def plot_accuracy_per_difficulty_for_different_role_played_levels(
     if output_filepath is None:
         plt.show()
     else:
-        plt.savefig(output_filepath + '.pdf')
-        plt.savefig(output_filepath + '.png')
+        plt.savefig(output_filepath + output_file_extension)
     plt.close(fig)
 
 
@@ -110,6 +122,7 @@ def plot_correlation_between_difficulty_and_qa_correctness(
         output_filepath_kdeplot: str = None,
         figsize_hexbin: Tuple[int, int] = (7, 5),
         figsize_kdeplot: Tuple[int, int] = (7, 5),
+        output_file_extension: str = '.png',
 ):
     difficulty_levels = set(difficulty_dict.values())
     X, Y = [], []
@@ -133,8 +146,7 @@ def plot_correlation_between_difficulty_and_qa_correctness(
     if output_filepath_hexbin is None:
         plt.show()
     else:
-        plt.savefig(output_filepath_hexbin + '.pdf')
-        plt.savefig(output_filepath_hexbin + '.png')
+        plt.savefig(output_filepath_hexbin + output_file_extension)
     plt.close(fig)
 
     # Version 2 of the plot: KDE
@@ -147,6 +159,24 @@ def plot_correlation_between_difficulty_and_qa_correctness(
     if output_filepath_kdeplot is None:
         plt.show()
     else:
-        plt.savefig(output_filepath_kdeplot + '.pdf')
-        plt.savefig(output_filepath_kdeplot + '.png')
+        plt.savefig(output_filepath_kdeplot + output_file_extension)
     plt.close(fig)
+
+
+def get_all_info_for_plotting_by_mdoel_prompt_and_dataset(model, prompt_idx, dataset, complete_df, difficulty_levels):
+    data_path = os.path.join(OUTPUT_DATA_DIR, f'{model}_responses_{dataset}')
+    student_levels = get_student_levels_from_prompt_idx(prompt_idx)
+    filenames = [f"{model}_grade_answers_prompt{prompt_idx}_0shot_a_{1+idx}.csv" for idx, _ in enumerate(student_levels)]
+    list_dfs = [pd.read_csv(os.path.join(data_path, filename)) for filename in filenames]
+    # to keep only the questions that are answered by all role-played levels
+    set_q_ids = get_questions_answered_by_all_roleplayed_levels(list_dfs, complete_df)
+    avg_accuracy_per_model, avg_accuracy_per_grade_per_model = get_average_accuracy_per_model(
+        list_dfs, set_q_ids, complete_df, difficulty_levels)
+    correctness_per_model, answers_per_model = get_response_correctness_per_model(list_dfs, set_q_ids, complete_df)
+    return {
+        'student_levels': student_levels,
+        'avg_accuracy_per_model': avg_accuracy_per_model,
+        'avg_accuracy_per_grade_per_model': avg_accuracy_per_grade_per_model,
+        'correctness_per_model': correctness_per_model,
+        'answers_per_model': answers_per_model,
+    }
