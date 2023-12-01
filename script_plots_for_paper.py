@@ -57,6 +57,7 @@ def main():
     dict_gpt_3_5_arc_56 = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 56, ARC, complete_df_arc, difficulty_levels_arc)
     dict_gpt_3_5_arc_55 = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 55, ARC, complete_df_arc, difficulty_levels_arc)
     dict_gpt_3_5_race_57 = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 57, RACE, complete_df_race, difficulty_levels_race)
+    dict_gpt_3_5_cupa_57 = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 57, CUPA, complete_df_cupa, difficulty_levels_cupa)
 
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -212,12 +213,12 @@ def main():
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-    # FIGURE: average accuracy per model -- exam grades -- ARC, RACE (and TODO CUPA)
+    # FIGURE: average accuracy per model -- exam grades -- ARC, RACE, and CUPA
     n_role_played_levels = len(dict_gpt_3_5_race_57['student_levels'])
     fig, ax = plt.subplots(figsize=(6, 4.2))
     ax.plot(range(n_role_played_levels), dict_gpt_3_5_race_57['avg_accuracy_per_model'], 'o-', label='RACE', c='#ffab00')
     ax.plot(range(n_role_played_levels), dict_gpt_3_5_arc_55['avg_accuracy_per_model'], '*-', label='ARC', c='#054b7d')
-    # TODO ax.plot(range(n_role_played_levels), dict_gpt_3_5_cupa_40['avg_accuracy_per_model'], 'x-', label='CUPA', c='#b83266')
+    ax.plot(range(n_role_played_levels), dict_gpt_3_5_cupa_57['avg_accuracy_per_model'], 'x-', label='CUPA', c='#b83266')
     ax.grid(alpha=0.5, axis='both')
     # ax.set_ylim(0, 1.0)
     ax.set_yticks(np.arange(0.0, 1.0, 0.1))
