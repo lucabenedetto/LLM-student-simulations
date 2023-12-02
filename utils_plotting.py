@@ -163,7 +163,7 @@ def plot_correlation_between_difficulty_and_qa_correctness(
     plt.close(fig)
 
 
-def get_all_info_for_plotting_by_mdoel_prompt_and_dataset(model, prompt_idx, dataset, complete_df, difficulty_levels):
+def get_all_info_for_plotting_by_mdoel_prompt_and_dataset(model, prompt_idx, dataset, complete_df, difficulty_column):
     data_path = os.path.join(OUTPUT_DATA_DIR, f'{model}_responses_{dataset}')
     student_levels = get_student_levels_from_prompt_idx(prompt_idx)
     filenames = [f"{model}_grade_answers_prompt{prompt_idx}_0shot_a_{1+idx}.csv" for idx, _ in enumerate(student_levels)]
@@ -171,7 +171,7 @@ def get_all_info_for_plotting_by_mdoel_prompt_and_dataset(model, prompt_idx, dat
     # to keep only the questions that are answered by all role-played levels
     set_q_ids = get_questions_answered_by_all_roleplayed_levels(list_dfs, complete_df)
     avg_accuracy_per_model, avg_accuracy_per_grade_per_model = get_average_accuracy_per_model(
-        list_dfs, set_q_ids, complete_df, difficulty_levels)
+        list_dfs, set_q_ids, complete_df, difficulty_column)
     correctness_per_model, answers_per_model = get_response_correctness_per_model(list_dfs, set_q_ids, complete_df)
     return {
         'student_levels': student_levels,

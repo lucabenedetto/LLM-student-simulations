@@ -18,7 +18,6 @@ from utils_plotting import (
     plot_correlation_between_difficulty_and_qa_correctness,
 )
 from constants import (
-    DIFFICULTY_LEVELS,
     RACE,
     ARC,
     CUPA,
@@ -56,7 +55,6 @@ def main():
             list_dfs[idx]['answer_index'] = list_dfs[idx].apply(lambda r: get_index_from_raw_answer(r['raw_answer']), axis=1)
             print(list_dfs[idx].value_counts('answer_index'))
 
-    difficulty_levels = DIFFICULTY_LEVELS[DATASET]
     complete_df = get_original_dataset(DATASET)
 
     # to keep only the questions that are answered by all models
@@ -66,7 +64,7 @@ def main():
     difficulty_dict = get_difficulty_dict_from_df(complete_df)
 
     # code below compute the correctness for the different models, which is the info that I can then use to plot the eval metrics.
-    avg_accuracy_per_model, avg_accuracy_per_grade_per_model = get_average_accuracy_per_model(list_dfs, set_q_ids, complete_df, difficulty_levels)
+    avg_accuracy_per_model, avg_accuracy_per_grade_per_model = get_average_accuracy_per_model(list_dfs, set_q_ids, complete_df)
     correctness_per_model, answers_per_model = get_response_correctness_per_model(list_dfs, set_q_ids, complete_df)
 
     # accuracy per model
