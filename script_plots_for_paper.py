@@ -26,6 +26,9 @@ matplotlib.rcParams['mathtext.fontset'] = 'stix'
 matplotlib.rcParams['font.family'] = 'STIXGeneral'
 matplotlib.rcParams['font.size'] = 14
 
+DO_PLOT = True
+SAVE_FIG = False
+
 
 def main():
     out_fig_path = os.path.join('output_figures', 'for_paper')
@@ -78,8 +81,8 @@ def main():
     ax.set_xticks(range(n_role_played_levels))
     ax.set_xticklabels(dict_gpt_3_5_race_40['student_levels'])
     ax.legend()
-    # plt.show()
-    # plt.savefig(os.path.join(out_fig_path, f'prompt_40_race_cupa_gpt_3_5_mcqa_accuracy_per_level.pdf'))
+    if DO_PLOT: plt.show()
+    if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_40_race_cupa_gpt_3_5_mcqa_accuracy_per_level.pdf'))
     plt.close(fig)
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -97,8 +100,8 @@ def main():
     ax.set_xticks(range(n_role_played_levels))
     ax.set_xticklabels(dict_gpt_3_5_arc_48['student_levels'])
     ax.legend()
-    # plt.show()
-    # plt.savefig(os.path.join(out_fig_path, f'prompt_48_arc_gpt_3_5_mcqa_accuracy_per_level.pdf'))
+    if DO_PLOT: plt.show()
+    if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_48_arc_gpt_3_5_mcqa_accuracy_per_level.pdf'))
     plt.close(fig)
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -118,8 +121,8 @@ def main():
         ax[idx].set_xticks(range(n_role_played_levels))
         ax[idx].set_xticklabels(dict_gpt_3_5_race_40['student_levels'])
         ax[idx].set_ylim(0.25, 0.95)
-    # plt.show()
-    # plt.savefig(os.path.join(out_fig_path, f'prompt_40_race_gpt_3_5_mcqa_accuracy_per_level_by_question_level.pdf'))
+    if DO_PLOT: plt.show()
+    if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_40_race_gpt_3_5_mcqa_accuracy_per_level_by_question_level.pdf'))
     plt.close(fig)
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -139,8 +142,8 @@ def main():
             ax[idx].set_ylabel('MCQA accuracy')
         ax[idx].set_xticks(range(n_role_played_levels))
         ax[idx].set_xticklabels(dict_gpt_3_5_arc_48['student_levels'])
-    # plt.show()
-    # plt.savefig(os.path.join(out_fig_path, f'prompt_48_arc_gpt_3_5_mcqa_accuracy_per_level_by_question_level.pdf'))
+    if DO_PLOT: plt.show()
+    if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_48_arc_gpt_3_5_mcqa_accuracy_per_level_by_question_level.pdf'))
     plt.close(fig)
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -165,8 +168,8 @@ def main():
         ax[idx].grid(alpha=0.5, axis='both')
         ax[idx].legend()
     ax[0].set_xlabel('Simulated level')
-    # plt.show()
-    # plt.savefig(os.path.join(out_fig_path, f'prompt_48_40_gpt_3_5_vs_gpt_3_5_1106_mcqa_accuracy_per_level.pdf'))
+    if DO_PLOT: plt.show()
+    if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_48_40_gpt_3_5_vs_gpt_3_5_1106_mcqa_accuracy_per_level.pdf'))
     plt.close(fig)
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -189,8 +192,8 @@ def main():
         # ax[idx].set_ylim(0.38, 0.92)
         ax[idx].legend()
     ax[2].set_xlabel('Simulated level')
-    # plt.show()
-    # plt.savefig(os.path.join(out_fig_path, f'prompt_44_45_46_gpt_3_5_race_mcqa_accuracy_per_level.pdf'))
+    if DO_PLOT: plt.show()
+    if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_44_45_46_gpt_3_5_race_mcqa_accuracy_per_level.pdf'))
     plt.close(fig)
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -208,8 +211,8 @@ def main():
     ax.set_xticklabels([x if x_idx % 2 == 0 else '' for x_idx, x in enumerate(dict_gpt_3_5_arc_56['student_levels'])])
     ax.set_ylim(0.38, 0.92)
     ax.legend()
-    # plt.show()
-    # plt.savefig(os.path.join(out_fig_path, f'prompt_56_gpt_3_5_arc_1106_mcqa_accuracy_per_level.pdf'))
+    if DO_PLOT: plt.show()
+    if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_56_gpt_3_5_arc_1106_mcqa_accuracy_per_level.pdf'))
     plt.close(fig)
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -228,8 +231,8 @@ def main():
     ax.set_xticks(range(n_role_played_levels))
     ax.set_xticklabels(dict_gpt_3_5_race_57['student_levels'])
     ax.legend()
-    # plt.show()
-    # plt.savefig(os.path.join(out_fig_path, f'prompt_57_race_cupa_55_arc_gpt_3_5_mcqa_accuracy_per_level.pdf'))
+    if DO_PLOT: plt.show()
+    if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_57_race_cupa_55_arc_gpt_3_5_mcqa_accuracy_per_level.pdf'))
     plt.close(fig)
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
