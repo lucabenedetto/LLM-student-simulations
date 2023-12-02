@@ -72,8 +72,8 @@ def get_correct_answer_dict_from_df(df) -> Dict[str, str]:
     return {q_id: correct_answer for q_id, correct_answer in df[['q_id', 'correct_answer']].values}
 
 
-def get_difficulty_dict_from_df(df) -> Dict[str, int]:
-    return {q_id: difficulty for q_id, difficulty in df[['q_id', 'difficulty']].values}
+def get_difficulty_dict_from_df(df, difficulty_column='difficulty') -> Dict[str, int]:
+    return {q_id: difficulty for q_id, difficulty in df[['q_id', difficulty_column]].values}
 
 
 def get_questions_by_difficulty_dict(
