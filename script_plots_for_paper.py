@@ -25,7 +25,7 @@ matplotlib.rcParams['mathtext.fontset'] = 'stix'
 matplotlib.rcParams['font.family'] = 'STIXGeneral'
 matplotlib.rcParams['font.size'] = 14
 
-DO_PLOT = True
+DO_PLOT = False
 SAVE_FIG = False
 
 
@@ -43,7 +43,8 @@ def main():
 
     # # dict that maps from qid to "true" difficulty
     # difficulty_dict = get_difficulty_dict_from_df(complete_df_race)
-    # difficulty_dict = get_difficulty_dict_from_df(complete_df_cupa)
+    difficulty_dict_cupa = get_difficulty_dict_from_df(complete_df_cupa)
+    target_level_dict_cupa = get_difficulty_dict_from_df(complete_df_cupa, difficulty_column='target_level')
     # difficulty_dict = get_difficulty_dict_from_df(complete_df_arc)
 
     # Simulation results
@@ -163,6 +164,66 @@ def main():
     if DO_PLOT: plt.show()
     if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_40_cupa_gpt_3_5_mcqa_accuracy_per_level_by_question_level.pdf'))
     plt.close(fig)
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+    # FIGURE: Correlation between pretested difficulty and virtual pretesting -- CUPA
+    #   The first plot plots all the questions, the second one only the ones which have correctness != 1.0 and != 0.0
+    for plot_idx in [0, 1]:
+        fig, ax = plt.subplots(figsize=(7, 4.2))
+        ax.grid(alpha=0.5, axis='y')
+        X, Y = [], []
+        for q_id in dict_gpt_3_5_cupa_40['correctness_per_model'].keys():
+            if plot_idx == 0 or np.mean(dict_gpt_3_5_cupa_40['correctness_per_model'][q_id]) not in {0.0, 1.0}:
+                X.append(difficulty_dict_cupa[q_id])
+                Y.append(np.mean(dict_gpt_3_5_cupa_40['correctness_per_model'][q_id]))
+        ax.scatter(X, Y, color='#b83266')
+        m, b = np.polyfit(X, Y, 1)
+        if m and b:
+            x0, x1 = min(X), max(X)
+            ax.plot([x0, x1], [x0 * m + b, x1 * m + b], ':', c='k', label='linear fit')
+        ax.set_xlabel('True difficulty')
+        ax.set_ylabel('Difficulty from virtual pretesting')
+        ax.legend()
+        if DO_PLOT: plt.show()
+        if plot_idx == 0:
+            output_name = f'prompt_40_cupa_gpt_3_5_virtual_pretesting.pdf'
+        else:
+            output_name = f'prompt_40_cupa_gpt_3_5_virtual_pretesting_no_extremes.pdf'
+        if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, output_name))
+        plt.close(fig)
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+    # FIGURE: Correlation between pretested difficulty and virtual pretesting, separately for target level -- CUPA
+    #   The first plot plots all the questions, the second one only the ones which have correctness != 1.0 and != 0.0
+    for plot_idx in [0, 1]:
+        X = {'B1': [], 'B2': [], 'C1': [], 'C2': []}
+        Y = {'B1': [], 'B2': [], 'C1': [], 'C2': []}
+        for q_id in dict_gpt_3_5_cupa_40['correctness_per_model'].keys():
+            if plot_idx == 0 or np.mean(dict_gpt_3_5_cupa_40['correctness_per_model'][q_id]) not in {0.0, 1.0}:
+                X[target_level_dict_cupa[q_id]].append(difficulty_dict_cupa[q_id])
+                Y[target_level_dict_cupa[q_id]].append(np.mean(dict_gpt_3_5_cupa_40['correctness_per_model'][q_id]))
+        fig, ax = plt.subplots(1, 4, figsize=(14, 4.2), sharex=True, sharey=True)
+        for idx, target_level in enumerate(['B1', 'B2', 'C1', 'C2']):
+            ax[idx].scatter(X[target_level], Y[target_level], color='#b83266', label=target_level)
+            m, b = np.polyfit(X[target_level], Y[target_level], 1)
+            if m and b:
+                x0, x1 = 30, 110
+                ax[idx].plot([x0, x1], [x0 * m + b, x1 * m + b], ':', c='k', label='linear fit')
+            # ax[idx].set_title(target_level)
+            ax[idx].set_xlabel('True difficulty')
+            ax[idx].set_xticks(range(30, 111, 10))
+            ax[idx].grid(alpha=0.5, axis='both')
+            ax[idx].legend()
+        ax[0].set_ylabel('Difficulty from virtual pretesting')
+        if DO_PLOT: plt.show()
+        if plot_idx == 0:
+            output_name = f'prompt_40_cupa_gpt_3_5_virtual_pretesting_by_target_level.pdf'
+        else:
+            output_name = f'prompt_40_cupa_gpt_3_5_virtual_pretesting_by_target_level_no_extremes.pdf'
+        if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, output_name))
+        plt.close(fig)
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
