@@ -176,7 +176,7 @@ def main():
         for q_id in dict_gpt_3_5_cupa_40['correctness_per_model'].keys():
             if plot_idx == 0 or np.mean(dict_gpt_3_5_cupa_40['correctness_per_model'][q_id]) not in {0.0, 1.0}:
                 X.append(difficulty_dict_cupa[q_id])
-                Y.append(np.mean(dict_gpt_3_5_cupa_40['correctness_per_model'][q_id]))
+                Y.append(1-np.mean(dict_gpt_3_5_cupa_40['correctness_per_model'][q_id]))
         ax.scatter(X, Y, color='#b83266')
         m, b = np.polyfit(X, Y, 1)
         if m and b:
@@ -203,7 +203,7 @@ def main():
         for q_id in dict_gpt_3_5_cupa_40['correctness_per_model'].keys():
             if plot_idx == 0 or np.mean(dict_gpt_3_5_cupa_40['correctness_per_model'][q_id]) not in {0.0, 1.0}:
                 X[target_level_dict_cupa[q_id]].append(difficulty_dict_cupa[q_id])
-                Y[target_level_dict_cupa[q_id]].append(np.mean(dict_gpt_3_5_cupa_40['correctness_per_model'][q_id]))
+                Y[target_level_dict_cupa[q_id]].append(1-np.mean(dict_gpt_3_5_cupa_40['correctness_per_model'][q_id]))
         fig, ax = plt.subplots(1, 4, figsize=(14, 4.2), sharex=True, sharey=True)
         for idx, target_level in enumerate(['B1', 'B2', 'C1', 'C2']):
             ax[idx].scatter(X[target_level], Y[target_level], color='#b83266', label=target_level)
