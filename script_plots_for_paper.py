@@ -127,7 +127,6 @@ def main():
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # FIGURE: MCQA by role played level, separately for different question levels -- ARC
-    # label_idx_to_str = ['middle', 'high', 'college']
     difficulty_levels = list(dict_gpt_3_5_arc_48['avg_accuracy_per_grade_per_model'].keys())
     n_role_played_levels = len(dict_gpt_3_5_arc_48['student_levels'])
     fig, ax = plt.subplots(1, len(difficulty_levels), figsize=(14, 4.2), sharey='all')
@@ -143,6 +142,26 @@ def main():
         ax[idx].set_xticklabels(dict_gpt_3_5_arc_48['student_levels'])
     if DO_PLOT: plt.show()
     if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_48_arc_gpt_3_5_mcqa_accuracy_per_level_by_question_level.pdf'))
+    plt.close(fig)
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+    # FIGURE: MCQA by role played level, separately for different target levels -- CUPA
+    difficulty_levels = list(dict_gpt_3_5_cupa_40['avg_accuracy_per_grade_per_model'].keys())
+    n_role_played_levels = len(dict_gpt_3_5_cupa_40['student_levels'])
+    fig, ax = plt.subplots(1, len(difficulty_levels), figsize=(10, 4.2), sharey='all')
+    for idx, grade in enumerate(difficulty_levels):
+        ax[idx].set_yticks(np.arange(0.0, 1.0, 0.1))
+        ax[idx].grid(alpha=0.5, axis='y')
+        ax[idx].plot(range(n_role_played_levels), dict_gpt_3_5_cupa_40['avg_accuracy_per_grade_per_model'][grade], 'x-', color='#b83266')
+        ax[idx].set_title(f'Target level = "{grade}"')
+        ax[idx].set_xlabel('Role-played level')
+        ax[idx].set_ylabel('QA accuracy')
+        ax[idx].set_xticks(range(n_role_played_levels))
+        ax[idx].set_xticklabels(dict_gpt_3_5_cupa_40['student_levels'])
+        ax[idx].set_ylim(0.25, 0.95)
+    if DO_PLOT: plt.show()
+    if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_40_cupa_gpt_3_5_mcqa_accuracy_per_level_by_question_level.pdf'))
     plt.close(fig)
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
