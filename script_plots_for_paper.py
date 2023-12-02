@@ -19,7 +19,6 @@ from constants import (
     RACE,
     CUPA,
     ARC,
-    DIFFICULTY_LEVELS,
 )
 
 matplotlib.rcParams['mathtext.fontset'] = 'stix'
