@@ -110,19 +110,20 @@ def main():
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # FIGURE: MCQA by role played level, separately for different question levels -- RACE
     label_idx_to_str = ['middle', 'high', 'college']
+    plot_style = ['o-', 'o--', 'o:']
     difficulty_levels = list(dict_gpt_3_5_race_40_test['avg_accuracy_per_grade_per_model'].keys())
     n_role_played_levels = len(dict_gpt_3_5_race_40_test['student_levels'])
-    fig, ax = plt.subplots(1, len(difficulty_levels), figsize=(7, 4.2), sharey='all')
+    fig, ax = plt.subplots(figsize=(6, 4.2))
+    ax.set_yticks(np.arange(0.0, 1.0, 0.05))
+    ax.grid(alpha=0.5)
     for idx, grade in enumerate(difficulty_levels):
-        ax[idx].set_yticks(np.arange(0.0, 1.0, 0.1))
-        ax[idx].grid(alpha=0.5, axis='y')
-        ax[idx].plot(range(n_role_played_levels), dict_gpt_3_5_race_40_test['avg_accuracy_per_grade_per_model'][grade], 'o-', color='#ffab00')
-        ax[idx].set_title(f'Q. level = "{label_idx_to_str[grade]}"')
-        ax[idx].set_xlabel('Role-played level')
-        ax[idx].set_ylabel('QA accuracy')
-        ax[idx].set_xticks(range(n_role_played_levels))
-        ax[idx].set_xticklabels(dict_gpt_3_5_race_40_test['student_levels'])
-        ax[idx].set_ylim(0.25, 0.95)
+        ax.plot(range(n_role_played_levels), dict_gpt_3_5_race_40_test['avg_accuracy_per_grade_per_model'][grade], plot_style[idx], label=label_idx_to_str[idx], color='#ffab00')
+    ax.set_xlabel('Role-played level')
+    ax.set_ylabel('QA accuracy')
+    ax.legend()
+    ax.set_xticks(range(n_role_played_levels))
+    ax.set_xticklabels(dict_gpt_3_5_race_40_test['student_levels'])
+    ax.set_ylim(0.25, 0.9)
     if DO_PLOT: plt.show()
     if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_40_race_gpt_3_5_mcqa_accuracy_per_level_by_question_level.pdf'))
     plt.close(fig)
