@@ -48,6 +48,7 @@ def main():
     # difficulty_dict = get_difficulty_dict_from_df(complete_df_arc)
 
     # Simulation results
+    dict_gpt_3_5_arc_48_dev = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 48, ARC, 'dev', complete_df_arc, difficulty_column_arc)
     dict_gpt_3_5_race_40_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 40, RACE, 'test', complete_df_race, difficulty_column_race)
     dict_gpt_3_5_cupa_40_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 40, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
     dict_gpt_3_5_arc_48_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 48, ARC, 'test', complete_df_arc, difficulty_column_arc)
@@ -87,11 +88,12 @@ def main():
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-    # FIGURE: average accuracy per model -- reference prompt -- ARC
+    # FIGURE: average accuracy per model -- reference prompt -- ARC dev and test
     n_role_played_levels = len(dict_gpt_3_5_arc_48_test['student_levels'])
 
     fig, ax = plt.subplots(figsize=(6, 4.2))
-    ax.plot(range(n_role_played_levels), dict_gpt_3_5_arc_48_test['avg_accuracy_per_model'], '*-', label='ARC', c='#054b7d')
+    ax.plot(range(n_role_played_levels), dict_gpt_3_5_arc_48_test['avg_accuracy_per_model'], '*-', label='ARC (test)', c='#054b7d')
+    ax.plot(range(n_role_played_levels), dict_gpt_3_5_arc_48_dev['avg_accuracy_per_model'], '*:', label='ARC (dev)', c='#054b7d')
     ax.grid(alpha=0.5, axis='both')
     ax.set_ylim(0, 1.0)
     ax.set_yticks(np.arange(0.0, 1.0, 0.1))
@@ -102,6 +104,7 @@ def main():
     ax.legend()
     if DO_PLOT: plt.show()
     if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_48_arc_gpt_3_5_mcqa_accuracy_per_level.pdf'))
+    plt.savefig(os.path.join(out_fig_path, f'prompt_48_arc_gpt_3_5_mcqa_accuracy_per_level.pdf'))
     plt.close(fig)
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
