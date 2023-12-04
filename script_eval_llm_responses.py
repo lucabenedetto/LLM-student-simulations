@@ -32,11 +32,12 @@ from constants import (
 DATASET = RACE
 PROMPT_IDX = 58
 MODEL = GPT_3_5
+SPLIT = 'test'
 
 
 def main():
-    data_path = os.path.join(OUTPUT_DATA_DIR, f'{MODEL}_responses_{DATASET}')
-    out_fig_path = os.path.join('output_figures', f'{MODEL}_{DATASET}')
+    data_path = os.path.join(OUTPUT_DATA_DIR, SPLIT, f'{MODEL}_responses_{DATASET}')
+    out_fig_path = os.path.join('output_figures', SPLIT, f'{MODEL}_{DATASET}')
 
     student_levels = get_student_levels_from_prompt_idx(PROMPT_IDX)
     # the 1+idx is needed for backward compatibility with files written with a previous script.
