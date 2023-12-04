@@ -89,13 +89,17 @@ def get_questions_by_difficulty_dict(
     return questions_by_difficulty
 
 
-def get_dataset(dataset_name: str, num_questions_per_difficulty_level: int = 50) -> pd.DataFrame:
-    if dataset_name == RACE and num_questions_per_difficulty_level == 50:
-        return pd.read_csv(os.path.join(INPUT_DATA_DIR, "race_pp_test_50q_per_diff.csv"))
-    elif dataset_name == ARC and num_questions_per_difficulty_level == 50:
-        return pd.read_csv(os.path.join(INPUT_DATA_DIR, "arc_test_50q_per_diff.csv"))
-    elif dataset_name == CUPA and num_questions_per_difficulty_level == 50:
-        return pd.read_csv(os.path.join(INPUT_DATA_DIR, "cupa_test_50q_per_diff.csv"))
+def get_dataset(
+        dataset_name: str,
+        n_questions_per_diff_level: int = 50,
+        split: str = 'test',
+) -> pd.DataFrame:
+    if dataset_name == RACE and n_questions_per_diff_level == 50:
+        return pd.read_csv(os.path.join(INPUT_DATA_DIR, f"race_pp_{split}_{n_questions_per_diff_level}q_per_diff.csv"))
+    elif dataset_name == ARC and n_questions_per_diff_level == 50:
+        return pd.read_csv(os.path.join(INPUT_DATA_DIR, f"arc_{split}_{n_questions_per_diff_level}q_per_diff.csv"))
+    elif dataset_name == CUPA and n_questions_per_diff_level == 50:
+        return pd.read_csv(os.path.join(INPUT_DATA_DIR, f"cupa_{split}_{n_questions_per_diff_level}q_per_diff.csv"))
     else:
         raise NotImplementedError()
 
