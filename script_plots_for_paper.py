@@ -131,19 +131,21 @@ def main():
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # FIGURE: MCQA by role played level, separately for different question levels -- ARC
+    plot_style = ['*-', '', '*--', '', '*-.', '', '*:']
     difficulty_levels = list(dict_gpt_3_5_arc_48_test['avg_accuracy_per_grade_per_model'].keys())
     n_role_played_levels = len(dict_gpt_3_5_arc_48_test['student_levels'])
-    fig, ax = plt.subplots(1, len(difficulty_levels), figsize=(14, 4.2), sharey='all')
+    fig, ax = plt.subplots(figsize=(6, 4.2))
     for idx, grade in enumerate(difficulty_levels):
-        ax[idx].set_yticks(np.arange(0.0, 1.0, 0.1))
-        ax[idx].grid(alpha=0.5, axis='y')
-        ax[idx].plot(range(n_role_played_levels), dict_gpt_3_5_arc_48_test['avg_accuracy_per_grade_per_model'][grade], '*-', color='#054b7d')
-        ax[idx].set_title(f'Q. level = "{grade}"')
-        ax[idx].set_xlabel('Role-played level')
-        if idx == 0:
-            ax[idx].set_ylabel('MCQA accuracy')
-        ax[idx].set_xticks(range(n_role_played_levels))
-        ax[idx].set_xticklabels(dict_gpt_3_5_arc_48_test['student_levels'])
+        if (idx+1) % 2 == 0:
+            continue
+        ax.plot(range(n_role_played_levels), dict_gpt_3_5_arc_48_test['avg_accuracy_per_grade_per_model'][grade], plot_style[idx], label=grade, color='#054b7d')
+    ax.set_yticks(np.arange(0.5, 1.0, 0.05))
+    ax.grid(alpha=0.5)
+    ax.set_xlabel('Role-played level')
+    ax.set_ylabel('MCQA accuracy')
+    ax.set_xticks(range(n_role_played_levels))
+    ax.set_xticklabels(dict_gpt_3_5_arc_48_test['student_levels'])
+    ax.legend()
     if DO_PLOT: plt.show()
     if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_48_arc_gpt_3_5_mcqa_accuracy_per_level_by_question_level.pdf'))
     plt.close(fig)
