@@ -5,4 +5,5 @@ torch==2.1.0
 transformers==4.34.1
 accelerate==0.24.1
 matplotlib==3.8.1
+retry==0.9.2
 seaborn==0.13.0
