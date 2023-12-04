@@ -55,7 +55,7 @@ def main():
 
         # the 1+idx is needed for backward compatibility with files written with a previous script.
         df_model_answers.to_csv(
-            os.path.join(OUTPUT_DATA_DIR, folder_name, f"{MODEL}_grade_answers_prompt{PROMPT_IDX}_0shot_a_{1+idx}.csv"),
+            os.path.join(OUTPUT_DATA_DIR, SPLIT, folder_name, f"{MODEL}_grade_answers_prompt{PROMPT_IDX}_0shot_a_{1+idx}.csv"),
             index=False
         )
 
