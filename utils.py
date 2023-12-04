@@ -1,5 +1,6 @@
 import ast
 import json
+import numpy as np
 import os
 from collections import defaultdict
 from typing import Union, Dict, List, Set, Tuple
@@ -13,11 +14,11 @@ def get_average_accuracy_per_model(
         list_dfs,
         set_q_ids,
         complete_df,
-        difficulty_levels,
+        difficulty_column: str = 'difficulty',
 ) -> Tuple[List[float], Dict[int, List[float]]]:
-    if len(difficulty_levels) > 0:  # this is for CUPA
-        # dict that maps from "true_difficulty" to list of qids
-        questions_by_difficulty = get_questions_by_difficulty_dict(complete_df, difficulty_levels)
+    # dict that maps from "true_difficulty" to list of qids
+    questions_by_difficulty = get_questions_by_difficulty_dict(complete_df, difficulty_column)
+    difficulty_levels = np.sort(list(questions_by_difficulty.keys()))
     correct_answer_dict = get_correct_answer_dict_from_df(complete_df)  # dict that maps from qid to correct answer
 
     avg_accuracy_per_grade_per_model = dict()
@@ -71,15 +72,19 @@ def get_correct_answer_dict_from_df(df) -> Dict[str, str]:
     return {q_id: correct_answer for q_id, correct_answer in df[['q_id', 'correct_answer']].values}
 
 
-def get_difficulty_dict_from_df(df) -> Dict[str, int]:
-    return {q_id: difficulty for q_id, difficulty in df[['q_id', 'difficulty']].values}
+def get_difficulty_dict_from_df(df, difficulty_column='difficulty') -> Dict[str, int]:
+    return {q_id: difficulty for q_id, difficulty in df[['q_id', difficulty_column]].values}
 
 
-def get_questions_by_difficulty_dict(df: pd.DataFrame, difficulty_levels: List[int]) -> Dict[int, Set[str]]:
+def get_questions_by_difficulty_dict(
+        df: pd.DataFrame,
+        # difficulty_levels: Optional[List[int]] = None,
+        difficulty_column: str = 'difficulty',
+) -> Dict[int, Set[str]]:
     questions_by_difficulty = dict()
-    for diff in difficulty_levels:
+    for diff in df[difficulty_column].unique():
         questions_by_difficulty[diff] = set()
-    for q_id, diff in df[['q_id', 'difficulty']].values:
+    for q_id, diff in df[['q_id', difficulty_column]].values:
         questions_by_difficulty[diff].add(q_id)
     return questions_by_difficulty
 
@@ -89,6 +94,8 @@ def get_dataset(dataset_name: str, num_questions_per_difficulty_level: int = 50)
         return pd.read_csv(os.path.join(INPUT_DATA_DIR, "race_pp_test_50q_per_diff.csv"))
     elif dataset_name == ARC and num_questions_per_difficulty_level == 50:
         return pd.read_csv(os.path.join(INPUT_DATA_DIR, "arc_test_50q_per_diff.csv"))
+    elif dataset_name == CUPA and num_questions_per_difficulty_level == 50:
+        return pd.read_csv(os.path.join(INPUT_DATA_DIR, "cupa_test_50q_per_diff.csv"))
     else:
         raise NotImplementedError()
 
@@ -346,3 +353,6 @@ def validate_answer(answer: str) -> Union[str, None]:
     except json.JSONDecodeError:
         print("The answer is not a valid JSON string.")
         return "{'index': -7, 'text': 'None'}"
+    except KeyError:
+        print("'index' not in keys.")
+        return "{'index': -6, 'text': 'None'}"

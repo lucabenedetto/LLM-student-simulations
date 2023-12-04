@@ -11,13 +11,14 @@ VICUNA_13B_V1_5 = 'vicuna_13b_v1_5'
 IS_READING_QUESTION = {
     RACE: True,
     ARC: False,
+    CUPA: True,
 }
 
-DIFFICULTY_LEVELS = {
-    RACE: [0, 1, 2],
-    ARC: [3, 4, 5, 6, 7, 8, 9],
-    CUPA: [],
-}
+# DIFFICULTY_LEVELS = {
+#     RACE: [0, 1, 2],
+#     ARC: [3, 4, 5, 6, 7, 8, 9],
+#     CUPA: [],
+# }
 
 INPUT_DATA_DIR = 'data/input'
 OUTPUT_DATA_DIR = 'data/output'

@@ -8,6 +8,7 @@ from utils_openai_api import prepare_answers_dict_gpt, get_gpt_model, validate_a
 from constants import (
     RACE,
     ARC,
+    CUPA,
     IS_READING_QUESTION,
     OUTPUT_DATA_DIR,
     GPT_3_5,
@@ -15,7 +16,7 @@ from constants import (
 )
 
 DATASET = RACE
-PROMPT_IDX = 59
+PROMPT_IDX = 40
 MODEL = GPT_3_5
 
 
