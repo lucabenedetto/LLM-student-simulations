@@ -152,7 +152,7 @@ def get_student_levels_from_prompt_idx(prompt_idx) -> List[str]:
     toefl_levels = ['32', '35', '46', '60', '79', '94', '102', '110', '115', '118']
     rounded_toefl_levels = ['40', '60', '80', '100', '120']  # this was used to see if "rounded" nums work better
 
-    if prompt_idx in {38, 39, 40, 41, 48, 54}:
+    if prompt_idx in {37, 38, 39, 40, 41, 48, 54}:
         return five_levels_char
     if prompt_idx in {43}:
         return five_levels_int
@@ -182,6 +182,13 @@ def get_student_levels_from_prompt_idx(prompt_idx) -> List[str]:
 
 
 def build_system_message_from_params(prompt_idx, student_level):
+    if prompt_idx == 37:
+        return f"""
+You will be shown a multiple choice question from a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, motivating your choice, and select the answer choice that a student of level {student_level} would pick.
+Provide only a JSON file with the following structure:
+{{"level rationale": "your step-by-step process for choosing the difficulty level", "question level": "difficulty level of the question", "index": "integer index of the answer chosen by a student of level {student_level}"}}
+"""
     if prompt_idx == 38:
         return f"""
 You will be shown a multiple choice question from a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
