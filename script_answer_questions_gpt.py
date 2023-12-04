@@ -18,6 +18,7 @@ from constants import (
 DATASET = RACE
 PROMPT_IDX = 40
 MODEL = GPT_3_5
+SPLIT = 'test'
 
 
 def main():
@@ -28,7 +29,7 @@ def main():
     openai.api_key = api_key
 
     st_levels = get_student_levels_from_prompt_idx(PROMPT_IDX)
-    df_items = get_dataset(DATASET, 50)
+    df_items = get_dataset(DATASET, n_questions_per_diff_level=50, split=SPLIT)
     is_reading_question = IS_READING_QUESTION[DATASET]
     folder_name = f'{MODEL}_responses_{DATASET}'
     model = get_gpt_model(MODEL)
