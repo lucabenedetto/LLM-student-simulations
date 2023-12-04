@@ -95,8 +95,8 @@ def main():
     ax.plot(range(n_role_played_levels), dict_gpt_3_5_arc_48_test['avg_accuracy_per_model'], '*-', label='ARC (test)', c='#054b7d')
     ax.plot(range(n_role_played_levels), dict_gpt_3_5_arc_48_dev['avg_accuracy_per_model'], '*:', label='ARC (dev)', c='#054b7d')
     ax.grid(alpha=0.5, axis='both')
-    ax.set_ylim(0, 1.0)
-    ax.set_yticks(np.arange(0.0, 1.0, 0.1))
+    # ax.set_ylim(0, 1.0)
+    ax.set_yticks(np.arange(0.4, 1.0, 0.1))
     ax.set_ylabel('MCQA accuracy')
     ax.set_xlabel('Simulated level')
     ax.set_xticks(range(n_role_played_levels))
@@ -104,7 +104,6 @@ def main():
     ax.legend()
     if DO_PLOT: plt.show()
     if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_48_arc_gpt_3_5_mcqa_accuracy_per_level.pdf'))
-    plt.savefig(os.path.join(out_fig_path, f'prompt_48_arc_gpt_3_5_mcqa_accuracy_per_level.pdf'))
     plt.close(fig)
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
