@@ -163,8 +163,8 @@ def plot_correlation_between_difficulty_and_qa_correctness(
     plt.close(fig)
 
 
-def get_all_info_for_plotting_by_mdoel_prompt_and_dataset(model, prompt_idx, dataset, complete_df, difficulty_column):
-    data_path = os.path.join(OUTPUT_DATA_DIR, f'{model}_responses_{dataset}')
+def get_all_info_for_plotting_by_mdoel_prompt_and_dataset(model, prompt_idx, dataset, split, complete_df, difficulty_column):
+    data_path = os.path.join(OUTPUT_DATA_DIR, split, f'{model}_responses_{dataset}')
     student_levels = get_student_levels_from_prompt_idx(prompt_idx)
     filenames = [f"{model}_grade_answers_prompt{prompt_idx}_0shot_a_{1+idx}.csv" for idx, _ in enumerate(student_levels)]
     list_dfs = [pd.read_csv(os.path.join(data_path, filename)) for filename in filenames]
