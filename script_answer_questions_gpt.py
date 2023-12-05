@@ -13,12 +13,14 @@ from constants import (
     OUTPUT_DATA_DIR,
     GPT_3_5,
     GPT_3_5_1106,
+    TEST,
+    DEV,
 )
 
 DATASET = RACE
 PROMPT_IDX = 40
 MODEL = GPT_3_5
-SPLIT = 'test'
+SPLIT = TEST
 
 
 def main():
