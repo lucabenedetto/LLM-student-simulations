@@ -28,12 +28,14 @@ from constants import (
     LLAMA2_7B_CHAT,
     LLAMA2_13B_CHAT,
     VICUNA_13B_V1_5,
+    TEST,
+    DEV,
 )
 
 DATASET = RACE
 PROMPT_IDX = 58
 MODEL = GPT_3_5
-SPLIT = 'test'
+SPLIT = TEST
 
 
 def main():
