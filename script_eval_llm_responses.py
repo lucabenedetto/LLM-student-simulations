@@ -24,6 +24,7 @@ from constants import (
     OUTPUT_DATA_DIR,
     GPT_3_5,
     GPT_3_5_1106,
+    GPT_4_1106,
     LLAMA2_7B_CHAT,
     LLAMA2_13B_CHAT,
     VICUNA_13B_V1_5,
@@ -42,7 +43,7 @@ def main():
     student_levels = get_student_levels_from_prompt_idx(PROMPT_IDX)
     # the 1+idx is needed for backward compatibility with files written with a previous script.
     # also, this is so noise due to some inconsistency in the output filenames, I will have to sort this out...
-    if MODEL in {GPT_3_5, GPT_3_5_1106}:
+    if MODEL in {GPT_3_5, GPT_3_5_1106, GPT_4_1106}:
         filenames = [f"{MODEL}_grade_answers_prompt{PROMPT_IDX}_0shot_a_{1+idx}.csv" for idx, _ in enumerate(student_levels)]
     elif MODEL in {LLAMA2_7B_CHAT, LLAMA2_13B_CHAT}:
         filenames = [f"llama2_answers_prompt{PROMPT_IDX}_0shot_{1 + idx}.csv" for idx, _ in enumerate(student_levels)]
