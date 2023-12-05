@@ -23,13 +23,14 @@ DATASET = RACE
 PROMPT_IDX = 40
 MAX_LENGTH = 2048
 MODEL = VICUNA_13B_V1_5
+SPLIT = 'test'
 
 
 def main():
 
     folder_name = f'{MODEL}_responses_{DATASET}'
     st_levels = get_student_levels_from_prompt_idx(PROMPT_IDX)
-    df_items = get_dataset(DATASET, 50)
+    df_items = get_dataset(DATASET, n_questions_per_diff_level=50, split=SPLIT)
     is_reading_question = IS_READING_QUESTION[DATASET]
     model = get_llama_model(MODEL)
     tokenizer = AutoTokenizer.from_pretrained(model)
@@ -69,7 +70,7 @@ def main():
 
         # the 1+idx is needed for backward compatibility with files written with a previous script.
         df_model_answers.to_csv(
-            os.path.join(OUTPUT_DATA_DIR, folder_name, f"{MODEL}_answers_prompt{PROMPT_IDX}_0shot_{1+idx}.csv"),
+            os.path.join(OUTPUT_DATA_DIR, SPLIT, folder_name, f"{MODEL}_answers_prompt{PROMPT_IDX}_0shot_{1+idx}.csv"),
             index=False
         )
 

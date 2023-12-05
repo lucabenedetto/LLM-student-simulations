@@ -1,5 +1,6 @@
 import openai
 import pandas as pd
+from retry import retry
 
 from utils import build_system_message_from_params, build_user_prompt_from_params, validate_answer
 from constants import (
@@ -17,6 +18,7 @@ def get_gpt_model(name):
         raise ValueError("Unknown model")
 
 
+@retry(tries=5, max_delay=60)
 def answer_question(system_context: str, user_prompt: str, temperature=0, model=None, response_format='text') -> str:
     if model is None:
         raise ValueError

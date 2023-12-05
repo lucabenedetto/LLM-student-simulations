@@ -89,13 +89,17 @@ def get_questions_by_difficulty_dict(
     return questions_by_difficulty
 
 
-def get_dataset(dataset_name: str, num_questions_per_difficulty_level: int = 50) -> pd.DataFrame:
-    if dataset_name == RACE and num_questions_per_difficulty_level == 50:
-        return pd.read_csv(os.path.join(INPUT_DATA_DIR, "race_pp_test_50q_per_diff.csv"))
-    elif dataset_name == ARC and num_questions_per_difficulty_level == 50:
-        return pd.read_csv(os.path.join(INPUT_DATA_DIR, "arc_test_50q_per_diff.csv"))
-    elif dataset_name == CUPA and num_questions_per_difficulty_level == 50:
-        return pd.read_csv(os.path.join(INPUT_DATA_DIR, "cupa_test_50q_per_diff.csv"))
+def get_dataset(
+        dataset_name: str,
+        n_questions_per_diff_level: int = 50,
+        split: str = 'test',
+) -> pd.DataFrame:
+    if dataset_name == RACE and n_questions_per_diff_level == 50:
+        return pd.read_csv(os.path.join(INPUT_DATA_DIR, f"race_pp_{split}_{n_questions_per_diff_level}q_per_diff.csv"))
+    elif dataset_name == ARC and n_questions_per_diff_level == 50:
+        return pd.read_csv(os.path.join(INPUT_DATA_DIR, f"arc_{split}_{n_questions_per_diff_level}q_per_diff.csv"))
+    elif dataset_name == CUPA and n_questions_per_diff_level == 50:
+        return pd.read_csv(os.path.join(INPUT_DATA_DIR, f"cupa_{split}_{n_questions_per_diff_level}q_per_diff.csv"))
     else:
         raise NotImplementedError()
 
@@ -148,7 +152,7 @@ def get_student_levels_from_prompt_idx(prompt_idx) -> List[str]:
     toefl_levels = ['32', '35', '46', '60', '79', '94', '102', '110', '115', '118']
     rounded_toefl_levels = ['40', '60', '80', '100', '120']  # this was used to see if "rounded" nums work better
 
-    if prompt_idx in {39, 40, 41, 48, 54}:
+    if prompt_idx in {36, 37, 38, 39, 40, 41, 48, 54}:
         return five_levels_char
     if prompt_idx in {43}:
         return five_levels_int
@@ -178,6 +182,27 @@ def get_student_levels_from_prompt_idx(prompt_idx) -> List[str]:
 
 
 def build_system_message_from_params(prompt_idx, student_level):
+    if prompt_idx == 36:
+        return f"""
+You will be shown a multiple choice question from a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of level {student_level} would pick.
+Provide only a JSON file with the following structure:
+{{"level": "difficulty level of the question", "index": "integer index of the answer chosen by a student of level {student_level}"}}
+"""
+    if prompt_idx == 37:
+        return f"""
+You will be shown a multiple choice question from a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, motivating your choice, and select the answer choice that a student of level {student_level} would pick.
+Provide only a JSON file with the following structure:
+{{"level rationale": "your step-by-step process for choosing the difficulty level", "question level": "difficulty level of the question", "index": "integer index of the answer chosen by a student of level {student_level}"}}
+"""
+    if prompt_idx == 38:
+        return f"""
+You will be shown a multiple choice question from a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, motivating your choice, and select the answer choice that a student of level {student_level} would pick.
+Provide only a JSON file with the following structure:
+{{"level rationale": "your step-by-step process for choosing the difficulty level", "question level": "difficulty level of the question", "answer explanation": "the list of steps that the students of level {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a student of level {student_level}"}}
+"""
     if prompt_idx == 39:
         return f"""
 You are taking a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
