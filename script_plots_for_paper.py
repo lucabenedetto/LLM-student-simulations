@@ -49,33 +49,41 @@ def main():
     # difficulty_dict = get_difficulty_dict_from_df(complete_df_arc)
 
     # Simulation results
+
+    # GPT-3.5
     dict_gpt_3_5_arc_48_dev = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 48, ARC, 'dev', complete_df_arc, difficulty_column_arc)
-    dict_gpt_3_5_race_40_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 40, RACE, 'test', complete_df_race, difficulty_column_race)
-    dict_gpt_3_5_cupa_40_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 40, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
     dict_gpt_3_5_arc_48_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 48, ARC, 'test', complete_df_arc, difficulty_column_arc)
-    dict_gpt_3_5_1106_race_40_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5_1106, 40, RACE, 'test', complete_df_race, difficulty_column_race)
-    dict_gpt_3_5_1106_cupa_40_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5_1106, 40, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
-    dict_gpt_3_5_1106_arc_48_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5_1106, 48, ARC, 'test', complete_df_arc, difficulty_column_arc)
+    dict_gpt_3_5_arc_55_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 55, ARC, 'test', complete_df_arc, difficulty_column_arc)
+    dict_gpt_3_5_arc_56_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 56, ARC, 'test', complete_df_arc, difficulty_column_arc)
+
+    dict_gpt_3_5_race_40_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 40, RACE, 'test', complete_df_race, difficulty_column_race)
     dict_gpt_3_5_race_44_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 44, RACE, 'test', complete_df_race, difficulty_column_race)
     dict_gpt_3_5_race_45_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 45, RACE, 'test', complete_df_race, difficulty_column_race)
     dict_gpt_3_5_race_46_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 46, RACE, 'test', complete_df_race, difficulty_column_race)
+    dict_gpt_3_5_race_47_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 47, RACE, 'test', complete_df_race, difficulty_column_race)
+    dict_gpt_3_5_race_49_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 49, RACE, 'test', complete_df_race, difficulty_column_race)
+    dict_gpt_3_5_race_50_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 50, RACE, 'test', complete_df_race, difficulty_column_race)
+    dict_gpt_3_5_race_57_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 57, RACE, 'test', complete_df_race, difficulty_column_race)
+    dict_gpt_3_5_race_60_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 60, RACE, 'test', complete_df_race, difficulty_column_race)
+
+    dict_gpt_3_5_cupa_40_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 40, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
     dict_gpt_3_5_cupa_44_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 44, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
     dict_gpt_3_5_cupa_45_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 45, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
     dict_gpt_3_5_cupa_46_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 46, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
-    dict_gpt_3_5_arc_56_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 56, ARC, 'test', complete_df_arc, difficulty_column_arc)
-    dict_gpt_3_5_arc_55_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 55, ARC, 'test', complete_df_arc, difficulty_column_arc)
-    dict_gpt_3_5_race_57_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 57, RACE, 'test', complete_df_race, difficulty_column_race)
+    dict_gpt_3_5_cupa_47_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 47, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
+    dict_gpt_3_5_cupa_49_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 49, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
+    dict_gpt_3_5_cupa_50_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 50, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
     dict_gpt_3_5_cupa_57_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 57, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
+    dict_gpt_3_5_cupa_60_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 60, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
+
+    # GPT-3.5 1106
+    dict_gpt_3_5_1106_race_40_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5_1106, 40, RACE, 'test', complete_df_race, difficulty_column_race)
+    dict_gpt_3_5_1106_cupa_40_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5_1106, 40, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
+    dict_gpt_3_5_1106_arc_48_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5_1106, 48, ARC, 'test', complete_df_arc, difficulty_column_arc)
+
+    # GPT-4
     dict_gpt_4_1106_arc_48_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_4_1106, 48, ARC, 'test', complete_df_arc, difficulty_column_arc)
     dict_gpt_4_1106_race_40_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_4_1106, 40, RACE, 'test', complete_df_race, difficulty_column_race)
-    dict_gpt_3_5_race_47_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 47, RACE, 'test', complete_df_race, difficulty_column_race)
-    dict_gpt_3_5_cupa_47_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 47, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
-    dict_gpt_3_5_race_49_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 49, RACE, 'test', complete_df_race, difficulty_column_race)
-    dict_gpt_3_5_cupa_49_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 49, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
-    dict_gpt_3_5_race_50_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 50, RACE, 'test', complete_df_race, difficulty_column_race)
-    dict_gpt_3_5_cupa_50_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 50, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
-    dict_gpt_3_5_race_60_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 60, RACE, 'test', complete_df_race, difficulty_column_race)
-    dict_gpt_3_5_cupa_60_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 60, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # FIGURE: average accuracy per model -- reference prompt -- RACE and CUPA
