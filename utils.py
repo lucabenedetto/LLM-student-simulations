@@ -205,7 +205,7 @@ Provide only a JSON file with the following structure:
 """
     if prompt_idx == 39:
         return f"""
-You are taking a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You will be shown a multiple choice question from a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
 You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of level {student_level} would pick.
 Provide only a JSON file with the following structure:
 {{"question level": "difficulty level of the question", "answer explanation": "the list of steps that the students of level {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a student of level {student_level}"}}
