@@ -221,7 +221,7 @@ def main():
     # FIGURE: Correlation between pretested difficulty and virtual pretesting -- CUPA
     #   The first plot plots all the questions, the second one only the ones which have correctness != 1.0 and != 0.0
     for plot_idx in [0, 1]:
-        fig, ax = plt.subplots(figsize=(7, 4.2))
+        fig, ax = plt.subplots(figsize=(6, 6))
         ax.grid(alpha=0.5, axis='y')
         X, Y = [], []
         for q_id in dict_gpt_3_5_cupa_40_test['correctness_per_model'].keys():
