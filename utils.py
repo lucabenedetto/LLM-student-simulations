@@ -152,7 +152,7 @@ def get_student_levels_from_prompt_idx(prompt_idx) -> List[str]:
     toefl_levels = ['32', '35', '46', '60', '79', '94', '102', '110', '115', '118']
     rounded_toefl_levels = ['40', '60', '80', '100', '120']  # this was used to see if "rounded" nums work better
 
-    if prompt_idx in {36, 37, 38, 39, 40, 41, 48, 54}:
+    if prompt_idx in {28, 31, 32, 35, 36, 37, 38, 39, 40, 41, 48, 54}:
         return five_levels_char
     if prompt_idx in {43}:
         return five_levels_int
@@ -182,6 +182,39 @@ def get_student_levels_from_prompt_idx(prompt_idx) -> List[str]:
 
 
 def build_system_message_from_params(prompt_idx, student_level):
+    if prompt_idx == 28:
+        return f"""
+You will be shown multiple choice questions from a science exam. 
+The questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+Similarly, the students can be identified with skill levels from one (low level student) to five (very skilled student).
+The level of students is defined such that a student of a certain level can answer most of the questions of lower levels, and almost none of the question of higher levels.
+
+You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of level {student_level} would pick.
+Provide only a JSON file with the following structure:
+{{"level": "difficulty level of the question", "index": "integer index of the answer chosen by a student of level {student_level}", "text": "text of the answer chosen by the student"}}        
+"""
+    if prompt_idx == 31:
+        return f"""
+You are taking a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of level {student_level} would pick.
+Provide only a JSON file with the following structure:
+{{"level": "difficulty level of the question", "index": "integer index of the answer chosen by a student of level {student_level}", "text": "text of the chosen answer"}}        
+"""
+    if prompt_idx == 32:
+        return f"""
+You are taking a science exam, and the questions in the exam have difficulty levels on a scale from level one (very easy) to level five (very difficult).
+Similarly, each student can be given a skill level: level one represents the least skilled students, who answer most questions wrongly, and level five represents the most skilled students, who can correctly answer even the most difficult items. 
+You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of level {student_level} would pick.
+Provide only a JSON file with the following structure:
+{{"level": "difficulty level of the question", "index": "integer index of the answer chosen by a student of level {student_level}", "text": "text of the chosen answer"}}        
+"""
+    if prompt_idx == 35:
+        return f"""
+You are taking a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, motivating your choice, and select the answer choice that a student of level {student_level} would pick.
+Provide only a JSON file with the following structure:
+{{"level": "difficulty level of the question", "motivation": "reason why you assigned that difficulty level", "index": "integer index of the answer chosen by a student of level {student_level}", "text": "text of the chosen answer"}}
+"""
     if prompt_idx == 36:
         return f"""
 You will be shown a multiple choice question from a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
