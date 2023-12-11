@@ -2,14 +2,14 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import os
-import pandas as pd
+# import pandas as pd
 from utils import (
-    get_student_levels_from_prompt_idx,
+    # get_student_levels_from_prompt_idx,
     get_original_dataset,
-    get_questions_answered_by_all_roleplayed_levels,
+    # get_questions_answered_by_all_roleplayed_levels,
     get_difficulty_dict_from_df,
-    get_average_accuracy_per_model,
-    get_response_correctness_per_model,
+    # get_average_accuracy_per_model,
+    # get_response_correctness_per_model,
 )
 from utils_plotting import get_all_info_for_plotting_by_mdoel_prompt_and_dataset
 from constants import (
