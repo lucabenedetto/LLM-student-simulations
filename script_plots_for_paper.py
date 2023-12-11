@@ -51,6 +51,10 @@ def main():
     # Simulation results
 
     # GPT-3.5
+    dict_gpt_3_5_arc_28_dev = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 28, ARC, 'dev', complete_df_arc, difficulty_column_arc)
+    dict_gpt_3_5_arc_31_dev = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 31, ARC, 'dev', complete_df_arc, difficulty_column_arc)
+    dict_gpt_3_5_arc_32_dev = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 32, ARC, 'dev', complete_df_arc, difficulty_column_arc)
+    dict_gpt_3_5_arc_35_dev = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 35, ARC, 'dev', complete_df_arc, difficulty_column_arc)
     dict_gpt_3_5_arc_48_dev = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 48, ARC, 'dev', complete_df_arc, difficulty_column_arc)
     dict_gpt_3_5_arc_48_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 48, ARC, 'test', complete_df_arc, difficulty_column_arc)
     dict_gpt_3_5_arc_55_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 55, ARC, 'test', complete_df_arc, difficulty_column_arc)
@@ -419,10 +423,31 @@ def main():
     plt.close(fig)
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+    # FIGURE: MCQA by role played level comparison of different prompts -- ARC
+    plot_style = ['*:', '*-.', '*--', '*-', '-']
+    labels = [28, 31, 32, 35, 'ref. prompt']
+    list_dict_results = [dict_gpt_3_5_arc_28_dev, dict_gpt_3_5_arc_31_dev, dict_gpt_3_5_arc_32_dev, dict_gpt_3_5_arc_35_dev, dict_gpt_3_5_arc_48_dev]
+    n_role_played_levels = len(dict_gpt_3_5_arc_48_dev['student_levels'])
+    fig, ax = plt.subplots(figsize=(6, 4.2))
+    for idx, dict_results in enumerate(list_dict_results):
+        color = '#288cfc' if idx == 4 else '#054b7d'
+        ax.plot(range(n_role_played_levels), dict_results['avg_accuracy_per_model'], plot_style[idx], label=labels[idx], color=color)
+    ax.set_yticks(np.arange(0.0, 1.0, 0.1))
+    ax.grid(alpha=0.5)
+    ax.set_xlabel('Simulated level')
+    ax.set_ylabel('MCQA accuracy')
+    ax.set_xticks(range(n_role_played_levels))
+    ax.set_xticklabels(dict_gpt_3_5_arc_48_dev['student_levels'])
+    ax.legend()
+    if DO_PLOT: plt.show()
+    if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_28_31_32_35_48_arc_gpt_3_5_mcqa_accuracy.pdf'))
+    plt.close(fig)
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 # saved colours:
 # RACE: #ffab00 (also tried #fd7401)
-# ARC: #054b7d
+# ARC: #054b7d (also '#288cfc' -- light blue)
 # CUPA: #b83266
 
 if __name__ == "__main__":
