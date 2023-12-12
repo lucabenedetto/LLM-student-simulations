@@ -1,24 +1,22 @@
 import json
 import os
-import pandas as pd
-import openai
+import pathlib
 
-from utils import get_student_levels_from_prompt_idx, get_dataset
-from utils_openai_api import prepare_answers_dict_gpt, get_gpt_model, validate_answer
+import openai
+import pandas as pd
+
 from constants import (
     RACE,
-    ARC,
-    CUPA,
     IS_READING_QUESTION,
     OUTPUT_DATA_DIR,
     GPT_3_5,
-    GPT_3_5_1106,
     TEST,
-    DEV,
 )
+from utils import get_student_levels_from_prompt_idx, get_dataset
+from utils_openai_api import prepare_answers_dict_gpt, get_gpt_model, validate_answer
 
 DATASET = RACE
-PROMPT_IDX = 40
+PROMPT_IDX = 62
 MODEL = GPT_3_5
 SPLIT = TEST
 
@@ -56,6 +54,8 @@ def main():
         df_model_answers['answer'] = df_model_answers.apply(lambda r: validate_answer(r['raw_answer']), axis=1)
 
         # the 1+idx is needed for backward compatibility with files written with a previous script.
+        output_folder_path = os.path.join(OUTPUT_DATA_DIR, SPLIT, folder_name)
+        pathlib.Path(output_folder_path).mkdir(parents=True, exist_ok=True)
         df_model_answers.to_csv(
             os.path.join(OUTPUT_DATA_DIR, SPLIT, folder_name, f"{MODEL}_grade_answers_prompt{PROMPT_IDX}_0shot_a_{1+idx}.csv"),
             index=False
