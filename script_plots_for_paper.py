@@ -88,6 +88,7 @@ def main():
     # GPT-4
     dict_gpt_4_1106_arc_48_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_4_1106, 48, ARC, 'test', complete_df_arc, difficulty_column_arc)
     dict_gpt_4_1106_race_40_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_4_1106, 40, RACE, 'test', complete_df_race, difficulty_column_race)
+    dict_gpt_4_1106_cupa_40_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_4_1106, 40, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # FIGURE: average accuracy per model -- reference prompt -- RACE and CUPA
@@ -308,12 +309,12 @@ def main():
     n_role_played_levels = len(dict_gpt_3_5_arc_48_test['student_levels'])
 
     fig, ax = plt.subplots(figsize=(6, 4.2))
-    ax.plot(range(n_role_played_levels), dict_gpt_4_1106_arc_48_test['avg_accuracy_per_model'], '*-', label='ARC (GPT-4 v1106)', c='#054b7d')
+    ax.plot(range(n_role_played_levels), dict_gpt_4_1106_arc_48_test['avg_accuracy_per_model'], '*-', label='ARC (GPT-4)', c='#054b7d')
     ax.plot(range(n_role_played_levels), dict_gpt_3_5_arc_48_test['avg_accuracy_per_model'], '*:', label='ARC (GPT-3.5)', c='#054b7d')
-    ax.plot(range(n_role_played_levels), dict_gpt_4_1106_race_40_test['avg_accuracy_per_model'], 'o-', label='RACE (GPT-4 v1106)', c='#ffab00')
+    ax.plot(range(n_role_played_levels), dict_gpt_4_1106_race_40_test['avg_accuracy_per_model'], 'o-', label='RACE (GPT-4)', c='#ffab00')
     ax.plot(range(n_role_played_levels), dict_gpt_3_5_race_40_test['avg_accuracy_per_model'], 'o:', label='RACE (GPT-3.5)', c='#ffab00')
-    # ax[2].plot(range(n_role_played_levels), dict_gpt_3_5_1106_cupa_40_test['avg_accuracy_per_model'], 'x-', label='CUPA (GPT-3.5 v1106)', c='#b83266')
-    # ax[2].plot(range(n_role_played_levels), dict_gpt_3_5_cupa_40_test['avg_accuracy_per_model'], 'x:', label='CUPA', c='#b83266')
+    ax.plot(range(n_role_played_levels), dict_gpt_4_1106_cupa_40_test['avg_accuracy_per_model'], 'x-', label='CUPA (GPT-4)', c='#b83266')
+    ax.plot(range(n_role_played_levels), dict_gpt_3_5_cupa_40_test['avg_accuracy_per_model'], 'x:', label='CUPA (GPT-3.5)', c='#b83266')
     ax.set_yticks(np.arange(0.4, 1.0, 0.05))
     ax.set_ylabel('MCQA accuracy')
     ax.set_xticks(range(n_role_played_levels))
