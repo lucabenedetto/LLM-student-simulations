@@ -57,6 +57,7 @@ def main():
     dict_gpt_3_5_arc_35_dev = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 35, ARC, 'dev', complete_df_arc, difficulty_column_arc)
     dict_gpt_3_5_arc_48_dev = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 48, ARC, 'dev', complete_df_arc, difficulty_column_arc)
     dict_gpt_3_5_arc_48_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 48, ARC, 'test', complete_df_arc, difficulty_column_arc)
+    dict_gpt_3_5_arc_52_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 52, ARC, 'test', complete_df_arc, difficulty_column_arc)
     dict_gpt_3_5_arc_55_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 55, ARC, 'test', complete_df_arc, difficulty_column_arc)
     dict_gpt_3_5_arc_56_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 56, ARC, 'test', complete_df_arc, difficulty_column_arc)
 
@@ -67,6 +68,7 @@ def main():
     dict_gpt_3_5_race_47_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 47, RACE, 'test', complete_df_race, difficulty_column_race)
     dict_gpt_3_5_race_49_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 49, RACE, 'test', complete_df_race, difficulty_column_race)
     dict_gpt_3_5_race_50_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 50, RACE, 'test', complete_df_race, difficulty_column_race)
+    dict_gpt_3_5_race_53_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 53, RACE, 'test', complete_df_race, difficulty_column_race)
     dict_gpt_3_5_race_57_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 57, RACE, 'test', complete_df_race, difficulty_column_race)
     dict_gpt_3_5_race_60_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 60, RACE, 'test', complete_df_race, difficulty_column_race)
 
@@ -77,6 +79,7 @@ def main():
     dict_gpt_3_5_cupa_47_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 47, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
     dict_gpt_3_5_cupa_49_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 49, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
     dict_gpt_3_5_cupa_50_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 50, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
+    dict_gpt_3_5_cupa_53_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 53, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
     dict_gpt_3_5_cupa_57_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 57, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
     dict_gpt_3_5_cupa_60_test = get_all_info_for_plotting_by_mdoel_prompt_and_dataset(GPT_3_5, 60, CUPA, 'test', complete_df_cupa, difficulty_column_cupa)
 
@@ -421,6 +424,26 @@ def main():
     ax.legend()
     if DO_PLOT: plt.show()
     if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_57_race_cupa_55_arc_gpt_3_5_mcqa_accuracy_per_level.pdf'))
+    plt.close(fig)
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+    # FIGURE: average accuracy per model -- qualitative scale (beg, int, adv) -- ARC, RACE, and CUPA
+    n_role_played_levels = len(dict_gpt_3_5_race_53_test['student_levels'])
+    fig, ax = plt.subplots(figsize=(6, 4.2))
+    ax.plot(range(n_role_played_levels), dict_gpt_3_5_race_53_test['avg_accuracy_per_model'], 'o-', label='RACE', c='#ffab00')
+    ax.plot(range(n_role_played_levels), dict_gpt_3_5_arc_52_test['avg_accuracy_per_model'], '*-', label='ARC', c='#054b7d')
+    ax.plot(range(n_role_played_levels), dict_gpt_3_5_cupa_53_test['avg_accuracy_per_model'], 'x-', label='CUPA', c='#b83266')
+    ax.grid(alpha=0.5, axis='both')
+    # ax.set_ylim(0, 1.0)
+    ax.set_yticks(np.arange(0.0, 1.0, 0.1))
+    ax.set_ylabel('MCQA accuracy')
+    ax.set_xlabel('Simulated level')
+    ax.set_xticks(range(n_role_played_levels))
+    ax.set_xticklabels(dict_gpt_3_5_race_53_test['student_levels'])
+    ax.legend()
+    if DO_PLOT: plt.show()
+    if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_53_race_cupa_52_arc_gpt_3_5_mcqa_accuracy_per_level.pdf'))
     plt.close(fig)
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
