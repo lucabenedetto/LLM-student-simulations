@@ -333,7 +333,7 @@ def main():
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # FIGURE: average accuracy per model -- language proficiency scales -- RACE and CUPA
     labels = ['CEFR', 'IELTS', 'TOEFL']
-    fig, ax = plt.subplots(3, 1, figsize=(6, 9))
+    fig, ax = plt.subplots(1, 3, figsize=(16, 4.2), sharey=True)
     results_race = [dict_gpt_3_5_race_44_test, dict_gpt_3_5_race_45_test, dict_gpt_3_5_race_46_test]
     results_cupa = [dict_gpt_3_5_cupa_44_test, dict_gpt_3_5_cupa_45_test, dict_gpt_3_5_cupa_46_test]
     for idx in range(3):
@@ -342,13 +342,13 @@ def main():
         ax[idx].plot(range(n_role_played_levels), results_cupa[idx]['avg_accuracy_per_model'], 'x:', label=f'CUPA - {labels[idx]}', c='#b83266')
         ax[idx].grid(alpha=0.5, axis='both')
         ax[idx].set_yticks(np.arange(0.4, 1.0, 0.1))
-        ax[idx].set_ylabel('MCQA accuracy')
         ax[idx].set_xticks(range(n_role_played_levels))
         # ax[idx].set_xticklabels([x if x_idx%2 == 0 else '' for x_idx, x in enumerate(results_race[idx]['student_levels'])])
         ax[idx].set_xticklabels(results_race[idx]['student_levels'])
         # ax[idx].set_ylim(0.38, 0.92)
         ax[idx].legend()
-    ax[2].set_xlabel('Simulated level')
+        ax[idx].set_xlabel('Simulated level')
+    ax[0].set_ylabel('MCQA accuracy')
     if DO_PLOT: plt.show()
     if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_44_45_46_gpt_3_5_race_mcqa_accuracy_per_level.pdf'))
     plt.close(fig)
