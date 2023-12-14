@@ -178,6 +178,8 @@ def get_student_levels_from_prompt_idx(prompt_idx) -> List[str]:
         return mark_grades
     if prompt_idx in {56}:
         return school_grades
+    if prompt_idx in {61, 62}:
+        return ['GPT']
     raise NotImplementedError()
 
 
@@ -363,6 +365,21 @@ A student of CEFR level {student_level} {get_cefr_levels_description(student_lev
 Provide only a JSON file with the following structure:
 {{"question level": "difficulty level of the question", "answer explanation": "the list of steps that the students of CEFR level {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a student of CEFR level {student_level}"}}
 """
+    if prompt_idx == 61:
+        return """
+You will be shown a multiple choice question from a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, and select the answer choice.
+Provide only a JSON file with the following structure:
+{{"question level": "difficulty level of the question", "answer explanation": "the list of steps that you would follow to select the answer", "index": "integer index of the answer chosen"}}
+"""
+    if prompt_idx == 62:
+        return """
+You will be shown a multiple choice question from an English reading comprehension exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, and select the answer choice.
+Provide only a JSON file with the following structure:
+{{"question level": "difficulty level of the question", "answer explanation": "the list of steps that you would follow to select the answer", "index": "integer index of the answer chosen"}}        
+"""
+
     raise NotImplementedError()
 
 
