@@ -6,6 +6,7 @@ from utils import build_system_message_from_params, build_user_prompt_from_param
 from constants import (
     GPT_3_5,
     GPT_3_5_1106,
+    GPT_4_1106
 )
 
 
@@ -14,20 +15,23 @@ def get_gpt_model(name):
         return 'gpt-3.5-turbo-0613'
     elif name == GPT_3_5_1106:
         return 'gpt-3.5-turbo-1106'
+    elif name == GPT_4_1106:
+        return 'gpt-4-1106-preview'
     else:
         raise ValueError("Unknown model")
 
 
 @retry(tries=5, max_delay=60)
-def answer_question(system_context: str, user_prompt: str, temperature=0, model=None, response_format='text') -> str:
+def answer_question(system_context: str, user_prompt: str, temperature=0, model=None, json_mode=True) -> str:
     if model is None:
         raise ValueError
+    type_format = 'json_object' if json_mode and model == 'gpt-4-1106-preview' else 'text'
     response = openai.ChatCompletion.create(
         model=model,
         messages=[{'role': 'system', 'content': system_context},
                   {'role': 'user', 'content': user_prompt}],
         temperature=temperature,
-        response_format={"type": response_format},
+        response_format={"type": type_format}
     )
     response_content = response['choices'][0]['message']['content']
     return response_content
