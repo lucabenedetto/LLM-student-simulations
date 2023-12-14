@@ -1,23 +1,24 @@
 import ast
 import json
+import numpy as np
 import os
 from collections import defaultdict
 from typing import Union, Dict, List, Set, Tuple
 
 import pandas as pd
 
-from constants import RACE, ARC, INPUT_DATA_DIR  # , CUPA
+from constants import RACE, ARC, INPUT_DATA_DIR, CUPA
 
 
 def get_average_accuracy_per_model(
         list_dfs,
         set_q_ids,
         complete_df,
-        difficulty_levels,
+        difficulty_column: str = 'difficulty',
 ) -> Tuple[List[float], Dict[int, List[float]]]:
-    # if len(difficulty_levels) > 0:  # this is for CUPA
     # dict that maps from "true_difficulty" to list of qids
-    questions_by_difficulty = get_questions_by_difficulty_dict(complete_df, difficulty_levels)
+    questions_by_difficulty = get_questions_by_difficulty_dict(complete_df, difficulty_column)
+    difficulty_levels = np.sort(list(questions_by_difficulty.keys()))
     correct_answer_dict = get_correct_answer_dict_from_df(complete_df)  # dict that maps from qid to correct answer
 
     avg_accuracy_per_grade_per_model = dict()
@@ -71,24 +72,34 @@ def get_correct_answer_dict_from_df(df) -> Dict[str, str]:
     return {q_id: correct_answer for q_id, correct_answer in df[['q_id', 'correct_answer']].values}
 
 
-def get_difficulty_dict_from_df(df) -> Dict[str, int]:
-    return {q_id: difficulty for q_id, difficulty in df[['q_id', 'difficulty']].values}
+def get_difficulty_dict_from_df(df, difficulty_column='difficulty') -> Dict[str, int]:
+    return {q_id: difficulty for q_id, difficulty in df[['q_id', difficulty_column]].values}
 
 
-def get_questions_by_difficulty_dict(df: pd.DataFrame, difficulty_levels: List[int]) -> Dict[int, Set[str]]:
+def get_questions_by_difficulty_dict(
+        df: pd.DataFrame,
+        # difficulty_levels: Optional[List[int]] = None,
+        difficulty_column: str = 'difficulty',
+) -> Dict[int, Set[str]]:
     questions_by_difficulty = dict()
-    for diff in difficulty_levels:
+    for diff in df[difficulty_column].unique():
         questions_by_difficulty[diff] = set()
-    for q_id, diff in df[['q_id', 'difficulty']].values:
+    for q_id, diff in df[['q_id', difficulty_column]].values:
         questions_by_difficulty[diff].add(q_id)
     return questions_by_difficulty
 
 
-def get_dataset(dataset_name: str, num_questions_per_difficulty_level: int = 50) -> pd.DataFrame:
-    if dataset_name == RACE and num_questions_per_difficulty_level == 50:
-        return pd.read_csv(os.path.join(INPUT_DATA_DIR, "race_pp_test_50q_per_diff.csv"))
-    elif dataset_name == ARC and num_questions_per_difficulty_level == 50:
-        return pd.read_csv(os.path.join(INPUT_DATA_DIR, "arc_test_50q_per_diff.csv"))
+def get_dataset(
+        dataset_name: str,
+        n_questions_per_diff_level: int = 50,
+        split: str = 'test',
+) -> pd.DataFrame:
+    if dataset_name == RACE and n_questions_per_diff_level == 50:
+        return pd.read_csv(os.path.join(INPUT_DATA_DIR, f"race_pp_{split}_{n_questions_per_diff_level}q_per_diff.csv"))
+    elif dataset_name == ARC and n_questions_per_diff_level == 50:
+        return pd.read_csv(os.path.join(INPUT_DATA_DIR, f"arc_{split}_{n_questions_per_diff_level}q_per_diff.csv"))
+    elif dataset_name == CUPA and n_questions_per_diff_level == 50:
+        return pd.read_csv(os.path.join(INPUT_DATA_DIR, f"cupa_{split}_{n_questions_per_diff_level}q_per_diff.csv"))
     else:
         raise NotImplementedError()
 
@@ -98,8 +109,8 @@ def get_original_dataset(dataset_name: str) -> pd.DataFrame:
         return pd.read_csv(os.path.join(INPUT_DATA_DIR, 'race_pp_test.csv'))
     elif dataset_name == ARC:
         return pd.read_csv(os.path.join(INPUT_DATA_DIR, 'arc_test.csv'))
-    # elif dataset_name == CUPA:
-    #     return pd.read_csv(os.path.join(INPUT_DATA_DIR, 'cupa.csv'))
+    elif dataset_name == CUPA:
+        return pd.read_csv(os.path.join(INPUT_DATA_DIR, 'cupa.csv'))
     else:
         raise NotImplementedError()
 
@@ -114,7 +125,7 @@ def get_questions_answered_by_all_roleplayed_levels(list_dfs, complete_df):
     return set_q_ids
 
 
-def get_student_levels_from_prompt_idx(prompt_idx):
+def get_student_levels_from_prompt_idx(prompt_idx) -> List[str]:
     # thw two standard approaches with numbers in chars, these (especially 5 levels) are the ones used the most.
     five_levels_char = ['one', 'two', 'three', 'four', 'five']
     ten_levels_char = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
@@ -141,7 +152,7 @@ def get_student_levels_from_prompt_idx(prompt_idx):
     toefl_levels = ['32', '35', '46', '60', '79', '94', '102', '110', '115', '118']
     rounded_toefl_levels = ['40', '60', '80', '100', '120']  # this was used to see if "rounded" nums work better
 
-    if prompt_idx in {39, 40, 41, 48, 54}:
+    if prompt_idx in {28, 31, 32, 35, 36, 37, 38, 39, 40, 41, 48, 54}:
         return five_levels_char
     if prompt_idx in {43}:
         return five_levels_int
@@ -171,9 +182,63 @@ def get_student_levels_from_prompt_idx(prompt_idx):
 
 
 def build_system_message_from_params(prompt_idx, student_level):
-    if prompt_idx == 39:
+    if prompt_idx == 28:
+        return f"""
+You will be shown multiple choice questions from a science exam. 
+The questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+Similarly, the students can be identified with skill levels from one (low level student) to five (very skilled student).
+The level of students is defined such that a student of a certain level can answer most of the questions of lower levels, and almost none of the question of higher levels.
+
+You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of level {student_level} would pick.
+Provide only a JSON file with the following structure:
+{{"level": "difficulty level of the question", "index": "integer index of the answer chosen by a student of level {student_level}", "text": "text of the answer chosen by the student"}}        
+"""
+    if prompt_idx == 31:
         return f"""
 You are taking a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of level {student_level} would pick.
+Provide only a JSON file with the following structure:
+{{"level": "difficulty level of the question", "index": "integer index of the answer chosen by a student of level {student_level}", "text": "text of the chosen answer"}}        
+"""
+    if prompt_idx == 32:
+        return f"""
+You are taking a science exam, and the questions in the exam have difficulty levels on a scale from level one (very easy) to level five (very difficult).
+Similarly, each student can be given a skill level: level one represents the least skilled students, who answer most questions wrongly, and level five represents the most skilled students, who can correctly answer even the most difficult items. 
+You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of level {student_level} would pick.
+Provide only a JSON file with the following structure:
+{{"level": "difficulty level of the question", "index": "integer index of the answer chosen by a student of level {student_level}", "text": "text of the chosen answer"}}        
+"""
+    if prompt_idx == 35:
+        return f"""
+You are taking a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, motivating your choice, and select the answer choice that a student of level {student_level} would pick.
+Provide only a JSON file with the following structure:
+{{"level": "difficulty level of the question", "motivation": "reason why you assigned that difficulty level", "index": "integer index of the answer chosen by a student of level {student_level}", "text": "text of the chosen answer"}}
+"""
+    if prompt_idx == 36:
+        return f"""
+You will be shown a multiple choice question from a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of level {student_level} would pick.
+Provide only a JSON file with the following structure:
+{{"level": "difficulty level of the question", "index": "integer index of the answer chosen by a student of level {student_level}"}}
+"""
+    if prompt_idx == 37:
+        return f"""
+You will be shown a multiple choice question from a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, motivating your choice, and select the answer choice that a student of level {student_level} would pick.
+Provide only a JSON file with the following structure:
+{{"level rationale": "your step-by-step process for choosing the difficulty level", "question level": "difficulty level of the question", "index": "integer index of the answer chosen by a student of level {student_level}"}}
+"""
+    if prompt_idx == 38:
+        return f"""
+You will be shown a multiple choice question from a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+You must assign a difficulty level to the given multiple choice question, motivating your choice, and select the answer choice that a student of level {student_level} would pick.
+Provide only a JSON file with the following structure:
+{{"level rationale": "your step-by-step process for choosing the difficulty level", "question level": "difficulty level of the question", "answer explanation": "the list of steps that the students of level {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a student of level {student_level}"}}
+"""
+    if prompt_idx == 39:
+        return f"""
+You will be shown a multiple choice question from a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
 You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of level {student_level} would pick.
 Provide only a JSON file with the following structure:
 {{"question level": "difficulty level of the question", "answer explanation": "the list of steps that the students of level {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a student of level {student_level}"}}
@@ -346,3 +411,6 @@ def validate_answer(answer: str) -> Union[str, None]:
     except json.JSONDecodeError:
         print("The answer is not a valid JSON string.")
         return "{'index': -7, 'text': 'None'}"
+    except KeyError:
+        print("'index' not in keys.")
+        return "{'index': -6, 'text': 'None'}"
