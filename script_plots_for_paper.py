@@ -308,7 +308,7 @@ def main():
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-    # FIGURE: average accuracy per model -- reference prompts, GPT_3_5 vs. GPT_4_1106 -- ARC and RACE
+    # FIGURE: average accuracy per model -- reference prompts, GPT_3_5 vs. GPT_4_1106 -- ARC, RACE, and CUPA
     n_role_played_levels = len(dict_gpt_3_5_arc_48_test['student_levels'])
 
     fig, ax = plt.subplots(figsize=(6, 4.2))
