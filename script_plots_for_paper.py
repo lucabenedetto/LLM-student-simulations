@@ -492,10 +492,6 @@ def main():
     plt.close(fig)
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-# saved colours:
-# RACE: #ffab00 (also tried #fd7401)
-# ARC: #054b7d (also '#288cfc' -- light blue)
-# CUPA: #b83266
 
 if __name__ == "__main__":
     main()
