@@ -14,6 +14,7 @@ from utils import (
     get_difficulty_dict_from_df,
     # get_average_accuracy_per_model,
     # get_response_correctness_per_model,
+    item_response_function as irf,
 )
 from utils_plotting import get_all_info_for_plotting_by_mdoel_prompt_and_dataset
 from constants import (
@@ -254,6 +255,21 @@ def main():
         print("LLM diff:", scipy.stats.linregress(X, Y))
         random_difficulty = np.random.choice([0.0, 0.2, 0.4, 0.6, 0.8, 1.0], len(Y))
         print("Random", scipy.stats.linregress(X, random_difficulty))
+
+        # TODO: this is the simulation with IRT, possibly to remove.
+        answers_sim_students = [[], [], [], [], []]
+        q_ids = list(dict_gpt_3_5_cupa_40_test['correctness_per_model'].keys())
+        for q_id in q_ids:
+            # I need the 1- because I want the difficulty, not the accuracy
+            answers_sim_students[0].append(1-irf(difficulty_dict_cupa[q_id], 30) >= np.random.uniform(0, 1.0))
+            answers_sim_students[1].append(1-irf(difficulty_dict_cupa[q_id], 50) >= np.random.uniform(0, 1.0))
+            answers_sim_students[2].append(1-irf(difficulty_dict_cupa[q_id], 70) >= np.random.uniform(0, 1.0))
+            answers_sim_students[3].append(1-irf(difficulty_dict_cupa[q_id], 90) >= np.random.uniform(0, 1.0))
+            answers_sim_students[4].append(1-irf(difficulty_dict_cupa[q_id], 110) >= np.random.uniform(0, 1.0))
+        simulated_students_answers = np.average(answers_sim_students, axis=0)
+        print(len(simulated_students_answers) == len(q_ids))
+        difficulties = [difficulty_dict_cupa[q_id] for q_id in q_ids]
+        print("Simulated students:", scipy.stats.linregress(difficulties, simulated_students_answers))
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #

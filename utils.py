@@ -414,3 +414,13 @@ def validate_answer(answer: str) -> Union[str, None]:
     except KeyError:
         print("'index' not in keys.")
         return "{'index': -6, 'text': 'None'}"
+
+
+def item_response_function(difficulty, skill, discrimination=1.0, guess=0.25, slip=0.05) -> float:
+    return np.add(
+        guess,
+        np.divide(
+            1.0 - np.add(guess, slip),
+            1.0 + np.exp(-1.7 * np.multiply(discrimination, np.subtract(skill, difficulty)))
+        )
+    )
