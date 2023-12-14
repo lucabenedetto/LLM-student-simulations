@@ -252,7 +252,7 @@ def main():
             output_name = f'prompt_40_cupa_gpt_3_5_virtual_pretesting.pdf'
         else:
             output_name = f'prompt_40_cupa_gpt_3_5_virtual_pretesting_no_extremes.pdf'
-        # if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, output_name))
+        if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, output_name))
         plt.close(fig)
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
