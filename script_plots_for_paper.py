@@ -238,9 +238,6 @@ def main():
                 Y.append(1-np.mean(dict_gpt_3_5_cupa_40_test['correctness_per_model'][q_id]))
         ax.scatter(X, [y + np.random.uniform(-0.025, 0.025) for y in Y], color='#b83266', alpha=0.75)
         m, b = np.polyfit(X, Y, 1)
-        print("LLM diff:", scipy.stats.linregress(X, Y))
-        random_difficulty = np.random.choice([0.0, 0.2, 0.4, 0.6, 0.8, 1.0], len(Y))
-        print("Random", scipy.stats.linregress(X, random_difficulty))
         if m and b:
             x0, x1 = min(X), max(X)
             ax.plot([x0, x1], [x0 * m + b, x1 * m + b], ':', c='k', label='linear fit')
@@ -254,6 +251,9 @@ def main():
             output_name = f'prompt_40_cupa_gpt_3_5_virtual_pretesting_no_extremes.pdf'
         if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, output_name))
         plt.close(fig)
+        print("LLM diff:", scipy.stats.linregress(X, Y))
+        random_difficulty = np.random.choice([0.0, 0.2, 0.4, 0.6, 0.8, 1.0], len(Y))
+        print("Random", scipy.stats.linregress(X, random_difficulty))
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
