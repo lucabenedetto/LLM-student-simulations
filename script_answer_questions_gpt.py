@@ -35,15 +35,15 @@ def main():
     df_items = get_dataset(DATASET, n_questions_per_diff_level=50, split=SPLIT)
     is_reading_question = IS_READING_QUESTION[DATASET]
     folder_name = f'{MODEL}_responses_{DATASET}'
-    if not os.path.exists(os.path.join(OUTPUT_DATA_DIR, folder_name)):
-        os.makedirs(os.path.join(OUTPUT_DATA_DIR, folder_name))
+    if not os.path.exists(os.path.join(OUTPUT_DATA_DIR, SPLIT, folder_name)):
+        os.makedirs(os.path.join(OUTPUT_DATA_DIR, SPLIT, folder_name))
     model = get_gpt_model(MODEL)
 
     for idx, student_level in enumerate(st_levels):
         print(f"-- Doing idx {idx}, student level {student_level}")
-        response_format = 'text' if MODEL == GPT_3_5 else 'json_object'
+        json_mode = MODEL in {GPT_4_1106, GPT_3_5_1106}
         answers_dict = prepare_answers_dict_gpt(
-            df_items, model, student_level, is_reading_question, PROMPT_IDX, response_format
+            df_items, model, student_level, is_reading_question, PROMPT_IDX, json_mode
         )
 
         df_model_answers = pd.DataFrame([(item, value) for item, value in answers_dict.items()], columns=['q_id', 'raw_answer'])
