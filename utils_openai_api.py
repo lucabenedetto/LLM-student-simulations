@@ -25,7 +25,7 @@ def get_gpt_model(name):
 def answer_question(system_context: str, user_prompt: str, temperature=0, model=None, json_mode=True) -> str:
     if model is None:
         raise ValueError
-    type_format = 'json_object' if json_mode and model == 'gpt-4-1106-preview' else 'text'
+    type_format = 'json_object' if json_mode else 'text'
     response = openai.ChatCompletion.create(
         model=model,
         messages=[{'role': 'system', 'content': system_context},
@@ -47,7 +47,7 @@ def prepare_answers_dict_gpt(
         student_level: int = None,
         is_reading_question: bool = False,
         prompt_idx: int = None,
-        response_format: str = 'text',
+        json_mode: bool = False,
 ):
     answers_dict = {}
     for idx, row in df_questions.iterrows():
@@ -55,7 +55,7 @@ def prepare_answers_dict_gpt(
         prompt = build_user_prompt_from_params(row.question, row.options, is_reading_question, row.context)
         system_message = build_gpt_system_message_from_params(prompt_idx, student_level)
         try:
-            answer = answer_question(system_message, prompt, model=model, response_format=response_format)
+            answer = answer_question(system_message, prompt, model=model, json_mode=json_mode)
             # answer = validate_answer(answer)
         except Exception as e:
             print(e)
