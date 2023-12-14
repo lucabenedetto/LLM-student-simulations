@@ -286,7 +286,7 @@ def main():
     n_role_played_levels = len(dict_gpt_3_5_1106_arc_48_test['student_levels'])
 
     # fig, ax = plt.subplots(figsize=(6, 4.2))  # this was when I had all the models in one plot.
-    fig, ax = plt.subplots(3, 1, figsize=(6, 9), sharex=True)
+    fig, ax = plt.subplots(1, 3, figsize=(16, 4.2), sharex=True, sharey=True)
     ax[0].plot(range(n_role_played_levels), dict_gpt_3_5_1106_arc_48_test['avg_accuracy_per_model'], '*-', label='ARC (GPT-3.5 v1106)', c='#054b7d')
     ax[0].plot(range(n_role_played_levels), dict_gpt_3_5_arc_48_test['avg_accuracy_per_model'], '*:', label='ARC (GPT-3.5)', c='#054b7d')
     ax[1].plot(range(n_role_played_levels), dict_gpt_3_5_1106_race_40_test['avg_accuracy_per_model'], 'o-', label='RACE (GPT-3.5 v1106)', c='#ffab00')
@@ -295,13 +295,13 @@ def main():
     ax[2].plot(range(n_role_played_levels), dict_gpt_3_5_cupa_40_test['avg_accuracy_per_model'], 'x:', label='CUPA', c='#b83266')
     for idx in range(3):
         ax[idx].set_yticks(np.arange(0.0, 1.0, 0.1))
-        ax[idx].set_ylabel('MCQA accuracy')
         ax[idx].set_xticks(range(n_role_played_levels))
         ax[idx].set_xticklabels(dict_gpt_3_5_1106_arc_48_test['student_levels'])
         ax[idx].set_ylim(0.38, 0.92)
         ax[idx].grid(alpha=0.5, axis='both')
         ax[idx].legend()
-    ax[0].set_xlabel('Simulated level')
+        ax[idx].set_xlabel('Simulated level')
+    ax[0].set_ylabel('MCQA accuracy')
     if DO_PLOT: plt.show()
     if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_48_40_gpt_3_5_vs_gpt_3_5_1106_mcqa_accuracy_per_level.pdf'))
     plt.close(fig)
