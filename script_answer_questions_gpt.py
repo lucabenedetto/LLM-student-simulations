@@ -10,6 +10,8 @@ from constants import (
     IS_READING_QUESTION,
     OUTPUT_DATA_DIR,
     GPT_3_5,
+    GPT_3_5_1106,
+    GPT_4_1106,
     TEST,
 )
 from utils import get_student_levels_from_prompt_idx, get_dataset
@@ -32,6 +34,8 @@ def main():
     df_items = get_dataset(DATASET, n_questions_per_diff_level=50, split=SPLIT)
     is_reading_question = IS_READING_QUESTION[DATASET]
     folder_name = f'{MODEL}_responses_{DATASET}'
+    if not os.path.exists(os.path.join(OUTPUT_DATA_DIR, folder_name)):
+        os.makedirs(os.path.join(OUTPUT_DATA_DIR, folder_name))
     model = get_gpt_model(MODEL)
 
     for idx, student_level in enumerate(st_levels):
@@ -41,16 +45,7 @@ def main():
             df_items, model, student_level, is_reading_question, PROMPT_IDX, response_format
         )
 
-        rows = []
-        for item, value in answers_dict.items():
-            row = []
-            row.append(item)
-            row.append(value)
-            rows.append(row)
-
-        # In older experiments, for GPT I didn't save the raw answer but only the processed one.
-        # df_model_answers = pd.DataFrame(rows, columns=["q_id", "answer"])
-        df_model_answers = pd.DataFrame(rows, columns=['q_id', 'raw_answer'])
+        df_model_answers = pd.DataFrame([(item, value) for item, value in answers_dict.items()], columns=['q_id', 'raw_answer'])
         df_model_answers['answer'] = df_model_answers.apply(lambda r: validate_answer(r['raw_answer']), axis=1)
 
         # the 1+idx is needed for backward compatibility with files written with a previous script.
