@@ -25,8 +25,8 @@ SPLIT = TEST
 
 
 def main():
-    # get the OpenAI API key
-    with open('../unsupervised-qdet/key.json', 'r') as f:
+    # get the OpenAI API key -- TODO: this is to change according to the location of the API key
+    with open('key.json', 'r') as f:
         data = json.load(f)
     api_key = data['key']
     openai.api_key = api_key
