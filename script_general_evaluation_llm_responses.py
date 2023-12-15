@@ -5,7 +5,6 @@ import os
 from utils import (
     get_average_accuracy_per_model,
     get_response_correctness_per_model,
-    get_difficulty_dict_from_df,
     get_original_dataset,
     get_questions_answered_by_all_roleplayed_levels,
     get_student_levels_from_prompt_idx,
