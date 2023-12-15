@@ -379,35 +379,35 @@ You must assign a difficulty level to the given multiple choice question, and se
 Provide only a JSON file with the following structure:
 {{"question level": "difficulty level of the question", "answer explanation": "the list of steps that you would follow to select the answer", "index": "integer index of the answer chosen"}}        
 """
-    if prompt_idx == 63:  # ARC
+    if prompt_idx == 63:
         return """
 You will be shown a multiple choice question from a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
 You must select the correct answer choice.
 Provide only a JSON file with the following structure:
 {{"answer explanation": "the list of steps that you would follow to select the answer", "index": "integer index of the answer chosen"}}
 """
-    if prompt_idx == 64:  # RACE
+    if prompt_idx == 64:
         return """
 You will be shown a multiple choice question from an English reading comprehension exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
 You must select the correct answer choice.
 Provide only a JSON file with the following structure:
 {{"answer explanation": "the list of steps that you would follow to select the answer", "index": "integer index of the answer chosen"}}        
 """
-    if prompt_idx == 65:  # ARC
+    if prompt_idx == 65:
         return """
 You will be shown a multiple choice question from a science exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
 You must select the correct answer choice.
 Provide only a JSON file with the following structure:
 {{"index": "integer index of the answer chosen"}}
 """
-    if prompt_idx == 66:  # RACE
+    if prompt_idx == 66:
         return """
 You will be shown a multiple choice question from an English reading comprehension exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
 You must select the correct answer choice.
 Provide only a JSON file with the following structure:
 {{"index": "integer index of the answer chosen"}}        
 """
-    if prompt_idx == 67:  # ARC&RACE
+    if prompt_idx == 67:
         return """
 You must select the correct answer index.
 Provide only a JSON file with the following structure:
