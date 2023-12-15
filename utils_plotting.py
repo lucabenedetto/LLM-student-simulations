@@ -113,56 +113,6 @@ def plot_accuracy_per_difficulty_for_different_role_played_levels(
     plt.close(fig)
 
 
-def plot_correlation_between_difficulty_and_qa_correctness(
-        correctness_per_model,
-        difficulty_dict,
-        dataset_name,
-        prompt_idx,
-        output_filepath_hexbin: str = None,
-        output_filepath_kdeplot: str = None,
-        figsize_hexbin: Tuple[int, int] = (7, 5),
-        figsize_kdeplot: Tuple[int, int] = (7, 5),
-        output_file_extension: str = '.png',
-):
-    difficulty_levels = set(difficulty_dict.values())
-    X, Y = [], []
-    for q_id in correctness_per_model.keys():
-        X.append(difficulty_dict[q_id])
-        Y.append(np.mean(correctness_per_model[q_id]))
-
-    # Version 1 of the plot: hexbin
-    fig, ax = plt.subplots(figsize=figsize_hexbin)
-    # ax.scatter(X, Y)
-    ax.set_ylim(-0.05, 1.05)
-    ax.set_xlim(min(difficulty_levels)-0.2, max(difficulty_levels)+0.2)
-    ax.hexbin(X, Y, gridsize=10)
-    ax.set_title(f'Correlation between QA accuracy and true difficulty | {dataset_name} | prompt {prompt_idx}')
-    ax.set_xlabel('"True" difficulty')
-    ax.set_ylabel('QA correctness')
-    m, b = np.polyfit(X, Y, 1)
-    if m and b:
-        x0, x1 = min(X), max(X)
-        ax.plot([x0, x1], [x0 * m + b, x1 * m + b], c='r')
-    if output_filepath_hexbin is None:
-        plt.show()
-    else:
-        plt.savefig(output_filepath_hexbin + output_file_extension)
-    plt.close(fig)
-
-    # Version 2 of the plot: KDE
-    fig, ax = plt.subplots(figsize=figsize_kdeplot)
-    ax.set_title(f'Correlation between QA accuracy and true difficulty | {dataset_name} | prompt {prompt_idx}')
-    seaborn.kdeplot(pd.DataFrame({'"True" difficulty': X, 'QA correctness': Y}), x='"True" difficulty', y='QA correctness', fill=True, levels=15)
-    if m and b:
-        x0, x1 = min(X), max(X)
-        ax.plot([x0, x1], [x0 * m + b, x1 * m + b], c='r')
-    if output_filepath_kdeplot is None:
-        plt.show()
-    else:
-        plt.savefig(output_filepath_kdeplot + output_file_extension)
-    plt.close(fig)
-
-
 def get_all_info_for_plotting_by_mdoel_prompt_and_dataset(model, prompt_idx, dataset, split, complete_df, difficulty_column):
     data_path = os.path.join(OUTPUT_DATA_DIR, split, f'{model}_responses_{dataset}')
     student_levels = get_student_levels_from_prompt_idx(prompt_idx)
