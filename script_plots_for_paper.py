@@ -4,16 +4,9 @@ import numpy as np
 import os
 import scipy
 
-import pandas as pd
-
-# import pandas as pd
 from utils import (
-    # get_student_levels_from_prompt_idx,
     get_original_dataset,
-    # get_questions_answered_by_all_roleplayed_levels,
     get_difficulty_dict_from_df,
-    # get_average_accuracy_per_model,
-    # get_response_correctness_per_model,
     item_response_function as irf,
 )
 from utils_plotting import get_all_info_for_plotting_by_mdoel_prompt_and_dataset
@@ -21,7 +14,6 @@ from constants import (
     GPT_3_5,
     GPT_3_5_1106,
     GPT_4_1106,
-    OUTPUT_DATA_DIR,
     RACE,
     CUPA,
     ARC,
@@ -47,11 +39,9 @@ def main():
     complete_df_cupa = get_original_dataset(CUPA)
     complete_df_arc = get_original_dataset(ARC)
 
-    # # dict that maps from qid to "true" difficulty
-    # difficulty_dict = get_difficulty_dict_from_df(complete_df_race)
+    # dict that maps from qid to "true" difficulty
     difficulty_dict_cupa = get_difficulty_dict_from_df(complete_df_cupa)
     target_level_dict_cupa = get_difficulty_dict_from_df(complete_df_cupa, difficulty_column='target_level')
-    # difficulty_dict = get_difficulty_dict_from_df(complete_df_arc)
 
     # Simulation results
 
@@ -256,7 +246,7 @@ def main():
         random_difficulty = np.random.choice([0.0, 0.2, 0.4, 0.6, 0.8, 1.0], len(Y))
         print("Random", scipy.stats.linregress(X, random_difficulty))
 
-        # TODO: this is the simulation with IRT, possibly to remove.
+        # TODO: this is the simulation with IRT, possibly to move somewhere else.
         answers_sim_students = [[], [], [], [], []]
         q_ids = list(dict_gpt_3_5_cupa_40_test['correctness_per_model'].keys())
         for q_id in q_ids:
