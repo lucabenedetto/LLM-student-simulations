@@ -50,9 +50,6 @@ def main():
     # to keep only the questions that are answered by all models
     set_q_ids = get_questions_answered_by_all_roleplayed_levels(list_dfs, complete_df)
 
-    # dict that maps from qid to "true" difficulty
-    difficulty_dict = get_difficulty_dict_from_df(complete_df)
-
     # code below compute the correctness for the different models, which is the info that I can then use to plot the eval metrics.
     avg_accuracy_per_model, avg_accuracy_per_grade_per_model = get_average_accuracy_per_model(list_dfs, set_q_ids, complete_df)
     correctness_per_model, answers_per_model = get_response_correctness_per_model(list_dfs, set_q_ids, complete_df)
