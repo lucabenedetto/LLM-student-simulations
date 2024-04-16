@@ -132,7 +132,7 @@ def main():
     # FIGURE: average accuracy per model -- reference prompt -- ARC (test), RACE and CUPA
     n_role_played_levels = len(dict_gpt_3_5_arc_48_test['student_levels'])
 
-    fig, ax = plt.subplots(figsize=(6, 4.2))  # was 4.2
+    fig, ax = plt.subplots(figsize=(6, 4.2))
     ax.plot(range(n_role_played_levels), dict_gpt_3_5_arc_48_test['avg_accuracy_per_model'], '*-', label='ARC (test)', c='#054b7d')
     # ax.plot(range(n_role_played_levels), dict_gpt_3_5_arc_48_dev['avg_accuracy_per_model'], '*:', label='ARC (dev)', c='#054b7d')
     ax.plot(range(n_role_played_levels), dict_gpt_3_5_race_40_test['avg_accuracy_per_model'], 'o-', label='RACE', c='#ffab00')
