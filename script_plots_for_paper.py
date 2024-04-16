@@ -129,6 +129,29 @@ def main():
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+    # FIGURE: average accuracy per model -- reference prompt -- ARC (test), RACE and CUPA
+    n_role_played_levels = len(dict_gpt_3_5_arc_48_test['student_levels'])
+
+    fig, ax = plt.subplots(figsize=(6, 4.2))  # was 4.2
+    ax.plot(range(n_role_played_levels), dict_gpt_3_5_arc_48_test['avg_accuracy_per_model'], '*-', label='ARC (test)', c='#054b7d')
+    # ax.plot(range(n_role_played_levels), dict_gpt_3_5_arc_48_dev['avg_accuracy_per_model'], '*:', label='ARC (dev)', c='#054b7d')
+    ax.plot(range(n_role_played_levels), dict_gpt_3_5_race_40_test['avg_accuracy_per_model'], 'o-', label='RACE', c='#ffab00')
+    ax.plot(range(n_role_played_levels), dict_gpt_3_5_cupa_40_test['avg_accuracy_per_model'], 'x-', label='CUPA', c='#b83266')
+    ax.grid(alpha=0.5, axis='both')
+    ax.set_ylim(0.4, 1.0)
+    ax.set_yticks(np.arange(0.4, 1.0, 0.05))
+    ax.set_ylabel('MCQA accuracy')
+    ax.set_xlabel('Simulated level')
+    ax.set_xticks(range(n_role_played_levels))
+    ax.set_xticklabels(dict_gpt_3_5_arc_48_test['student_levels'])
+    ax.legend()
+    plt.tight_layout()
+    if DO_PLOT: plt.show()
+    if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_48_arc_40_race_cupa_gpt_3_5_mcqa_accuracy_per_level.pdf'))
+    plt.close(fig)
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # FIGURE: MCQA by role played level, separately for different question levels -- RACE
     label_idx_to_str = ['middle', 'high', 'college']
     plot_style = ['o-', 'o--', 'o:']
