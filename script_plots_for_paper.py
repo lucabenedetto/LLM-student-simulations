@@ -180,7 +180,7 @@ def main():
     plot_style = ['o-', 'o--', 'o:']
     difficulty_levels = list(dict_gpt_3_5_race_40_test['avg_accuracy_per_grade_per_model'].keys())
     n_role_played_levels = len(dict_gpt_3_5_race_40_test['student_levels'])
-    fig, ax = plt.subplots(figsize=(6, 4.2))
+    fig, ax = plt.subplots(figsize=(4.5, 3.5))
     ax.set_yticks(np.arange(0.0, 1.0, 0.05))
     ax.grid(alpha=0.5)
     for idx, grade in enumerate(difficulty_levels):
@@ -191,6 +191,7 @@ def main():
     ax.set_xticks(range(n_role_played_levels))
     ax.set_xticklabels(dict_gpt_3_5_race_40_test['student_levels'])
     ax.set_ylim(0.25, 0.9)
+    plt.tight_layout()
     if DO_PLOT: plt.show()
     if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_40_race_gpt_3_5_mcqa_accuracy_per_level_by_question_level.pdf'))
     plt.close(fig)
@@ -201,7 +202,7 @@ def main():
     plot_style = ['*-', '', '*--', '', '*-.', '', '*:']
     difficulty_levels = list(dict_gpt_3_5_arc_48_test['avg_accuracy_per_grade_per_model'].keys())
     n_role_played_levels = len(dict_gpt_3_5_arc_48_test['student_levels'])
-    fig, ax = plt.subplots(figsize=(6, 4.2))
+    fig, ax = plt.subplots(figsize=(4.5, 3.5))
     for idx, grade in enumerate(difficulty_levels):
         if (idx+1) % 2 == 0:
             continue
@@ -213,6 +214,7 @@ def main():
     ax.set_xticks(range(n_role_played_levels))
     ax.set_xticklabels(dict_gpt_3_5_arc_48_test['student_levels'])
     ax.legend()
+    plt.tight_layout()
     if DO_PLOT: plt.show()
     if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_48_arc_gpt_3_5_mcqa_accuracy_per_level_by_question_level.pdf'))
     plt.close(fig)
@@ -224,7 +226,7 @@ def main():
     plot_style = ['', '*-', '', '*--', '', '*:', '']
     difficulty_levels = list(dict_gpt_3_5_arc_48_test['avg_accuracy_per_grade_per_model'].keys())
     n_role_played_levels = len(dict_gpt_3_5_arc_48_test['student_levels'])
-    fig, ax = plt.subplots(figsize=(6, 4.2))
+    fig, ax = plt.subplots(figsize=(4.5, 3.5))
     for idx, grade in enumerate(difficulty_levels):
         if (idx) % 2 == 0:
             continue
@@ -236,6 +238,7 @@ def main():
     ax.set_xticks(range(n_role_played_levels))
     ax.set_xticklabels(dict_gpt_3_5_arc_48_test['student_levels'])
     ax.legend()
+    plt.tight_layout()
     if DO_PLOT: plt.show()
     if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_48_arc_gpt_3_5_mcqa_accuracy_per_level_by_question_level_b.pdf'))
     plt.close(fig)
