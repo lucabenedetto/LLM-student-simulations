@@ -170,8 +170,7 @@ def main():
     ax.legend()
     plt.tight_layout()
     if DO_PLOT: plt.show()
-    # if SAVE_FIG:
-    plt.savefig(os.path.join(out_fig_path, f'prompt_48_arc_40_race_cupa_gpt_3_5_mcqa_accuracy_per_level.pdf'))
+    if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_48_arc_40_race_cupa_gpt_3_5_mcqa_accuracy_per_level.pdf'))
     plt.close(fig)
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
