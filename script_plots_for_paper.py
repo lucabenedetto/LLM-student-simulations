@@ -152,6 +152,30 @@ def main():
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+    # FIGURE: average accuracy per model -- reference prompt -- ARC (test), ARC (dev), RACE and CUPA
+    n_role_played_levels = len(dict_gpt_3_5_arc_48_test['student_levels'])
+
+    fig, ax = plt.subplots(figsize=(6, 4.2))
+    ax.plot(range(n_role_played_levels), dict_gpt_3_5_arc_48_dev['avg_accuracy_per_model'], '*:', label='ARC (dev)', c='#054b7d')
+    ax.plot(range(n_role_played_levels), dict_gpt_3_5_arc_48_test['avg_accuracy_per_model'], '*-', label='ARC (test)', c='#054b7d')
+    ax.plot(range(n_role_played_levels), dict_gpt_3_5_race_40_test['avg_accuracy_per_model'], 'o-', label='RACE', c='#ffab00')
+    ax.plot(range(n_role_played_levels), dict_gpt_3_5_cupa_40_test['avg_accuracy_per_model'], 'x-', label='CUPA', c='#b83266')
+    ax.grid(alpha=0.5, axis='both')
+    ax.set_ylim(0.4, 1.0)
+    ax.set_yticks(np.arange(0.4, 1.0, 0.05))
+    ax.set_ylabel('MCQA accuracy')
+    ax.set_xlabel('Simulated level')
+    ax.set_xticks(range(n_role_played_levels))
+    ax.set_xticklabels(dict_gpt_3_5_arc_48_test['student_levels'])
+    ax.legend()
+    plt.tight_layout()
+    if DO_PLOT: plt.show()
+    # if SAVE_FIG:
+    plt.savefig(os.path.join(out_fig_path, f'prompt_48_arc_40_race_cupa_gpt_3_5_mcqa_accuracy_per_level.pdf'))
+    plt.close(fig)
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # FIGURE: MCQA by role played level, separately for different question levels -- RACE
     label_idx_to_str = ['middle', 'high', 'college']
     plot_style = ['o-', 'o--', 'o:']
@@ -265,24 +289,41 @@ def main():
             output_name = f'prompt_40_cupa_gpt_3_5_virtual_pretesting_no_extremes.pdf'
         if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, output_name))
         plt.close(fig)
-        print("LLM diff:", scipy.stats.linregress(X, Y))
-        random_difficulty = np.random.choice([0.0, 0.2, 0.4, 0.6, 0.8, 1.0], len(Y))
-        print("Random", scipy.stats.linregress(X, random_difficulty))
+        if plot_idx == 0:
+            np.random.seed(42)
+            print("LLM diff:", scipy.stats.linregress(X, Y))
+            random_difficulty = np.random.choice([0.0, 0.2, 0.4, 0.6, 0.8, 1.0], len(Y))
+            print("Random", scipy.stats.linregress(X, random_difficulty))
 
-        # TODO: this is the simulation with IRT, possibly to move somewhere else.
-        answers_sim_students = [[], [], [], [], []]
-        q_ids = list(dict_gpt_3_5_cupa_40_test['correctness_per_model'].keys())
-        for q_id in q_ids:
-            # I need the 1- because I want the difficulty, not the accuracy
-            answers_sim_students[0].append(1-irf(difficulty_dict_cupa[q_id], 30) >= np.random.uniform(0, 1.0))
-            answers_sim_students[1].append(1-irf(difficulty_dict_cupa[q_id], 50) >= np.random.uniform(0, 1.0))
-            answers_sim_students[2].append(1-irf(difficulty_dict_cupa[q_id], 70) >= np.random.uniform(0, 1.0))
-            answers_sim_students[3].append(1-irf(difficulty_dict_cupa[q_id], 90) >= np.random.uniform(0, 1.0))
-            answers_sim_students[4].append(1-irf(difficulty_dict_cupa[q_id], 110) >= np.random.uniform(0, 1.0))
-        simulated_students_answers = np.average(answers_sim_students, axis=0)
-        print(len(simulated_students_answers) == len(q_ids))
-        difficulties = [difficulty_dict_cupa[q_id] for q_id in q_ids]
-        print("Simulated students:", scipy.stats.linregress(difficulties, simulated_students_answers))
+            # TODO: this is the simulation with IRT, possibly to move somewhere else.
+            answers_sim_students = [[], [], [], [], []]
+            q_ids = list(dict_gpt_3_5_cupa_40_test['correctness_per_model'].keys())
+            for q_id in q_ids:
+                # I need the 1- because I want the difficulty, not the accuracy
+                answers_sim_students[0].append(1-irf(difficulty_dict_cupa[q_id], 30) >= np.random.uniform(0, 1.0))
+                answers_sim_students[1].append(1-irf(difficulty_dict_cupa[q_id], 50) >= np.random.uniform(0, 1.0))
+                answers_sim_students[2].append(1-irf(difficulty_dict_cupa[q_id], 70) >= np.random.uniform(0, 1.0))
+                answers_sim_students[3].append(1-irf(difficulty_dict_cupa[q_id], 90) >= np.random.uniform(0, 1.0))
+                answers_sim_students[4].append(1-irf(difficulty_dict_cupa[q_id], 110) >= np.random.uniform(0, 1.0))
+            simulated_students_answers = np.average(answers_sim_students, axis=0)
+            print(len(simulated_students_answers) == len(q_ids))
+            difficulties = [difficulty_dict_cupa[q_id] for q_id in q_ids]
+            print("Simulated students (ideal):", scipy.stats.linregress(difficulties, simulated_students_answers))
+
+            answers_sim_students = [[], [], [], [], []]
+            q_ids = list(dict_gpt_3_5_cupa_40_test['correctness_per_model'].keys())
+            for q_id in q_ids:
+                # I need the 1- because I want the difficulty, not the accuracy
+                answers_sim_students[0].append(1-irf(difficulty_dict_cupa[q_id], 80) >= np.random.uniform(0, 1.0))
+                answers_sim_students[1].append(1-irf(difficulty_dict_cupa[q_id], 90) >= np.random.uniform(0, 1.0))
+                answers_sim_students[2].append(1-irf(difficulty_dict_cupa[q_id], 100) >= np.random.uniform(0, 1.0))
+                answers_sim_students[3].append(1-irf(difficulty_dict_cupa[q_id], 110) >= np.random.uniform(0, 1.0))
+                answers_sim_students[4].append(1-irf(difficulty_dict_cupa[q_id], 120) >= np.random.uniform(0, 1.0))
+            simulated_students_answers = np.average(answers_sim_students, axis=0)
+            print(len(simulated_students_answers) == len(q_ids))
+            difficulties = [difficulty_dict_cupa[q_id] for q_id in q_ids]
+            print("Simulated students (not ideal):", scipy.stats.linregress(difficulties, simulated_students_answers))
+
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -342,6 +383,35 @@ def main():
     if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_48_40_gpt_3_5_vs_gpt_3_5_1106_mcqa_accuracy_per_level.pdf'))
     plt.close(fig)
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+    # FIGURE: average accuracy per model -- reference prompts, GPT_3_5 vs. GPT_3_5_1106 -- RACE, CUPA, ARC
+    # It is the same as the previous plot, but plotting them in separate figs.
+    # TODO
+    n_role_played_levels = len(dict_gpt_3_5_1106_arc_48_test['student_levels'])
+
+    # fig, ax = plt.subplots(figsize=(6, 4.2))  # this was when I had all the models in one plot.
+    fig, ax = plt.subplots(1, 3, figsize=(16, 4.2), sharex=True, sharey=True)
+    ax[0].plot(range(n_role_played_levels), dict_gpt_3_5_1106_arc_48_test['avg_accuracy_per_model'], '*-', label='ARC (GPT-3.5 v1106)', c='#054b7d')
+    ax[0].plot(range(n_role_played_levels), dict_gpt_3_5_arc_48_test['avg_accuracy_per_model'], '*:', label='ARC (GPT-3.5)', c='#054b7d')
+    ax[1].plot(range(n_role_played_levels), dict_gpt_3_5_1106_race_40_test['avg_accuracy_per_model'], 'o-', label='RACE (GPT-3.5 v1106)', c='#ffab00')
+    ax[1].plot(range(n_role_played_levels), dict_gpt_3_5_race_40_test['avg_accuracy_per_model'], 'o:', label='RACE (GPT-3.5)', c='#ffab00')
+    ax[2].plot(range(n_role_played_levels), dict_gpt_3_5_1106_cupa_40_test['avg_accuracy_per_model'], 'x-', label='CUPA (GPT-3.5 v1106)', c='#b83266')
+    ax[2].plot(range(n_role_played_levels), dict_gpt_3_5_cupa_40_test['avg_accuracy_per_model'], 'x:', label='CUPA', c='#b83266')
+    for idx in range(3):
+        ax[idx].set_yticks(np.arange(0.0, 1.0, 0.1))
+        ax[idx].set_xticks(range(n_role_played_levels))
+        ax[idx].set_xticklabels(dict_gpt_3_5_1106_arc_48_test['student_levels'])
+        ax[idx].set_ylim(0.38, 0.92)
+        ax[idx].grid(alpha=0.5, axis='both')
+        ax[idx].legend()
+        ax[idx].set_xlabel('Simulated level')
+    ax[0].set_ylabel('MCQA accuracy')
+    if DO_PLOT: plt.show()
+    if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_48_40_gpt_3_5_vs_gpt_3_5_1106_mcqa_accuracy_per_level.pdf'))
+    plt.close(fig)
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # FIGURE: average accuracy per model -- reference prompts, GPT_3_5 vs. GPT_4_1106 -- ARC, RACE, and CUPA
