@@ -637,6 +637,7 @@ def main():
     ax.set_xticks(range(n_role_played_levels))
     ax.set_xticklabels(dict_gpt_3_5_race_57_test['student_levels'])
     ax.legend()
+    plt.tight_layout()
     if DO_PLOT: plt.show()
     if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_57_race_cupa_55_arc_gpt_3_5_mcqa_accuracy_per_level.pdf'))
     plt.close(fig)
