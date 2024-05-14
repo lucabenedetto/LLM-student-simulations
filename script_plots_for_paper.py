@@ -577,6 +577,31 @@ def main():
     plt.close(fig)
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+    # FIGURE: MCQA by role played level comparison of different prompts (second version) -- ARC
+    plot_style = ['*:', '*-.', '*--', '*-', '-']
+    # labels = [28, 31, 32, 35, 'R.P.']
+    labels = ['P.1', 'P.2', 'P.3', 'P.4', 'R.P.']
+    list_dict_results = [dict_gpt_3_5_arc_28_dev, dict_gpt_3_5_arc_31_dev, dict_gpt_3_5_arc_32_dev, dict_gpt_3_5_arc_35_dev, dict_gpt_3_5_arc_48_dev]
+    n_role_played_levels = len(dict_gpt_3_5_arc_48_dev['student_levels'])
+    fig, ax = plt.subplots(figsize=(6, 4.2))
+    for idx, dict_results in enumerate(list_dict_results):
+        # color = '#288cfc' if idx == 4 else '#054b7d'
+        color = '#054b7d' if idx == 4 else '#288cfc'
+        ax.plot(range(n_role_played_levels), dict_results['avg_accuracy_per_model'], plot_style[idx], label=labels[idx], color=color)
+    ax.set_yticks(np.arange(0.0, 1.0, 0.1))
+    ax.grid(alpha=0.5)
+    ax.set_xlabel('Simulated level')
+    ax.set_ylabel('MCQA accuracy')
+    ax.set_xticks(range(n_role_played_levels))
+    ax.set_xticklabels(dict_gpt_3_5_arc_48_dev['student_levels'])
+    ax.legend()
+    plt.tight_layout()
+    if DO_PLOT: plt.show()
+    if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_28_31_32_35_48_arc_gpt_3_5_mcqa_accuracy.pdf'))
+    plt.close(fig)
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
 
 if __name__ == "__main__":
     main()
