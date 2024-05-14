@@ -241,6 +241,50 @@ def main():
     plt.close(fig)
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+    # FIGURE: MCQA by role played level, separately for different question levels -- CUPA
+    n_role_played_levels = len(dict_gpt_3_5_cupa_40_test['student_levels'])
+    q_id_level_0 = []
+    q_id_level_1 = []
+    q_id_level_2 = []
+    for q_id in dict_gpt_3_5_cupa_40_test['correctness_per_model'].keys():
+        if difficulty_dict_cupa[q_id] < 60:
+            q_id_level_0.append(q_id)
+        elif difficulty_dict_cupa[q_id] <= 80:
+            q_id_level_1.append(q_id)
+        else:  # > 80
+            q_id_level_2.append(q_id)
+    y_difficulty_0 = [
+        np.mean([dict_gpt_3_5_cupa_40_test['correctness_per_model'][q_id][simulated_level] for q_id in q_id_level_0])
+        for simulated_level in range(n_role_played_levels)
+    ]
+    y_difficulty_1 = [
+        np.mean([dict_gpt_3_5_cupa_40_test['correctness_per_model'][q_id][simulated_level] for q_id in q_id_level_1])
+        for simulated_level in range(n_role_played_levels)
+    ]
+    y_difficulty_2 = [
+        np.mean([dict_gpt_3_5_cupa_40_test['correctness_per_model'][q_id][simulated_level] for q_id in q_id_level_2])
+        for simulated_level in range(n_role_played_levels)
+    ]
+    label_idx_to_str = ['diff. < 60', '60 <= diff. <= 80', 'diff. > 80']
+    plot_style = ['x-', 'x--', 'x:']
+    fig, ax = plt.subplots(figsize=(4.5, 3.5))
+    ax.set_yticks(np.arange(0.0, 1.0, 0.05))
+    ax.grid(alpha=0.5)
+    ax.plot(range(n_role_played_levels), y_difficulty_0, plot_style[0], color='#b83266', label=label_idx_to_str[0])
+    ax.plot(range(n_role_played_levels), y_difficulty_1, plot_style[1], color='#b83266', label=label_idx_to_str[1])
+    ax.plot(range(n_role_played_levels), y_difficulty_2, plot_style[2], color='#b83266', label=label_idx_to_str[2])
+    ax.set_xlabel('Simulated level')
+    ax.set_ylabel('MCQA accuracy')
+    ax.legend()
+    ax.set_xticks(range(n_role_played_levels))
+    ax.set_xticklabels(dict_gpt_3_5_cupa_40_test['student_levels'])
+    plt.tight_layout()
+    # ax.set_ylim(0.25, 0.9)
+    if DO_PLOT: plt.show()
+    if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_40_cupa_gpt_3_5_mcqa_accuracy_per_level_by_question_level.pdf'))
+    plt.close(fig)
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # FIGURE: MCQA by role played level, separately for different target levels -- CUPA
