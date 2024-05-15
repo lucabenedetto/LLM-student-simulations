@@ -345,10 +345,12 @@ def main():
             print("From virtual pretesting")
             print("Correlation:", scipy.stats.linregress(X, Y))
             print("MAE:", mean_absolute_error(X, [linear_scaling(diff, 0.0, 1.0, 30, 110) for diff in Y]))
+            print("MAPE:", 100/80*mean_absolute_error(X, [linear_scaling(diff, 0.0, 1.0, 30, 110) for diff in Y]))
             random_difficulty = np.random.choice([0.0, 0.2, 0.4, 0.6, 0.8, 1.0], len(Y))
             print("Random baseline")
             print("Correlation", scipy.stats.linregress(X, random_difficulty))
             print("MAE:", mean_absolute_error(X, [linear_scaling(diff, 0.0, 1.0, 30, 110) for diff in random_difficulty]))
+            print("MAPE:", 100/80*mean_absolute_error(X, [linear_scaling(diff, 0.0, 1.0, 30, 110) for diff in random_difficulty]))
 
             # TODO: this is the simulation with IRT, possibly to move somewhere else.
             answers_sim_students = [[], [], [], [], []]
@@ -366,6 +368,7 @@ def main():
             print("Simulated students (ideal)")
             print("Correlation", scipy.stats.linregress(difficulties, simulated_students_answers))
             print("MAE:", mean_absolute_error(difficulties, [linear_scaling(diff, 0.0, 1.0, 30, 110) for diff in simulated_students_answers]))
+            print("MAPE:", 100/80*mean_absolute_error(difficulties, [linear_scaling(diff, 0.0, 1.0, 30, 110) for diff in simulated_students_answers]))
 
             answers_sim_students = [[], [], [], [], []]
             q_ids = list(dict_gpt_3_5_cupa_40_test['correctness_per_model'].keys())
@@ -382,6 +385,7 @@ def main():
             print("Simulated students (not ideal)")
             print("Correlation:", scipy.stats.linregress(difficulties, simulated_students_answers))
             print("MAE:", mean_absolute_error(difficulties, [linear_scaling(diff, 0.0, 1.0, 30, 110) for diff in simulated_students_answers]))
+            print("MAPE:", 100/80*mean_absolute_error(difficulties, [linear_scaling(diff, 0.0, 1.0, 30, 110) for diff in simulated_students_answers]))
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
