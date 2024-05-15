@@ -68,9 +68,9 @@ def main(model_name, dataset_name):
         print("Correlation (original):", scipy.stats.linregress(llm_difficulty, target_difficulty))
         # this is just to check that the rescaling didn't break anything.
         print("Correlation (scaled)  :",  scipy.stats.linregress(scaled_llm_difficulty, target_difficulty))
-        print("R2:", r2_score(target_difficulty, scaled_llm_difficulty))
-        print("MAE:", mean_absolute_error(target_difficulty, scaled_llm_difficulty))
-        print("MAPE:", 100*mean_absolute_error(target_difficulty, scaled_llm_difficulty)/(DICT_DATASET_MAX_DIFFICULTY[dataset_name] - DICT_DATASET_MIN_DIFFICULTY[dataset_name]))
+        print("R2: %.2f" % r2_score(target_difficulty, scaled_llm_difficulty))
+        print("MAE: %.2f" % mean_absolute_error(target_difficulty, scaled_llm_difficulty))
+        print("MAPE: %.2f" % (100*mean_absolute_error(target_difficulty, scaled_llm_difficulty)/(DICT_DATASET_MAX_DIFFICULTY[dataset_name] - DICT_DATASET_MIN_DIFFICULTY[dataset_name])))
         # plt.hist(llm_difficulty)
         # plt.show()
 
