@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import pandas as pd
 import ast
 import scipy
@@ -69,13 +70,9 @@ def main(model_name, dataset_name):
         print("Correlation (scaled)  :",  scipy.stats.linregress(scaled_llm_difficulty, target_difficulty))
         print("R2:", r2_score(target_difficulty, scaled_llm_difficulty))
         print("MAE:", mean_absolute_error(target_difficulty, scaled_llm_difficulty))
-    # corpus is the list of all explanations, regardless of simulated level
-    # corpus = []
-    # correctness = []
-    # for level in range(1, 6):
-    #     corpus.extend(list(df_dict[level]['explanation'].values))
-    #     correctness.extend(list(df_dict[level]['selected_answer_is_correct'].values))
-# llm_difficulty, difficulty, selected_answer_is_correct
+        print("MAPE:", 100*mean_absolute_error(target_difficulty, scaled_llm_difficulty)/(DICT_DATASET_MAX_DIFFICULTY[dataset_name] - DICT_DATASET_MIN_DIFFICULTY[dataset_name]))
+        # plt.hist(llm_difficulty)
+        # plt.show()
 
 
 if __name__ == "__main__":
