@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import scipy
+from sklearn.metrics import mean_absolute_error, r2_score
 
 from utils import (
     get_original_dataset,
@@ -25,6 +26,10 @@ matplotlib.rcParams['font.size'] = 14
 
 DO_PLOT = False
 SAVE_FIG = False
+
+
+def linear_scaling(x, original_min, original_max, target_min, target_max):
+    return (x - original_min) / (original_max - original_min) * (target_max - target_min) + target_min
 
 
 def main():
@@ -337,9 +342,13 @@ def main():
         plt.close(fig)
         if plot_idx == 0:
             np.random.seed(42)
-            print("LLM diff:", scipy.stats.linregress(X, Y))
+            print("From virtual pretesting")
+            print("Correlation:", scipy.stats.linregress(X, Y))
+            print("MAE:", mean_absolute_error(X, [linear_scaling(diff, 0.0, 1.0, 30, 110) for diff in Y]))
             random_difficulty = np.random.choice([0.0, 0.2, 0.4, 0.6, 0.8, 1.0], len(Y))
-            print("Random", scipy.stats.linregress(X, random_difficulty))
+            print("Random baseline")
+            print("Correlation", scipy.stats.linregress(X, random_difficulty))
+            print("MAE:", mean_absolute_error(X, [linear_scaling(diff, 0.0, 1.0, 30, 110) for diff in random_difficulty]))
 
             # TODO: this is the simulation with IRT, possibly to move somewhere else.
             answers_sim_students = [[], [], [], [], []]
@@ -354,7 +363,9 @@ def main():
             simulated_students_answers = np.average(answers_sim_students, axis=0)
             print(len(simulated_students_answers) == len(q_ids))
             difficulties = [difficulty_dict_cupa[q_id] for q_id in q_ids]
-            print("Simulated students (ideal):", scipy.stats.linregress(difficulties, simulated_students_answers))
+            print("Simulated students (ideal)")
+            print("Correlation", scipy.stats.linregress(difficulties, simulated_students_answers))
+            print("MAE:", mean_absolute_error(difficulties, [linear_scaling(diff, 0.0, 1.0, 30, 110) for diff in simulated_students_answers]))
 
             answers_sim_students = [[], [], [], [], []]
             q_ids = list(dict_gpt_3_5_cupa_40_test['correctness_per_model'].keys())
@@ -368,7 +379,9 @@ def main():
             simulated_students_answers = np.average(answers_sim_students, axis=0)
             print(len(simulated_students_answers) == len(q_ids))
             difficulties = [difficulty_dict_cupa[q_id] for q_id in q_ids]
-            print("Simulated students (not ideal):", scipy.stats.linregress(difficulties, simulated_students_answers))
+            print("Simulated students (not ideal)")
+            print("Correlation:", scipy.stats.linregress(difficulties, simulated_students_answers))
+            print("MAE:", mean_absolute_error(difficulties, [linear_scaling(diff, 0.0, 1.0, 30, 110) for diff in simulated_students_answers]))
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
