@@ -9,6 +9,7 @@ from utils import (
     get_original_dataset,
     get_difficulty_dict_from_df,
     item_response_function as irf,
+    eval_metric_monotonicity,
 )
 from utils_plotting import get_all_info_for_plotting_by_mdoel_prompt_and_dataset
 from constants import (
@@ -711,10 +712,13 @@ def main():
     list_dict_results = [dict_gpt_3_5_arc_28_dev, dict_gpt_3_5_arc_31_dev, dict_gpt_3_5_arc_32_dev, dict_gpt_3_5_arc_35_dev, dict_gpt_3_5_arc_48_dev]
     n_role_played_levels = len(dict_gpt_3_5_arc_48_dev['student_levels'])
     fig, ax = plt.subplots(figsize=(6, 4.2))
+    print("Results of analysis monotonicity")
     for idx, dict_results in enumerate(list_dict_results):
         # color = '#288cfc' if idx == 4 else '#054b7d'
         color = '#054b7d' if idx == 4 else '#288cfc'
         ax.plot(range(n_role_played_levels), dict_results['avg_accuracy_per_model'], plot_style[idx], label=labels[idx], color=color)
+        print(f"Eval. metric monotonicity {labels[idx]} = {eval_metric_monotonicity(dict_results['avg_accuracy_per_model'])}")
+    print("Ideal eval. metric monotonicity", eval_metric_monotonicity([0.00, 0.25, 0.5, 0.75, 1.0]))
     ax.set_yticks(np.arange(0.0, 1.0, 0.1))
     ax.grid(alpha=0.5)
     ax.set_xlabel('Simulated level')
