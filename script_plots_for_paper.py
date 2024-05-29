@@ -168,6 +168,10 @@ def main():
     ax.plot(range(n_role_played_levels), dict_gpt_3_5_cupa_40_test['avg_accuracy_per_model'], 'x-', label='CUPA', c='#b83266')
     ax.grid(alpha=0.5, axis='both')
     ax.set_ylim(0.4, 1.0)
+    print("eval. metric mon. arc_dev = ", eval_metric_monotonicity(dict_gpt_3_5_arc_48_dev['avg_accuracy_per_model']))
+    print("eval. metric mon. arc_test = ", eval_metric_monotonicity(dict_gpt_3_5_arc_48_test['avg_accuracy_per_model']))
+    print("eval. metric mon. race_test = ", eval_metric_monotonicity(dict_gpt_3_5_race_40_test['avg_accuracy_per_model']))
+    print("eval. metric mon. cupa_test = ", eval_metric_monotonicity(dict_gpt_3_5_cupa_40_test['avg_accuracy_per_model']))
     ax.set_yticks(np.arange(0.4, 1.0, 0.05))
     ax.set_ylabel('MCQA accuracy')
     ax.set_xlabel('Simulated level')
@@ -443,6 +447,9 @@ def main():
     if DO_PLOT: plt.show()
     if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_48_arc_gpt_3_5_vs_gpt_3_5_1106_vs_gpt_4_mcqa_accuracy_per_level.pdf'))
     plt.close(fig)
+    print("eval. metric mon. arc test gpt_3_5 = ", eval_metric_monotonicity(dict_gpt_3_5_arc_48_test['avg_accuracy_per_model']))
+    print("eval. metric mon. arc test gpt_3_5 1106 = ", eval_metric_monotonicity(dict_gpt_3_5_1106_arc_48_test['avg_accuracy_per_model']))
+    print("eval. metric mon. arc test gpt_4 = ", eval_metric_monotonicity(dict_gpt_4_1106_arc_48_test['avg_accuracy_per_model']))
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # RACE
     n_role_played_levels = len(dict_gpt_3_5_1106_arc_48_test['student_levels'])
@@ -462,6 +469,9 @@ def main():
     if DO_PLOT: plt.show()
     if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_40_race_gpt_3_5_vs_gpt_3_5_1106_vs_gpt_4_mcqa_accuracy_per_level.pdf'))
     plt.close(fig)
+    print("eval. metric mon. RACE test gpt_3_5 = ", eval_metric_monotonicity(dict_gpt_3_5_race_40_test['avg_accuracy_per_model']))
+    print("eval. metric mon. RACE test gpt_3_5 1106 = ", eval_metric_monotonicity(dict_gpt_3_5_1106_race_40_test['avg_accuracy_per_model']))
+    print("eval. metric mon. RACE test gpt_4 = ", eval_metric_monotonicity(dict_gpt_4_1106_race_40_test['avg_accuracy_per_model']))
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # CUPA
     n_role_played_levels = len(dict_gpt_3_5_1106_arc_48_test['student_levels'])
@@ -481,6 +491,9 @@ def main():
     if DO_PLOT: plt.show()
     if SAVE_FIG: plt.savefig(os.path.join(out_fig_path, f'prompt_40_cupa_gpt_3_5_vs_gpt_3_5_1106_vs_gpt_4_mcqa_accuracy_per_level.pdf'))
     plt.close(fig)
+    print("eval. metric mon. CUPA test gpt_3_5 = ", eval_metric_monotonicity(dict_gpt_3_5_cupa_40_test['avg_accuracy_per_model']))
+    print("eval. metric mon. CUPA test gpt_3_5 1106 = ", eval_metric_monotonicity(dict_gpt_3_5_1106_cupa_40_test['avg_accuracy_per_model']))
+    print("eval. metric mon. CUPA test gpt_4 = ", eval_metric_monotonicity(dict_gpt_4_1106_cupa_40_test['avg_accuracy_per_model']))
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
