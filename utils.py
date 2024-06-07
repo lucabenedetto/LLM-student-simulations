@@ -479,7 +479,10 @@ def item_response_function(difficulty, skill, discrimination=1.0, guess=0.25, sl
 
 
 def eval_metric_monotonicity(list_acc):
-    return (
-        scipy.stats.linregress(list_acc, [0.0, 0.25, 0.5, 0.75, 1.0]).rvalue
-        - np.sum([np.sqrt(np.abs(list_acc[i + 1] - list_acc[i])) if list_acc[i + 1] < list_acc[i] else 0.0 for i in range(4)])
+    ideal_accuracy_curve = [0.0, 0.25, 0.5, 0.75, 1.0]
+    correlation_score = scipy.stats.linregress(list_acc, ideal_accuracy_curve).rvalue
+    penalty_non_monotonicity = np.sum(
+        [np.sqrt(np.abs(list_acc[i + 1] - list_acc[i]))
+         if list_acc[i + 1] < list_acc[i] else 0.0 for i in range(4)]
     )
+    return correlation_score - penalty_non_monotonicity
