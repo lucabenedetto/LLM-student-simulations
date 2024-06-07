@@ -3,6 +3,7 @@ import pandas as pd
 import ast
 import scipy
 from sklearn.metrics import r2_score, mean_absolute_error
+import numpy as np
 
 
 def extract_difficulty(text):
@@ -27,6 +28,48 @@ def linear_scaling(x, original_min, original_max, target_min, target_max):
 
 DICT_DATASET_MIN_DIFFICULTY = {'race_pp': 0, 'arc': 3, 'cupa': 30}
 DICT_DATASET_MAX_DIFFICULTY = {'race_pp': 2, 'arc': 9, 'cupa': 110}
+
+
+def plot_metrics_difficulty_analysis(dict_scores, metric_name):
+    species = ['GPT-3.5\n' + k for k in dict_scores['gpt3_5'].keys()] + ['GPT-4\n' + k for k in dict_scores['gpt_4_1106'].keys()]
+    # list(dict_scores['gpt3_5'].keys)
+    penguin_means = {
+        'one': [dict_scores['gpt3_5'][k][0] for k in dict_scores['gpt3_5'].keys()]
+               + [dict_scores['gpt_4_1106'][k][0] for k in dict_scores['gpt_4_1106'].keys()],
+        'two': [dict_scores['gpt3_5'][k][1] for k in dict_scores['gpt3_5'].keys()]
+               + [dict_scores['gpt_4_1106'][k][1] for k in dict_scores['gpt_4_1106'].keys()],
+        'three': [dict_scores['gpt3_5'][k][2] for k in dict_scores['gpt3_5'].keys()]
+               + [dict_scores['gpt_4_1106'][k][2] for k in dict_scores['gpt_4_1106'].keys()],
+        'four': [dict_scores['gpt3_5'][k][3] for k in dict_scores['gpt3_5'].keys()]
+               + [dict_scores['gpt_4_1106'][k][3] for k in dict_scores['gpt_4_1106'].keys()],
+        'five': [dict_scores['gpt3_5'][k][4] for k in dict_scores['gpt3_5'].keys()]
+               + [dict_scores['gpt_4_1106'][k][4] for k in dict_scores['gpt_4_1106'].keys()],
+    }
+
+    x = np.arange(len(species))  # the label locations
+    width = 0.15  # 0.25  # the width of the bars
+    multiplier = 0
+
+    fig, ax = plt.subplots(figsize=(6, 5))
+    # fig, ax = plt.subplots(figsize=(4.5, 3.5))
+
+    for attribute, measurement in penguin_means.items():
+        offset = width * multiplier
+        rects = ax.bar(x + offset, measurement, width, label=attribute)
+        # ax.bar_label(rects, padding=0)
+        multiplier += 1
+
+    # Add some text for labels, title and custom x-axis tick labels, etc.
+    ax.set_ylabel(metric_name)
+    ax.set_title(f'{metric_name} for different models, datasets, and simulated levels')
+    ax.set_xticks(x + width, species)
+    # ax.legend(loc='upper left', ncols=3)
+    ax.legend()
+    ax.grid(axis='y')
+    # ax.set_ylim(-1, 1)
+    plt.tight_layout()
+    plt.savefig(f'output_figures/for_paper/analysis_difficulty_from_llm_{metric_name}.pdf')
+    return
 
 
 def main(model_name, dataset_name):
@@ -60,24 +103,41 @@ def main(model_name, dataset_name):
         df_dict[level] = temp_df
 
     # print(df_dict[1]['llm_difficulty'])
+    list_r2_scores = []
+    list_mape_scores = []
     for simulated_level in range(1, 6):
         print("DOING SIMULATED_LEVEL", simulated_level)
+        print("Count of occurrences per level")
+        print(df_dict[simulated_level].groupby('llm_difficulty').size())
         target_difficulty = [float(diff) for diff in df_dict[simulated_level]['difficulty'].values]
         llm_difficulty = [float(diff) for diff in df_dict[simulated_level]['llm_difficulty'].values]
         scaled_llm_difficulty = [float(diff) for diff in df_dict[simulated_level]['scaled_llm_difficulty'].values]
         print("Correlation (original):", scipy.stats.linregress(llm_difficulty, target_difficulty))
         # this is just to check that the rescaling didn't break anything.
         print("Correlation (scaled)  :",  scipy.stats.linregress(scaled_llm_difficulty, target_difficulty))
-        print("R2: %.2f" % r2_score(target_difficulty, scaled_llm_difficulty))
+        r2 = r2_score(target_difficulty, scaled_llm_difficulty)
+        list_r2_scores.append(r2)
+        print("R2: %.2f" % r2)
         print("MAE: %.2f" % mean_absolute_error(target_difficulty, scaled_llm_difficulty))
-        print("MAPE: %.2f" % (100*mean_absolute_error(target_difficulty, scaled_llm_difficulty)/(DICT_DATASET_MAX_DIFFICULTY[dataset_name] - DICT_DATASET_MIN_DIFFICULTY[dataset_name])))
+        mape = (100*mean_absolute_error(target_difficulty, scaled_llm_difficulty)/(DICT_DATASET_MAX_DIFFICULTY[dataset_name] - DICT_DATASET_MIN_DIFFICULTY[dataset_name]))
+        list_mape_scores.append(mape)
+        print("MAPE: %.2f" % mape)
         # plt.hist(llm_difficulty)
         # plt.show()
+    return list_r2_scores, list_mape_scores
 
 
 if __name__ == "__main__":
+    dict_r2_scores = dict()
+    dict_mape_scores = dict()
+
     # model = 'gpt_4_1106'  # gpt3_5, gpt3_5_1106, gpt_4_1106
     # dataset_name = 'arc'  # cupa, race_pp, arc
-    for model in ['gpt3_5', 'gpt3_5_1106', 'gpt_4_1106']:
+    for model in ['gpt3_5', 'gpt_4_1106']:
+        dict_r2_scores[model] = dict()
+        dict_mape_scores[model] = dict()
         for dataset_name in ['cupa', 'race_pp', 'arc']:
-            main(model, dataset_name)
+            dict_r2_scores[model][dataset_name], dict_mape_scores[model][dataset_name] = main(model, dataset_name)
+
+    plot_metrics_difficulty_analysis(dict_r2_scores, metric_name="R2 score")
+    plot_metrics_difficulty_analysis(dict_mape_scores, metric_name="MAPE")
